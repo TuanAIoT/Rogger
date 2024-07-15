@@ -1,0 +1,1095 @@
+Archive member included because of file (symbol)
+
+E:/AIoT/Code/Rogger/DGC_A230_6_Rev_1_0_Software/lib/pfdl.a(pfdl.o)
+                              ./src/r_cg_pfdl.o (PFDL_Open)
+d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/../../../../rl78-elf/lib/g13\libc.a(lib_a-memcpy.o)
+                              ./src/r_main.o (memcpy)
+d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/g13\libgcc.a(ashrdi3.o)
+                              ./KEELOQ/KeeLOQ.o (__ashrdi3)
+
+Allocating common symbols
+Common symbol       size              file
+
+g_uart1_rx_length   0x2               ./src/r_cg_serial.o
+Tick_Count          0x2               ./src/r_cg_timer_user.o
+g_uart1_rx_count    0x2               ./src/r_cg_serial.o
+M1_Time_T1          0x2               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+M1_Tick_Count       0x2               ./src/r_cg_timer_user.o
+CFG_Parameters_Value
+                    0x80              ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+Command_Status_No2  0x1               ./HMI/4Digit_7Segment.o
+M2_Tick_Count       0x2               ./src/r_cg_timer_user.o
+gFdlDesc            0x2               ./src/r_cg_pfdl.o
+Power_failure       0x1               ./src/r_main.o
+CFG_parameter       0x58              ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+Last_Open_Command_State
+                    0x1               ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+gFdlStatus          0x1               ./src/r_cg_pfdl.o
+Digit_Count         0x1               ./HMI/4Digit_7Segment.o
+M2_Time_T4          0x2               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+Automatic_Close_Flag
+                    0x2               ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+Flash_Frequency_Config
+                    0x1               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+Disable_Tick_Count  0x2               ./src/r_cg_timer_user.o
+Last_Close_Command_State
+                    0x1               ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+M1_Time_T5          0x2               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+Brake_Tick_Count    0x2               ./src/r_cg_timer_user.o
+gFdlReq             0x8               ./src/r_cg_pfdl.o
+gp_uart1_rx_address
+                    0x2               ./src/r_cg_serial.o
+gFdlResult          0x1               ./src/r_cg_pfdl.o
+Flash_Frequency_Count
+                    0x1               ./src/r_cg_timer_user.o
+Courtesy_Light_Time
+                    0x2               ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+M2_Time_T3          0x2               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+M1_Time_T2          0x2               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+HMI_Flash_Count     0x1               ./src/r_cg_timer_user.o
+Courtesy_Light_Count
+                    0x2               ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+M2_Time_T5          0x2               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+M1_Time_T4          0x2               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+gp_uart1_tx_address
+                    0x2               ./src/r_cg_serial.o
+Pre_Flash_Type      0x1               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+Automatic_Close_Count
+                    0x2               ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+M2_Time_T1          0x2               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+M1_Time_T3          0x2               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+g_uart1_tx_count    0x2               ./src/r_cg_serial.o
+Flash_Timer_Counter
+                    0x1               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+Safety_Status_No1   0x1               ./HMI/4Digit_7Segment.o
+Safety_Status_No2   0x1               ./HMI/4Digit_7Segment.o
+M2_Time_T2          0x2               ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+Key_Tick_Count      0x2               ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+Last_Clock_Command_State
+                    0x1               ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+
+Discarded input sections
+
+ .text          0x0000000000000000        0x0 ./src/r_cg_cgc.o
+ .data          0x0000000000000000        0x0 ./src/r_cg_cgc.o
+ .bss           0x0000000000000000        0x0 ./src/r_cg_cgc.o
+ .text          0x0000000000000000        0x0 ./src/r_cg_cgc_user.o
+ .data          0x0000000000000000        0x0 ./src/r_cg_cgc_user.o
+ .bss           0x0000000000000000        0x0 ./src/r_cg_cgc_user.o
+ .text          0x0000000000000000        0x0 ./src/r_cg_intc.o
+ .data          0x0000000000000000        0x0 ./src/r_cg_intc.o
+ .bss           0x0000000000000000        0x0 ./src/r_cg_intc.o
+ .text.R_INTC10_Start
+                0x0000000000000000       0x2f ./src/r_cg_intc.o
+ .text.R_INTC10_Stop
+                0x0000000000000000       0x2f ./src/r_cg_intc.o
+ .text          0x0000000000000000        0x0 ./src/r_cg_intc_user.o
+ .data          0x0000000000000000        0x0 ./src/r_cg_intc_user.o
+ .bss           0x0000000000000000        0x0 ./src/r_cg_intc_user.o
+ .text          0x0000000000000000        0x0 ./src/r_cg_pfdl.o
+ .data          0x0000000000000000        0x0 ./src/r_cg_pfdl.o
+ .bss           0x0000000000000000        0x0 ./src/r_cg_pfdl.o
+ .text          0x0000000000000000        0x0 ./src/r_cg_port.o
+ .data          0x0000000000000000        0x0 ./src/r_cg_port.o
+ .bss           0x0000000000000000        0x0 ./src/r_cg_port.o
+ .text          0x0000000000000000        0x0 ./src/r_cg_port_user.o
+ .data          0x0000000000000000        0x0 ./src/r_cg_port_user.o
+ .bss           0x0000000000000000        0x0 ./src/r_cg_port_user.o
+ .debug_info    0x0000000000000000       0x48 ./src/r_cg_port_user.o
+ .debug_abbrev  0x0000000000000000       0x1b ./src/r_cg_port_user.o
+ .debug_aranges
+                0x0000000000000000       0x18 ./src/r_cg_port_user.o
+ .debug_line    0x0000000000000000       0x1d ./src/r_cg_port_user.o
+ .debug_str     0x0000000000000000      0x169 ./src/r_cg_port_user.o
+ .comment       0x0000000000000000       0xa1 ./src/r_cg_port_user.o
+ .text          0x0000000000000000        0x0 ./src/r_cg_serial.o
+ .data          0x0000000000000000        0x0 ./src/r_cg_serial.o
+ .bss           0x0000000000000000        0x0 ./src/r_cg_serial.o
+ .text.R_UART1_Start
+                0x0000000000000000       0xb4 ./src/r_cg_serial.o
+ .text.R_UART1_Stop
+                0x0000000000000000       0x97 ./src/r_cg_serial.o
+ .text.R_UART1_Receive
+                0x0000000000000000       0x32 ./src/r_cg_serial.o
+ .text.R_UART1_Send
+                0x0000000000000000       0x8d ./src/r_cg_serial.o
+ .text          0x0000000000000000        0x0 ./src/r_cg_serial_user.o
+ .data          0x0000000000000000        0x0 ./src/r_cg_serial_user.o
+ .bss           0x0000000000000000        0x0 ./src/r_cg_serial_user.o
+ .text          0x0000000000000000        0x0 ./src/r_cg_timer.o
+ .data          0x0000000000000000        0x0 ./src/r_cg_timer.o
+ .bss           0x0000000000000000        0x0 ./src/r_cg_timer.o
+ .text.R_TAU0_Channel0_Stop
+                0x0000000000000000       0x4c ./src/r_cg_timer.o
+ .text          0x0000000000000000        0x0 ./src/r_cg_timer_user.o
+ .data          0x0000000000000000        0x0 ./src/r_cg_timer_user.o
+ .bss           0x0000000000000000        0x0 ./src/r_cg_timer_user.o
+ .text          0x0000000000000000        0x0 ./src/r_cg_vector_table.o
+ .data          0x0000000000000000        0x0 ./src/r_cg_vector_table.o
+ .bss           0x0000000000000000        0x0 ./src/r_cg_vector_table.o
+ .text          0x0000000000000000        0x0 ./src/r_hardware_setup.o
+ .data          0x0000000000000000        0x0 ./src/r_hardware_setup.o
+ .bss           0x0000000000000000        0x0 ./src/r_hardware_setup.o
+ .text          0x0000000000000000        0x0 ./src/r_main.o
+ .data          0x0000000000000000        0x0 ./src/r_main.o
+ .bss           0x0000000000000000        0x0 ./src/r_main.o
+ .data          0x0000000000000000        0x0 ./src/r_reset_program.o
+ .bss           0x0000000000000000        0x0 ./src/r_reset_program.o
+ .text          0x0000000000000000        0x0 ./KEELOQ/KeeLOQ.o
+ .data          0x0000000000000000        0x0 ./KEELOQ/KeeLOQ.o
+ .bss           0x0000000000000000        0x0 ./KEELOQ/KeeLOQ.o
+ .text.nlf      0x0000000000000000       0x34 ./KEELOQ/KeeLOQ.o
+ .text.keeloq_encrypt
+                0x0000000000000000      0x28b ./KEELOQ/KeeLOQ.o
+ .text.keeloq_decrypt
+                0x0000000000000000      0x285 ./KEELOQ/KeeLOQ.o
+ .debug_frame   0x0000000000000000       0x8c ./KEELOQ/KeeLOQ.o
+ .debug_info    0x0000000000000000      0x1d5 ./KEELOQ/KeeLOQ.o
+ .debug_abbrev  0x0000000000000000       0xca ./KEELOQ/KeeLOQ.o
+ .debug_aranges
+                0x0000000000000000       0x30 ./KEELOQ/KeeLOQ.o
+ .debug_ranges  0x0000000000000000       0x20 ./KEELOQ/KeeLOQ.o
+ .debug_line    0x0000000000000000      0x274 ./KEELOQ/KeeLOQ.o
+ .debug_str     0x0000000000000000      0x21a ./KEELOQ/KeeLOQ.o
+ .comment       0x0000000000000000       0xa1 ./KEELOQ/KeeLOQ.o
+ .text          0x0000000000000000        0x0 ./HMI/4Digit_7Segment.o
+ .data          0x0000000000000000        0x0 ./HMI/4Digit_7Segment.o
+ .bss           0x0000000000000000        0x0 ./HMI/4Digit_7Segment.o
+ .data.Parameters_Display_Data
+                0x0000000000000000        0x4 ./HMI/4Digit_7Segment.o
+ .text.convert_number_to_seven_segment
+                0x0000000000000000       0x56 ./HMI/4Digit_7Segment.o
+ .text          0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+ .data          0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+ .bss           0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+ .text          0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+ .data          0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+ .bss           0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+ .text          0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+ .data          0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+ .bss           0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+ .text          0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+ .data          0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+ .bss           0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+ .text          0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+ .data          0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+ .bss           0x0000000000000000        0x0 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+ .text          0x0000000000000000        0x0 ./Common/Common.o
+ .data          0x0000000000000000        0x0 ./Common/Common.o
+ .bss           0x0000000000000000        0x0 ./Common/Common.o
+ .text.delay_us
+                0x0000000000000000       0x2c ./Common/Common.o
+ .text          0x0000000000000000        0x0 E:/AIoT/Code/Rogger/DGC_A230_6_Rev_1_0_Software/lib/pfdl.a(pfdl.o)
+ .data          0x0000000000000000        0x0 E:/AIoT/Code/Rogger/DGC_A230_6_Rev_1_0_Software/lib/pfdl.a(pfdl.o)
+ .bss           0x0000000000000000        0x0 E:/AIoT/Code/Rogger/DGC_A230_6_Rev_1_0_Software/lib/pfdl.a(pfdl.o)
+ .data          0x0000000000000000        0x0 d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/../../../../rl78-elf/lib/g13\libc.a(lib_a-memcpy.o)
+ .bss           0x0000000000000000        0x0 d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/../../../../rl78-elf/lib/g13\libc.a(lib_a-memcpy.o)
+ .text          0x0000000000000000        0x0 d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/g13\libgcc.a(ashrdi3.o)
+ .data          0x0000000000000000        0x0 d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/g13\libgcc.a(ashrdi3.o)
+ .bss           0x0000000000000000        0x0 d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/g13\libgcc.a(ashrdi3.o)
+ .text.___ashrdi3
+                0x0000000000000000       0x3f d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/g13\libgcc.a(ashrdi3.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+VEC              0x0000000000000000 0x0000000000000004
+IVEC             0x0000000000000004 0x00000000000000bc
+OPT              0x00000000000000c0 0x0000000000000004
+SEC_ID           0x00000000000000c4 0x000000000000000a
+OCDSTAD          0x00000000000000ce 0x000000000000000a
+OCDROM           0x0000000000017e00 0x0000000000000200
+ROM              0x00000000000000d8 0x0000000000017d28
+MIRROR           0x00000000000f3000 0x000000000000af00
+RAM              0x00000000000fdf00 0x0000000000002000
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD ./src/r_cg_cgc.o
+LOAD ./src/r_cg_cgc_user.o
+LOAD ./src/r_cg_intc.o
+LOAD ./src/r_cg_intc_user.o
+LOAD ./src/r_cg_pfdl.o
+LOAD ./src/r_cg_port.o
+LOAD ./src/r_cg_port_user.o
+LOAD ./src/r_cg_serial.o
+LOAD ./src/r_cg_serial_user.o
+LOAD ./src/r_cg_timer.o
+LOAD ./src/r_cg_timer_user.o
+LOAD ./src/r_cg_vector_table.o
+LOAD ./src/r_hardware_setup.o
+LOAD ./src/r_main.o
+LOAD ./src/r_reset_program.o
+LOAD ./KEELOQ/KeeLOQ.o
+LOAD ./HMI/4Digit_7Segment.o
+LOAD ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+LOAD ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+LOAD ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+LOAD ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+LOAD ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+LOAD ./Common/Common.o
+LOAD E:/AIoT/Code/Rogger/DGC_A230_6_Rev_1_0_Software/lib/pfdl.a
+START GROUP
+LOAD d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/../../../../rl78-elf/lib/g13\libm.a
+LOAD d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/../../../../rl78-elf/lib/g13\libc.a
+LOAD d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/g13\libgcc.a
+END GROUP
+LOAD d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/g13\libgcc.a
+START GROUP
+LOAD d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/../../../../rl78-elf/lib/g13\libc.a
+LOAD d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/../../../../rl78-elf/lib/g13\libsim.a
+END GROUP
+LOAD d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/g13\libgcc.a
+
+.vec            0x0000000000000000        0x4
+ *(.vec)
+ .vec           0x0000000000000000        0x4 ./src/r_cg_vector_table.o
+                0x0000000000000000                HardwareVectors
+
+.vects          0x0000000000000004       0x7c
+ *(.vects)
+ .vects         0x0000000000000004       0x7c ./src/r_cg_vector_table.o
+                0x0000000000000004                Vectors
+
+.option_bytes   0x00000000000000c0        0x4
+ *(.option_bytes)
+ .option_bytes  0x00000000000000c0        0x4 ./src/r_cg_vector_table.o
+                0x00000000000000c0                Option_Bytes
+
+.security_id    0x00000000000000c4        0xa
+ *(.security_id)
+ .security_id   0x00000000000000c4        0xa ./src/r_cg_vector_table.o
+                0x00000000000000c4                Security_Id
+
+.lowtext        0x00000000000000d8        0x0
+ *(.plt)
+ .plt           0x00000000000000d8        0x0 ./src/r_cg_intc_user.o
+ *(.lowtext)
+                0x00000000000000d8                . = ALIGN (0x2)
+
+.tors           0x00000000000000d8        0x0
+                0x00000000000000d8                __CTOR_LIST__ = .
+                0x00000000000000d8                . = ALIGN (0x2)
+                0x00000000000000d8                ___ctors = .
+ *(.ctors)
+                0x00000000000000d8                ___ctors_end = .
+                0x00000000000000d8                __CTOR_END__ = .
+                0x00000000000000d8                __DTOR_LIST__ = .
+                0x00000000000000d8                ___dtors = .
+ *(.dtors)
+                0x00000000000000d8                ___dtors_end = .
+                0x00000000000000d8                __DTOR_END__ = .
+                0x00000000000000d8                . = ALIGN (0x2)
+                0x00000000000000d8                _mdata = .
+
+.text           0x00000000000000e8     0x7b54
+ *(.text)
+ .text          0x00000000000000e8       0x62 ./src/r_reset_program.o
+                0x00000000000000ea                _rl78_fini
+                0x00000000000000ec                PowerON_Reset
+ .text          0x000000000000014a       0x1c d:/e2_studio/renesas/gcc for renesas rl78 4.9.2.202201-gnurl78-elf/rl78-elf/rl78-elf/bin/../lib/gcc/rl78-elf/4.9.2.202201-GNURL78/../../../../rl78-elf/lib/g13\libc.a(lib_a-memcpy.o)
+                0x000000000000014a                memcpy
+ *(.text.*)
+ .text.R_CGC_Create
+                0x0000000000000166       0x8d ./src/r_cg_cgc.o
+                0x0000000000000166                R_CGC_Create
+ .text.R_CGC_Get_ResetSource
+                0x00000000000001f3       0x14 ./src/r_cg_cgc_user.o
+                0x00000000000001f3                R_CGC_Get_ResetSource
+ .text.R_INTC_Create
+                0x0000000000000207      0x2bb ./src/r_cg_intc.o
+                0x0000000000000207                R_INTC_Create
+ .text.R_INTC0_Start
+                0x00000000000004c2       0x2f ./src/r_cg_intc.o
+                0x00000000000004c2                R_INTC0_Start
+ .text.R_INTC0_Stop
+                0x00000000000004f1       0x2f ./src/r_cg_intc.o
+                0x00000000000004f1                R_INTC0_Stop
+ .text.r_intc0_interrupt
+                0x0000000000000520       0x69 ./src/r_cg_intc_user.o
+                0x0000000000000520                r_intc0_interrupt
+ .text.r_intc10_interrupt
+                0x0000000000000589       0x12 ./src/r_cg_intc_user.o
+                0x0000000000000589                r_intc10_interrupt
+ .text.R_FDL_Create
+                0x000000000000059b        0x9 ./src/r_cg_pfdl.o
+                0x000000000000059b                R_FDL_Create
+ .text.R_FDL_Write
+                0x00000000000005a4       0x66 ./src/r_cg_pfdl.o
+                0x00000000000005a4                R_FDL_Write
+ .text.R_FDL_Read
+                0x000000000000060a       0x47 ./src/r_cg_pfdl.o
+                0x000000000000060a                R_FDL_Read
+ .text.R_FDL_Erase
+                0x0000000000000651       0x58 ./src/r_cg_pfdl.o
+                0x0000000000000651                R_FDL_Erase
+ .text.R_FDL_Open
+                0x00000000000006a9       0x19 ./src/r_cg_pfdl.o
+                0x00000000000006a9                R_FDL_Open
+ .text.R_FDL_Close
+                0x00000000000006c2        0x8 ./src/r_cg_pfdl.o
+                0x00000000000006c2                R_FDL_Close
+ .text.R_FDL_BlankCheck
+                0x00000000000006ca       0x5f ./src/r_cg_pfdl.o
+                0x00000000000006ca                R_FDL_BlankCheck
+ .text.R_FDL_IVerify
+                0x0000000000000729       0x5f ./src/r_cg_pfdl.o
+                0x0000000000000729                R_FDL_IVerify
+ .text.R_PORT_Create
+                0x0000000000000788       0xf1 ./src/r_cg_port.o
+                0x0000000000000788                R_PORT_Create
+ .text.R_SAU0_Create
+                0x0000000000000879       0x2e ./src/r_cg_serial.o
+                0x0000000000000879                R_SAU0_Create
+ .text.R_UART1_Create
+                0x00000000000008a7      0x268 ./src/r_cg_serial.o
+                0x00000000000008a7                R_UART1_Create
+ .text.r_uart1_interrupt_receive
+                0x0000000000000b0f       0xda ./src/r_cg_serial_user.o
+                0x0000000000000b0f                r_uart1_interrupt_receive
+ .text.r_uart1_interrupt_send
+                0x0000000000000be9       0x69 ./src/r_cg_serial_user.o
+                0x0000000000000be9                r_uart1_interrupt_send
+ .text.r_uart1_callback_receiveend
+                0x0000000000000c52        0x1 ./src/r_cg_serial_user.o
+ .text.r_uart1_callback_softwareoverrun
+                0x0000000000000c53        0x1 ./src/r_cg_serial_user.o
+ .text.r_uart1_callback_sendend
+                0x0000000000000c54        0x1 ./src/r_cg_serial_user.o
+ .text.r_uart1_callback_error
+                0x0000000000000c55        0x1 ./src/r_cg_serial_user.o
+ .text.R_TAU0_Create
+                0x0000000000000c56      0x7a8 ./src/r_cg_timer.o
+                0x0000000000000c56                R_TAU0_Create
+ .text.R_TAU0_Channel0_Start
+                0x00000000000013fe       0x4c ./src/r_cg_timer.o
+                0x00000000000013fe                R_TAU0_Channel0_Start
+ .text.R_TAU0_Channel1_Start
+                0x000000000000144a       0x4c ./src/r_cg_timer.o
+                0x000000000000144a                R_TAU0_Channel1_Start
+ .text.R_TAU0_Channel1_Stop
+                0x0000000000001496       0x4c ./src/r_cg_timer.o
+                0x0000000000001496                R_TAU0_Channel1_Stop
+ .text.R_TAU0_Channel2_Start
+                0x00000000000014e2       0x4c ./src/r_cg_timer.o
+                0x00000000000014e2                R_TAU0_Channel2_Start
+ .text.R_TAU0_Channel2_Stop
+                0x000000000000152e       0x4c ./src/r_cg_timer.o
+                0x000000000000152e                R_TAU0_Channel2_Stop
+ .text.R_TAU0_Channel3_Start
+                0x000000000000157a       0x4c ./src/r_cg_timer.o
+                0x000000000000157a                R_TAU0_Channel3_Start
+ .text.R_TAU0_Channel3_Stop
+                0x00000000000015c6       0x4c ./src/r_cg_timer.o
+                0x00000000000015c6                R_TAU0_Channel3_Stop
+ .text.R_TAU0_Channel4_Start
+                0x0000000000001612       0x4c ./src/r_cg_timer.o
+                0x0000000000001612                R_TAU0_Channel4_Start
+ .text.R_TAU0_Channel4_Stop
+                0x000000000000165e       0x4c ./src/r_cg_timer.o
+                0x000000000000165e                R_TAU0_Channel4_Stop
+ .text.R_TAU0_Channel5_Start
+                0x00000000000016aa       0x4c ./src/r_cg_timer.o
+                0x00000000000016aa                R_TAU0_Channel5_Start
+ .text.R_TAU0_Channel5_Stop
+                0x00000000000016f6       0x4c ./src/r_cg_timer.o
+                0x00000000000016f6                R_TAU0_Channel5_Stop
+ .text.R_TAU0_Channel6_Start
+                0x0000000000001742       0x4c ./src/r_cg_timer.o
+                0x0000000000001742                R_TAU0_Channel6_Start
+ .text.R_TAU0_Channel6_Stop
+                0x000000000000178e       0x4c ./src/r_cg_timer.o
+                0x000000000000178e                R_TAU0_Channel6_Stop
+ .text.R_TAU0_Channel7_Start
+                0x00000000000017da       0x4c ./src/r_cg_timer.o
+                0x00000000000017da                R_TAU0_Channel7_Start
+ .text.R_TAU0_Channel7_Stop
+                0x0000000000001826       0x4c ./src/r_cg_timer.o
+                0x0000000000001826                R_TAU0_Channel7_Stop
+ .text.r_tau0_channel0_interrupt
+                0x0000000000001872       0x91 ./src/r_cg_timer_user.o
+                0x0000000000001872                r_tau0_channel0_interrupt
+ .text.r_tau0_channel1_interrupt
+                0x0000000000001903      0x170 ./src/r_cg_timer_user.o
+                0x0000000000001903                r_tau0_channel1_interrupt
+ .text.r_tau0_channel2_interrupt
+                0x0000000000001a73       0x41 ./src/r_cg_timer_user.o
+                0x0000000000001a73                r_tau0_channel2_interrupt
+ .text.r_tau0_channel3_interrupt
+                0x0000000000001ab4       0x3d ./src/r_cg_timer_user.o
+                0x0000000000001ab4                r_tau0_channel3_interrupt
+ .text.r_tau0_channel4_interrupt
+                0x0000000000001af1      0x256 ./src/r_cg_timer_user.o
+                0x0000000000001af1                r_tau0_channel4_interrupt
+ .text.r_tau0_channel5_interrupt
+                0x0000000000001d47       0x3d ./src/r_cg_timer_user.o
+                0x0000000000001d47                r_tau0_channel5_interrupt
+ .text.r_tau0_channel6_interrupt
+                0x0000000000001d84       0x41 ./src/r_cg_timer_user.o
+                0x0000000000001d84                r_tau0_channel6_interrupt
+ .text.r_tau0_channel7_interrupt
+                0x0000000000001dc5       0x3d ./src/r_cg_timer_user.o
+                0x0000000000001dc5                r_tau0_channel7_interrupt
+ .text.R_Dummy  0x0000000000001e02       0x12 ./src/r_cg_vector_table.o
+                0x0000000000001e02                R_Dummy
+ .text.R_Systeminit
+                0x0000000000001e14       0x9f ./src/r_hardware_setup.o
+                0x0000000000001e14                R_Systeminit
+ .text.HardwareSetup
+                0x0000000000001eb3       0x11 ./src/r_hardware_setup.o
+                0x0000000000001eb3                HardwareSetup
+ .text.main     0x0000000000001ec4       0xc5 ./src/r_main.o
+                0x0000000000001ec4                main
+ .text.R_MAIN_UserInit
+                0x0000000000001f89        0x4 ./src/r_main.o
+                0x0000000000001f89                R_MAIN_UserInit
+ .text.convert_ascii_to_seven_segment
+                0x0000000000001f8d      0x249 ./HMI/4Digit_7Segment.o
+                0x0000000000001f8d                convert_ascii_to_seven_segment
+ .text.Output_Anode_Seven_Segment
+                0x00000000000021d6      0x1d8 ./HMI/4Digit_7Segment.o
+                0x00000000000021d6                Output_Anode_Seven_Segment
+ .text.Display_Parameter_Callback
+                0x00000000000023ae      0x192 ./HMI/4Digit_7Segment.o
+                0x00000000000023ae                Display_Parameter_Callback
+ .text.Display_Status_Callback
+                0x0000000000002540      0x13e ./HMI/4Digit_7Segment.o
+                0x0000000000002540                Display_Status_Callback
+ .text.Motor1_Disable
+                0x000000000000267e       0x2f ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x000000000000267e                Motor1_Disable
+ .text.Motor1_Open_Enable
+                0x00000000000026ad       0x18 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x00000000000026ad                Motor1_Open_Enable
+ .text.Motor1_Close_Enable
+                0x00000000000026c5       0x18 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x00000000000026c5                Motor1_Close_Enable
+ .text.Motor2_Disable
+                0x00000000000026dd       0x2f ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x00000000000026dd                Motor2_Disable
+ .text.Motor2_Open_Enable
+                0x000000000000270c       0x18 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x000000000000270c                Motor2_Open_Enable
+ .text.Motor2_Close_Enable
+                0x0000000000002724       0x18 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x0000000000002724                Motor2_Close_Enable
+ .text.Calculate_Torque_Parameter
+                0x000000000000273c      0x12e ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x000000000000273c                Calculate_Torque_Parameter
+ .text.Setting_Courtesy_Light_and_Flash_Light
+                0x000000000000286a      0x1a1 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x000000000000286a                Setting_Courtesy_Light_and_Flash_Light
+ .text.Prepare_To_Moving
+                0x0000000000002a0b      0x226 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x0000000000002a0b                Prepare_To_Moving
+ .text.Prepare_To_Partial_Moving
+                0x0000000000002c31      0x1ac ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x0000000000002c31                Prepare_To_Partial_Moving
+ .text.Power_Failure_Recovery_Process
+                0x0000000000002ddd      0x28f ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x0000000000002ddd                Power_Failure_Recovery_Process
+ .text.Timing_Motor_Machine_State
+                0x000000000000306c      0x29a ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x000000000000306c                Timing_Motor_Machine_State
+ .text.__Do_Open_Gate
+                0x0000000000003306       0x3a ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x0000000000003306                __Do_Open_Gate
+ .text.__Do_Close_Gate
+                0x0000000000003340       0x65 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x0000000000003340                __Do_Close_Gate
+ .text.__Do_Stop_Gate
+                0x00000000000033a5      0x251 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x00000000000033a5                __Do_Stop_Gate
+ .text.__Do_Brake_Motor_Type_1
+                0x00000000000035f6       0x57 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x00000000000035f6                __Do_Brake_Motor_Type_1
+ .text.__Do_Brake_Motor_Type_2
+                0x000000000000364d       0x74 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x000000000000364d                __Do_Brake_Motor_Type_2
+ .text.__Do_Brake_Motor_Type_3
+                0x00000000000036c1       0x57 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x00000000000036c1                __Do_Brake_Motor_Type_3
+ .text.__Do_Partial_Open_Gate
+                0x0000000000003718       0x2a ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x0000000000003718                __Do_Partial_Open_Gate
+ .text.__Do_Partial_Close_Gate
+                0x0000000000003742       0x2a ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x0000000000003742                __Do_Partial_Close_Gate
+ .text.__Do_Partial_Stop_Gate
+                0x000000000000376c      0x194 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x000000000000376c                __Do_Partial_Stop_Gate
+ .text.Check_Safety_Device_Status
+                0x0000000000003900      0x375 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000003900                Check_Safety_Device_Status
+ .text.Courtesy_Light_After_Maneuver_Is_Complete
+                0x0000000000003c75       0x7c ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000003c75                Courtesy_Light_After_Maneuver_Is_Complete
+ .text.TestPB_Pressed_Process
+                0x0000000000003cf1       0xa7 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000003cf1                TestPB_Pressed_Process
+ .text.Partial_Command_Process
+                0x0000000000003d98       0xe2 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000003d98                Partial_Command_Process
+ .text.Step_Command_Process_Mode_0
+                0x0000000000003e7a       0xe9 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000003e7a                Step_Command_Process_Mode_0
+ .text.Step_Command_Process_Mode_1
+                0x0000000000003f63       0xd8 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000003f63                Step_Command_Process_Mode_1
+ .text.Step_Command_Process_Mode_2
+                0x000000000000403b       0xd8 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x000000000000403b                Step_Command_Process_Mode_2
+ .text.Step_Command_Process_Mode_3
+                0x0000000000004113      0x14d ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000004113                Step_Command_Process_Mode_3
+ .text.Step_Command_Process_Mode_4
+                0x0000000000004260      0x11b ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000004260                Step_Command_Process_Mode_4
+ .text.Step_Command_Process
+                0x000000000000437b       0x81 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x000000000000437b                Step_Command_Process
+ .text.Open_Command_Process
+                0x00000000000043fc      0x220 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x00000000000043fc                Open_Command_Process
+ .text.Close_Command_Process
+                0x000000000000461c      0x11c ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x000000000000461c                Close_Command_Process
+ .text.Clock_Command_Process
+                0x0000000000004738        0x1 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000004738                Clock_Command_Process
+ .text.Photocell_FT1_Process
+                0x0000000000004739      0x32c ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000004739                Photocell_FT1_Process
+ .text.Photocell_FT2_Process
+                0x0000000000004a65      0x31d ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000004a65                Photocell_FT2_Process
+ .text.Sensing_Edge_COS1_Process
+                0x0000000000004d82        0x1 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000004d82                Sensing_Edge_COS1_Process
+ .text.Sensing_Edge_COS2_Process
+                0x0000000000004d83        0x1 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000004d83                Sensing_Edge_COS2_Process
+ .text.Emergency_Stop_Process
+                0x0000000000004d84      0x145 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000004d84                Emergency_Stop_Process
+ .text.Open_Limit_Switch_No1_Process
+                0x0000000000004ec9       0xa5 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000004ec9                Open_Limit_Switch_No1_Process
+ .text.Open_Limit_Switch_No2_Process
+                0x0000000000004f6e       0x41 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000004f6e                Open_Limit_Switch_No2_Process
+ .text.Close_Limit_Switch_No1_Process
+                0x0000000000004faf       0x98 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000004faf                Close_Limit_Switch_No1_Process
+ .text.Close_Limit_Switch_No2_Process
+                0x0000000000005047       0x4e ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000005047                Close_Limit_Switch_No2_Process
+ .text.Normal_Mode
+                0x0000000000005095      0x711 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x0000000000005095                Normal_Mode
+ .text.Factory_Default_Setting
+                0x00000000000057a6      0x225 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                0x00000000000057a6                Factory_Default_Setting
+ .text.Write_Config_Parameters
+                0x00000000000059cb       0xef ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                0x00000000000059cb                Write_Config_Parameters
+ .text.Reset_Factory_Default_Parameters
+                0x0000000000005aba       0xca ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                0x0000000000005aba                Reset_Factory_Default_Parameters
+ .text.Read_Parameters_From_Flash_Memory
+                0x0000000000005b84       0x36 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                0x0000000000005b84                Read_Parameters_From_Flash_Memory
+ .text.Write_Parameters_To_Flash_Memory
+                0x0000000000005bba       0x2a ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                0x0000000000005bba                Write_Parameters_To_Flash_Memory
+ .text.Calculate_CFG_Parameters
+                0x0000000000005be4      0x9e6 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                0x0000000000005be4                Calculate_CFG_Parameters
+ .text.Parameters_Edit_Process
+                0x00000000000065ca      0x598 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                0x00000000000065ca                Parameters_Edit_Process
+ .text.Travel_Acquisition_Procedure_With_Encoder
+                0x0000000000006b62       0x73 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+                0x0000000000006b62                Travel_Acquisition_Procedure_With_Encoder
+ .text.Travel_Acquisition_Procedure_Without_Eencoder
+                0x0000000000006bd5      0x6ff ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+                0x0000000000006bd5                Travel_Acquisition_Procedure_Without_Eencoder
+ .text.Program_Command_Process
+                0x00000000000072d4      0x160 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+                0x00000000000072d4                Program_Command_Process
+ .text.Check_Safety_and_Limit_Switch
+                0x0000000000007434      0x2db ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+                0x0000000000007434                Check_Safety_and_Limit_Switch
+ .text.Test_Command_Process
+                0x000000000000770f      0x342 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+                0x000000000000770f                Test_Command_Process
+ .text.delay_ms
+                0x0000000000007a51       0x33 ./Common/Common.o
+                0x0000000000007a51                delay_ms
+ .text.convert_binary_to_ascii
+                0x0000000000007a84       0x75 ./Common/Common.o
+                0x0000000000007a84                convert_binary_to_ascii
+ .text.convert_ascii_to_binary
+                0x0000000000007af9       0xc5 ./Common/Common.o
+                0x0000000000007af9                convert_ascii_to_binary
+ .text.convert_BCD_to_binary
+                0x0000000000007bbe       0x23 ./Common/Common.o
+                0x0000000000007bbe                convert_BCD_to_binary
+ .text.convert_binary_to_BCD
+                0x0000000000007be1       0x5b ./Common/Common.o
+                0x0000000000007be1                convert_binary_to_BCD
+                0x0000000000007c3c                etext = .
+                0x0000000000007c3c                . = ALIGN (0x2)
+                0x0000000000000000                PROVIDE (__rl78_abs__, 0x0)
+
+.init
+ *(.init)
+
+.fini
+ *(.fini)
+
+.got
+ *(.got)
+ *(.got.plt)
+                0x0000000000003000                PROVIDE (__mirror, 0x3000)
+                0x000000000000df00                PROVIDE (__mirror_end, (__mirror + 0xaf00))
+                0x0000000000007c3c                PROVIDE (__rodata, ADDR (.rodata))
+
+.rodata         0x0000000000007c3c      0x27b
+                0x0000000000007c3c                . = ALIGN (0x2)
+ *(.rodata)
+ .rodata        0x0000000000007c3c        0x3 ./src/r_main.o
+ .rodata        0x0000000000007c3f       0x1a ./HMI/4Digit_7Segment.o
+ .rodata        0x0000000000007c59        0x6 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+ .rodata        0x0000000000007c5f        0xf ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+ .rodata        0x0000000000007c6e       0x27 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+ .rodata        0x0000000000007c95       0x12 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+ .rodata        0x0000000000007ca7       0x10 ./Common/Common.o
+ *(.rodata.*)
+ .rodata.CFG_Parameters_Name
+                0x0000000000007cb7      0x100 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                0x0000000000007cb7                CFG_Parameters_Name
+ .rodata.CFG_Parameters_Min_Value
+                0x0000000000007db7       0x80 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                0x0000000000007db7                CFG_Parameters_Min_Value
+ .rodata.CFG_Parameters_Max_Value
+                0x0000000000007e37       0x80 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                0x0000000000007e37                CFG_Parameters_Max_Value
+                0x0000000000007eb7                _erodata = .
+                0x0000000000000001                ASSERT (! ((SIZEOF (.rodata) > (__mirror_end - __mirror))), Error: Too much const data-the size exceeds the mirror area. Please change some of them from 'const' to 'const __far' and uncheck 'Data sections (-fdata-sections)' of optimaize option.)
+                0x0000000000000001                ASSERT (! ((((((SIZEOF (.rodata) <= (__mirror_end - __mirror)) && (SIZEOF (.rodata) > 0x0)) && (ABSOLUTE (__rodata) >= __mirror_end)) && (ABSOLUTE (.) > __mirror_end)) && (ADDR (.text) < __rodata))), Error: No room left for const data- the start address exceeds the mirror area. Please move the .text section from lower address to higher address.)
+                0x0000000000000001                ASSERT (! ((((((SIZEOF (.rodata) <= (__mirror_end - __mirror)) && (SIZEOF (.rodata) > 0x0)) && (ABSOLUTE (__rodata) >= __mirror_end)) && (ABSOLUTE (.) > __mirror_end)) && (__rodata < ADDR (.text)))), Error: No room left for const data- the start address exceeds the mirror area. Please check the map file.)
+                0x0000000000000001                ASSERT (! ((((((SIZEOF (.rodata) <= (__mirror_end - __mirror)) && (SIZEOF (.rodata) > 0x0)) && (ABSOLUTE (__rodata) < __mirror_end)) && (ABSOLUTE (.) > __mirror_end)) && (ADDR (.text) < __rodata))), Error : No room left for const data-the end address exceeds the mirror area. Please move the .text section from lower address to higher address.)
+                0x0000000000000001                ASSERT (! ((((((SIZEOF (.rodata) <= (__mirror_end - __mirror)) && (SIZEOF (.rodata) > 0x0)) && (ABSOLUTE (__rodata) < __mirror_end)) && (ABSOLUTE (.) > __mirror_end)) && (__rodata < ADDR (.text)))), Error : No room left for const data-the end address exceeds the mirror area. Please check the map file.)
+
+PFDL_COD        0x0000000000007eb7       0xac
+                0x0000000000007eb7                PROVIDE (___start_PFDL_COD, .)
+ PFDL_COD       0x0000000000007eb7       0xac E:/AIoT/Code/Rogger/DGC_A230_6_Rev_1_0_Software/lib/pfdl.a(pfdl.o)
+                0x0000000000007eb7                PFDL_Open
+                0x0000000000007eb7                PFDL_Open
+                0x0000000000007edc                PFDL_Execute
+                0x0000000000007edc                PFDL_Execute
+                0x0000000000007f49                PFDL_Handler
+                0x0000000000007f49                PFDL_Handler
+                0x0000000000007f55                PFDL_Close
+                0x0000000000007f55                PFDL_Close
+                0x0000000000007f63                PROVIDE (___stop_PFDL_COD, .)
+
+.frodata        0x0000000000007f63        0x1
+                0x0000000000007f64                . = ALIGN (0x2)
+ *fill*         0x0000000000007f63        0x1 
+ *(.frodata)
+ *(.frodata.*)
+                0x0000000000007f64                _efrodata = .
+
+.eh_frame_hdr
+ *(.eh_frame_hdr)
+
+.eh_frame
+ *(.eh_frame)
+
+.jcr            0x0000000000007f64        0x0
+ *(.jcr)
+                0x0000000000007f64                . = ALIGN (0x2)
+
+.data           0x00000000000fdf00       0x10 load address 0x00000000000000d8
+                0x00000000000fdf00                . = ALIGN (0x2)
+                0x00000000000fdf00                _data = .
+ *(.data)
+ *(.data.*)
+ .data.M1_Torque_Setting
+                0x00000000000fdf00        0x2 ./src/r_cg_intc_user.o
+                0x00000000000fdf00                M1_Torque_Setting
+ .data.M2_Torque_Setting
+                0x00000000000fdf02        0x2 ./src/r_cg_intc_user.o
+                0x00000000000fdf02                M2_Torque_Setting
+ .data.Parameter_Name
+                0x00000000000fdf04        0x2 ./HMI/4Digit_7Segment.o
+                0x00000000000fdf04                Parameter_Name
+ .data.Parameter_Value
+                0x00000000000fdf06        0x2 ./HMI/4Digit_7Segment.o
+                0x00000000000fdf06                Parameter_Value
+ .data.Mask     0x00000000000fdf08        0x1 ./HMI/4Digit_7Segment.o
+                0x00000000000fdf08                Mask
+ .data.Command_Status_No1
+                0x00000000000fdf09        0x1 ./HMI/4Digit_7Segment.o
+                0x00000000000fdf09                Command_Status_No1
+ .data.CFG_Paramenters_Index
+                0x00000000000fdf0a        0x1 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                0x00000000000fdf0a                CFG_Paramenters_Index
+ *fill*         0x00000000000fdf0b        0x1 
+ .data.Torque_Inc
+                0x00000000000fdf0c        0x2 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+                0x00000000000fdf0c                Torque_Inc
+ .data.Torque_Dec
+                0x00000000000fdf0e        0x2 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+                0x00000000000fdf0e                Torque_Dec
+                0x00000000000fdf10                . = ALIGN (0x2)
+                0x00000000000fdf10                _edata = .
+                0x0000000000000010                PROVIDE (__romdatacopysize, SIZEOF (.data))
+
+.bss            0x00000000000fdf10      0x170 load address 0x00000000000000e8
+                0x00000000000fdf10                . = ALIGN (0x2)
+                0x00000000000fdf10                _bss = .
+ *(.bss)
+ *(.bss.**)
+ .bss.HMI_Flash_Enable
+                0x00000000000fdf10        0x1 ./src/r_cg_timer_user.o
+                0x00000000000fdf10                HMI_Flash_Enable
+ .bss.Display_Mode
+                0x00000000000fdf11        0x1 ./src/r_main.o
+                0x00000000000fdf11                Display_Mode
+ .bss.Flash_Enable
+                0x00000000000fdf12        0x1 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x00000000000fdf12                Flash_Enable
+ .bss.Machine_State
+                0x00000000000fdf13        0x1 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x00000000000fdf13                Machine_State
+ .bss.Braking_Time_Enable
+                0x00000000000fdf14        0x1 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x00000000000fdf14                Braking_Time_Enable
+ .bss.Disable_Time_Enable
+                0x00000000000fdf15        0x1 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x00000000000fdf15                Disable_Time_Enable
+ .bss.Leaf_No1_State
+                0x00000000000fdf16        0x1 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x00000000000fdf16                Leaf_No1_State
+ .bss.Leaf_No2_State
+                0x00000000000fdf17        0x1 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x00000000000fdf17                Leaf_No2_State
+ .bss.flag_PP   0x00000000000fdf18        0x1 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x00000000000fdf18                flag_PP
+ *fill*         0x00000000000fdf19        0x1 
+ .bss.M1_Last_Time_Position
+                0x00000000000fdf1a        0x2 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x00000000000fdf1a                M1_Last_Time_Position
+ .bss.M2_Last_Time_Position
+                0x00000000000fdf1c        0x2 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x00000000000fdf1c                M2_Last_Time_Position
+ .bss.M1_Time_Position
+                0x00000000000fdf1e        0x2 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x00000000000fdf1e                M1_Time_Position
+ .bss.M2_Time_Position
+                0x00000000000fdf20        0x2 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x00000000000fdf20                M2_Time_Position
+ .bss.Courtesy_Light_Enable
+                0x00000000000fdf22        0x1 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x00000000000fdf22                Courtesy_Light_Enable
+ .bss.M1_Timestamp
+                0x00000000000fdf23        0x1 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+                0x00000000000fdf23                M1_Timestamp
+ .bss.M2_Timestamp
+                0x00000000000fdf24        0x1 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+                0x00000000000fdf24                M2_Timestamp
+                0x00000000000fdf26                . = ALIGN (0x2)
+ *fill*         0x00000000000fdf25        0x1 
+ *(COMMON)
+ COMMON         0x00000000000fdf26        0xd ./src/r_cg_pfdl.o
+                0x00000000000fdf26                gFdlDesc
+                0x00000000000fdf28                gFdlStatus
+                0x00000000000fdf2a                gFdlReq
+                0x00000000000fdf32                gFdlResult
+ *fill*         0x00000000000fdf33        0x1 
+ COMMON         0x00000000000fdf34        0xa ./src/r_cg_serial.o
+                0x00000000000fdf34                g_uart1_rx_length
+                0x00000000000fdf36                g_uart1_rx_count
+                0x00000000000fdf38                gp_uart1_rx_address
+                0x00000000000fdf3a                gp_uart1_tx_address
+                0x00000000000fdf3c                g_uart1_tx_count
+ COMMON         0x00000000000fdf3e        0xc ./src/r_cg_timer_user.o
+                0x00000000000fdf3e                Tick_Count
+                0x00000000000fdf40                M1_Tick_Count
+                0x00000000000fdf42                M2_Tick_Count
+                0x00000000000fdf44                Disable_Tick_Count
+                0x00000000000fdf46                Brake_Tick_Count
+                0x00000000000fdf48                Flash_Frequency_Count
+                0x00000000000fdf49                HMI_Flash_Count
+ COMMON         0x00000000000fdf4a        0x1 ./src/r_main.o
+                0x00000000000fdf4a                Power_failure
+ COMMON         0x00000000000fdf4b        0x4 ./HMI/4Digit_7Segment.o
+                0x00000000000fdf4b                Command_Status_No2
+                0x00000000000fdf4c                Digit_Count
+                0x00000000000fdf4d                Safety_Status_No1
+                0x00000000000fdf4e                Safety_Status_No2
+ *fill*         0x00000000000fdf4f        0x1 
+ COMMON         0x00000000000fdf50       0x1a ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                0x00000000000fdf50                M1_Time_T1
+                0x00000000000fdf52                M2_Time_T4
+                0x00000000000fdf54                Flash_Frequency_Config
+                0x00000000000fdf56                M1_Time_T5
+                0x00000000000fdf58                M2_Time_T3
+                0x00000000000fdf5a                M1_Time_T2
+                0x00000000000fdf5c                M2_Time_T5
+                0x00000000000fdf5e                M1_Time_T4
+                0x00000000000fdf60                Pre_Flash_Type
+                0x00000000000fdf62                M2_Time_T1
+                0x00000000000fdf64                M1_Time_T3
+                0x00000000000fdf66                Flash_Timer_Counter
+                0x00000000000fdf68                M2_Time_T2
+ COMMON         0x00000000000fdf6a        0x7 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                0x00000000000fdf6a                Last_Open_Command_State
+                0x00000000000fdf6b                Last_Close_Command_State
+                0x00000000000fdf6c                Courtesy_Light_Time
+                0x00000000000fdf6e                Courtesy_Light_Count
+                0x00000000000fdf70                Last_Clock_Command_State
+ *fill*         0x00000000000fdf71        0x1 
+ COMMON         0x00000000000fdf72       0xde ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                0x00000000000fdf72                CFG_Parameters_Value
+                0x00000000000fdff2                CFG_parameter
+                0x00000000000fe04a                Automatic_Close_Flag
+                0x00000000000fe04c                Automatic_Close_Count
+                0x00000000000fe04e                Key_Tick_Count
+                0x00000000000fe050                . = ALIGN (0x2)
+                0x00000000000fe050                _ebss = .
+                0x00000000000fe080                . = ALIGN (0x80)
+ *fill*         0x00000000000fe050       0x30 
+                0x00000000000fe080                _end = .
+                0x0000000000000064                PROVIDE (stack_size, 0x64)
+
+.stack          0x00000000000ffedc        0x0
+                0x00000000000ffedc                _stack = .
+                0x0000000000000001                ASSERT ((_stack > (_end + stack_size)), Error: Too much data - no room left for the stack)
+OUTPUT(DGC_A230_6_Rev_1_0_Software.elf elf32-rl78)
+
+.debug_frame    0x0000000000000000      0xf50
+ .debug_frame   0x0000000000000000       0x24 ./src/r_cg_cgc.o
+ .debug_frame   0x0000000000000024       0x2c ./src/r_cg_cgc_user.o
+ .debug_frame   0x0000000000000050       0x64 ./src/r_cg_intc.o
+ .debug_frame   0x00000000000000b4       0xb8 ./src/r_cg_intc_user.o
+ .debug_frame   0x000000000000016c       0xc4 ./src/r_cg_pfdl.o
+ .debug_frame   0x0000000000000230       0x24 ./src/r_cg_port.o
+ .debug_frame   0x0000000000000254       0x84 ./src/r_cg_serial.o
+ .debug_frame   0x00000000000002d8      0x120 ./src/r_cg_serial_user.o
+ .debug_frame   0x00000000000003f8      0x124 ./src/r_cg_timer.o
+ .debug_frame   0x000000000000051c      0x328 ./src/r_cg_timer_user.o
+ .debug_frame   0x0000000000000844       0x54 ./src/r_cg_vector_table.o
+ .debug_frame   0x0000000000000898       0x58 ./src/r_hardware_setup.o
+ .debug_frame   0x00000000000008f0       0x3c ./src/r_main.o
+ .debug_frame   0x000000000000092c       0x84 ./HMI/4Digit_7Segment.o
+ .debug_frame   0x00000000000009b0      0x1a4 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+ .debug_frame   0x0000000000000b54      0x20c ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+ .debug_frame   0x0000000000000d60       0xbc ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+ .debug_frame   0x0000000000000e1c       0x64 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+ .debug_frame   0x0000000000000e80       0x44 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+ .debug_frame   0x0000000000000ec4       0x8c ./Common/Common.o
+
+.debug_info     0x0000000000000000     0x5d67
+ .debug_info    0x0000000000000000      0x133 ./src/r_cg_cgc.o
+ .debug_info    0x0000000000000133       0x7b ./src/r_cg_cgc_user.o
+ .debug_info    0x00000000000001ae      0x30d ./src/r_cg_intc.o
+ .debug_info    0x00000000000004bb      0x18f ./src/r_cg_intc_user.o
+ .debug_info    0x000000000000064a      0x2ff ./src/r_cg_pfdl.o
+ .debug_info    0x0000000000000949      0x35e ./src/r_cg_port.o
+ .debug_info    0x0000000000000ca7      0x37f ./src/r_cg_serial.o
+ .debug_info    0x0000000000001026      0x15a ./src/r_cg_serial_user.o
+ .debug_info    0x0000000000001180      0x438 ./src/r_cg_timer.o
+ .debug_info    0x00000000000015b8      0x6f7 ./src/r_cg_timer_user.o
+ .debug_info    0x0000000000001caf      0x108 ./src/r_cg_vector_table.o
+ .debug_info    0x0000000000001db7      0x156 ./src/r_hardware_setup.o
+ .debug_info    0x0000000000001f0d      0x55c ./src/r_main.o
+ .debug_info    0x0000000000002469       0x82 ./src/r_reset_program.o
+ .debug_info    0x00000000000024eb      0x303 ./HMI/4Digit_7Segment.o
+ .debug_info    0x00000000000027ee      0xa9f ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+ .debug_info    0x000000000000328d     0x16a6 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+ .debug_info    0x0000000000004933      0x7ea ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+ .debug_info    0x000000000000511d      0x7cf ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+ .debug_info    0x00000000000058ec      0x2b6 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+ .debug_info    0x0000000000005ba2      0x1c5 ./Common/Common.o
+
+.debug_abbrev   0x0000000000000000     0x1417
+ .debug_abbrev  0x0000000000000000       0x82 ./src/r_cg_cgc.o
+ .debug_abbrev  0x0000000000000082       0x53 ./src/r_cg_cgc_user.o
+ .debug_abbrev  0x00000000000000d5       0xb8 ./src/r_cg_intc.o
+ .debug_abbrev  0x000000000000018d       0xe1 ./src/r_cg_intc_user.o
+ .debug_abbrev  0x000000000000026e       0xde ./src/r_cg_pfdl.o
+ .debug_abbrev  0x000000000000034c       0x8f ./src/r_cg_port.o
+ .debug_abbrev  0x00000000000003db      0x132 ./src/r_cg_serial.o
+ .debug_abbrev  0x000000000000050d       0xcb ./src/r_cg_serial_user.o
+ .debug_abbrev  0x00000000000005d8       0xd0 ./src/r_cg_timer.o
+ .debug_abbrev  0x00000000000006a8      0x166 ./src/r_cg_timer_user.o
+ .debug_abbrev  0x000000000000080e       0x7c ./src/r_cg_vector_table.o
+ .debug_abbrev  0x000000000000088a       0xcc ./src/r_hardware_setup.o
+ .debug_abbrev  0x0000000000000956      0x122 ./src/r_main.o
+ .debug_abbrev  0x0000000000000a78       0x14 ./src/r_reset_program.o
+ .debug_abbrev  0x0000000000000a8c       0xf7 ./HMI/4Digit_7Segment.o
+ .debug_abbrev  0x0000000000000b83      0x1aa ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+ .debug_abbrev  0x0000000000000d2d      0x1f8 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+ .debug_abbrev  0x0000000000000f25      0x1c7 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+ .debug_abbrev  0x00000000000010ec      0x16b ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+ .debug_abbrev  0x0000000000001257       0xf1 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+ .debug_abbrev  0x0000000000001348       0xcf ./Common/Common.o
+
+.debug_aranges  0x0000000000000000      0x5f8
+ .debug_aranges
+                0x0000000000000000       0x20 ./src/r_cg_cgc.o
+ .debug_aranges
+                0x0000000000000020       0x20 ./src/r_cg_cgc_user.o
+ .debug_aranges
+                0x0000000000000040       0x40 ./src/r_cg_intc.o
+ .debug_aranges
+                0x0000000000000080       0x28 ./src/r_cg_intc_user.o
+ .debug_aranges
+                0x00000000000000a8       0x58 ./src/r_cg_pfdl.o
+ .debug_aranges
+                0x0000000000000100       0x20 ./src/r_cg_port.o
+ .debug_aranges
+                0x0000000000000120       0x48 ./src/r_cg_serial.o
+ .debug_aranges
+                0x0000000000000168       0x48 ./src/r_cg_serial_user.o
+ .debug_aranges
+                0x00000000000001b0       0xa0 ./src/r_cg_timer.o
+ .debug_aranges
+                0x0000000000000250       0x58 ./src/r_cg_timer_user.o
+ .debug_aranges
+                0x00000000000002a8       0x20 ./src/r_cg_vector_table.o
+ .debug_aranges
+                0x00000000000002c8       0x28 ./src/r_hardware_setup.o
+ .debug_aranges
+                0x00000000000002f0       0x28 ./src/r_main.o
+ .debug_aranges
+                0x0000000000000318       0x20 ./src/r_reset_program.o
+ .debug_aranges
+                0x0000000000000338       0x40 ./HMI/4Digit_7Segment.o
+ .debug_aranges
+                0x0000000000000378       0xc0 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+ .debug_aranges
+                0x0000000000000438       0xd0 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+ .debug_aranges
+                0x0000000000000508       0x50 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+ .debug_aranges
+                0x0000000000000558       0x30 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+ .debug_aranges
+                0x0000000000000588       0x28 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+ .debug_aranges
+                0x00000000000005b0       0x48 ./Common/Common.o
+
+.debug_ranges   0x0000000000000000      0x588
+ .debug_ranges  0x0000000000000000       0x10 ./src/r_cg_cgc.o
+ .debug_ranges  0x0000000000000010       0x10 ./src/r_cg_cgc_user.o
+ .debug_ranges  0x0000000000000020       0x30 ./src/r_cg_intc.o
+ .debug_ranges  0x0000000000000050       0x18 ./src/r_cg_intc_user.o
+ .debug_ranges  0x0000000000000068       0x48 ./src/r_cg_pfdl.o
+ .debug_ranges  0x00000000000000b0       0x10 ./src/r_cg_port.o
+ .debug_ranges  0x00000000000000c0       0x38 ./src/r_cg_serial.o
+ .debug_ranges  0x00000000000000f8       0x38 ./src/r_cg_serial_user.o
+ .debug_ranges  0x0000000000000130       0x90 ./src/r_cg_timer.o
+ .debug_ranges  0x00000000000001c0       0x48 ./src/r_cg_timer_user.o
+ .debug_ranges  0x0000000000000208       0x10 ./src/r_cg_vector_table.o
+ .debug_ranges  0x0000000000000218       0x18 ./src/r_hardware_setup.o
+ .debug_ranges  0x0000000000000230       0x18 ./src/r_main.o
+ .debug_ranges  0x0000000000000248       0x30 ./HMI/4Digit_7Segment.o
+ .debug_ranges  0x0000000000000278       0xb0 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+ .debug_ranges  0x0000000000000328      0x1b0 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+ .debug_ranges  0x00000000000004d8       0x40 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+ .debug_ranges  0x0000000000000518       0x20 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+ .debug_ranges  0x0000000000000538       0x18 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+ .debug_ranges  0x0000000000000550       0x38 ./Common/Common.o
+
+.debug_line     0x0000000000000000     0x58c3
+ .debug_line    0x0000000000000000       0xb9 ./src/r_cg_cgc.o
+ .debug_line    0x00000000000000b9       0x69 ./src/r_cg_cgc_user.o
+ .debug_line    0x0000000000000122      0x1d6 ./src/r_cg_intc.o
+ .debug_line    0x00000000000002f8       0xe6 ./src/r_cg_intc_user.o
+ .debug_line    0x00000000000003de      0x2c5 ./src/r_cg_pfdl.o
+ .debug_line    0x00000000000006a3      0x114 ./src/r_cg_port.o
+ .debug_line    0x00000000000007b7      0x2b3 ./src/r_cg_serial.o
+ .debug_line    0x0000000000000a6a      0x13f ./src/r_cg_serial_user.o
+ .debug_line    0x0000000000000ba9      0x531 ./src/r_cg_timer.o
+ .debug_line    0x00000000000010da      0x37a ./src/r_cg_timer_user.o
+ .debug_line    0x0000000000001454       0x68 ./src/r_cg_vector_table.o
+ .debug_line    0x00000000000014bc      0x144 ./src/r_hardware_setup.o
+ .debug_line    0x0000000000001600      0x1c5 ./src/r_main.o
+ .debug_line    0x00000000000017c5      0x165 ./src/r_reset_program.o
+ .debug_line    0x000000000000192a      0x382 ./HMI/4Digit_7Segment.o
+ .debug_line    0x0000000000001cac      0xca2 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+ .debug_line    0x000000000000294e     0x165a ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+ .debug_line    0x0000000000003fa8      0xc53 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+ .debug_line    0x0000000000004bfb      0x62a ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+ .debug_line    0x0000000000005225      0x465 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+ .debug_line    0x000000000000568a      0x239 ./Common/Common.o
+
+.debug_str      0x0000000000000000     0x1e22
+ .debug_str     0x0000000000000000      0x15f ./src/r_cg_cgc.o
+                                        0x186 (size before relaxing)
+ .debug_str     0x000000000000015f       0x40 ./src/r_cg_cgc_user.o
+                                        0x191 (size before relaxing)
+ .debug_str     0x000000000000019f       0xc4 ./src/r_cg_intc.o
+                                        0x25d (size before relaxing)
+ .debug_str     0x0000000000000263       0xbb ./src/r_cg_intc_user.o
+                                        0x214 (size before relaxing)
+ .debug_str     0x000000000000031e      0x23e ./src/r_cg_pfdl.o
+                                        0x3a4 (size before relaxing)
+ .debug_str     0x000000000000055c       0x93 ./src/r_cg_port.o
+                                        0x20f (size before relaxing)
+ .debug_str     0x00000000000005ef      0x12e ./src/r_cg_serial.o
+                                        0x2cb (size before relaxing)
+ .debug_str     0x000000000000071d       0xc9 ./src/r_cg_serial_user.o
+                                        0x287 (size before relaxing)
+ .debug_str     0x00000000000007e6      0x16a ./src/r_cg_timer.o
+                                        0x3a2 (size before relaxing)
+ .debug_str     0x0000000000000950      0x8a5 ./src/r_cg_timer_user.o
+                                        0xa74 (size before relaxing)
+ .debug_str     0x00000000000011f5       0x4c ./src/r_cg_vector_table.o
+                                        0x1b6 (size before relaxing)
+ .debug_str     0x0000000000001241       0x50 ./src/r_hardware_setup.o
+                                        0x1bd (size before relaxing)
+ .debug_str     0x0000000000001291      0x14e ./src/r_main.o
+                                        0x89b (size before relaxing)
+ .debug_str     0x00000000000013df      0x10c ./HMI/4Digit_7Segment.o
+                                        0x2f9 (size before relaxing)
+ .debug_str     0x00000000000014eb      0x31e ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+                                        0xc93 (size before relaxing)
+ .debug_str     0x0000000000001809      0x282 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+                                        0xcb5 (size before relaxing)
+ .debug_str     0x0000000000001a8b      0x1ac ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+                                        0xa88 (size before relaxing)
+ .debug_str     0x0000000000001c37      0x11b ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+                                        0xacd (size before relaxing)
+ .debug_str     0x0000000000001d52       0x48 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+                                        0x2db (size before relaxing)
+ .debug_str     0x0000000000001d9a       0x88 ./Common/Common.o
+                                        0x25f (size before relaxing)
+
+.comment        0x0000000000000000       0xa0
+ .comment       0x0000000000000000       0xa0 ./src/r_cg_cgc.o
+                                         0xa1 (size before relaxing)
+ .comment       0x0000000000000000       0xa1 ./src/r_cg_cgc_user.o
+ .comment       0x0000000000000000       0xa1 ./src/r_cg_intc.o
+ .comment       0x0000000000000000       0xa1 ./src/r_cg_intc_user.o
+ .comment       0x0000000000000000       0xa1 ./src/r_cg_pfdl.o
+ .comment       0x0000000000000000       0xa1 ./src/r_cg_port.o
+ .comment       0x0000000000000000       0xa1 ./src/r_cg_serial.o
+ .comment       0x0000000000000000       0xa1 ./src/r_cg_serial_user.o
+ .comment       0x0000000000000000       0xa1 ./src/r_cg_timer.o
+ .comment       0x0000000000000000       0xa1 ./src/r_cg_timer_user.o
+ .comment       0x0000000000000000       0xa1 ./src/r_cg_vector_table.o
+ .comment       0x0000000000000000       0xa1 ./src/r_hardware_setup.o
+ .comment       0x0000000000000000       0xa1 ./src/r_main.o
+ .comment       0x0000000000000000       0xa1 ./HMI/4Digit_7Segment.o
+ .comment       0x0000000000000000       0xa1 ./DGC_A230_Functions/DGC_A230_Motor_Functions.o
+ .comment       0x0000000000000000       0xa1 ./DGC_A230_Functions/DGC_A230_Normal_Mode.o
+ .comment       0x0000000000000000       0xa1 ./DGC_A230_Functions/DGC_A230_Parameters_Functions.o
+ .comment       0x0000000000000000       0xa1 ./DGC_A230_Functions/DGC_A230_Program_Mode.o
+ .comment       0x0000000000000000       0xa1 ./DGC_A230_Functions/DGC_A230_Test_Mode.o
+ .comment       0x0000000000000000       0xa1 ./Common/Common.o

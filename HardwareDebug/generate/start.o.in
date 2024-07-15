@@ -1,0 +1,1 @@
+-O0 -ffunction-sections -fdata-sections -Wstack-usage=256 -g2 -mcpu=s2 -x assembler-with-cpp -Wa,--gdwarf2 -I"E:/AIoT/Code/Rogger/DGC_A230_6_Rev_1_0_Software/src" -Wa,-adlhn="start.lst" -MMD -MP -MF"generate/start.d" -MT"generate/start.o" -c "../generate/start.S" -o "generate/start.o"

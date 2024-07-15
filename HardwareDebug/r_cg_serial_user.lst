@@ -1,0 +1,442 @@
+   1                             	r8	=	0xffef0
+   2                             	r16	=	0xffee8
+   3                             	r24	=	0xffee0
+   4                             	r9	=	0xffef1
+   5                             	r17	=	0xffee9
+   6                             	r25	=	0xffee1
+   7                             	r10	=	0xffef2
+   8                             	r18	=	0xffeea
+   9                             	r26	=	0xffee2
+  10                             	r11	=	0xffef3
+  11                             	r19	=	0xffeeb
+  12                             	r27	=	0xffee3
+  13                             	r12	=	0xffef4
+  14                             	r20	=	0xffeec
+  15                             	r28	=	0xffee4
+  16                             	r13	=	0xffef5
+  17                             	r21	=	0xffeed
+  18                             	r29	=	0xffee5
+  19                             	r14	=	0xffef6
+  20                             	r22	=	0xffeee
+  21                             	r30	=	0xffee6
+  22                             	r15	=	0xffef7
+  23                             	r23	=	0xffeef
+  24                             	r31	=	0xffee7
+  25                             	MDUC	=	0xf00e8
+  26                             	MDAL	=	0xffff0
+  27                             	MDAH	=	0xffff2
+  28                             	MDBL	=	0xffff6
+  29                             	MDBH	=	0xffff4
+  30                             	MDCL	=	0xf00e0
+  31                             	MDCH	=	0xf00e2
+  32                             	.text
+  33                             	.Ltext0:
+  34                             		.section	.text.r_uart1_interrupt_receive,"ax",@progbits
+  35                             		.global	_r_uart1_interrupt_receive
+  37                             	_r_uart1_interrupt_receive:
+  38                             	.LFB0:
+  39                             		.file 1 "../src/r_cg_serial_user.c"
+   1:../src/r_cg_serial_user.c **** /**************************************************************************************************
+   2:../src/r_cg_serial_user.c **** * DISCLAIMER
+   3:../src/r_cg_serial_user.c **** * This software is supplied by Renesas Electronics Corporation and is only intended for use with Re
+   4:../src/r_cg_serial_user.c **** * No other uses are authorized. This software is owned by Renesas Electronics Corporation and is pr
+   5:../src/r_cg_serial_user.c **** * applicable laws, including copyright laws. 
+   6:../src/r_cg_serial_user.c **** * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING THIS SOFTWARE, WHETHE
+   7:../src/r_cg_serial_user.c **** * OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULA
+   8:../src/r_cg_serial_user.c **** * NON-INFRINGEMENT.  ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.TO THE MAXIMUM EXTENT PERMITTED N
+   9:../src/r_cg_serial_user.c **** * LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE 
+  10:../src/r_cg_serial_user.c **** * INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS SOFTWARE, E
+  11:../src/r_cg_serial_user.c **** * ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  12:../src/r_cg_serial_user.c **** * Renesas reserves the right, without notice, to make changes to this software and to discontinue t
+  13:../src/r_cg_serial_user.c **** * of this software. By using this software, you agree to the additional terms and conditions found 
+  14:../src/r_cg_serial_user.c **** * following link:
+  15:../src/r_cg_serial_user.c **** * http://www.renesas.com/disclaimer
+  16:../src/r_cg_serial_user.c **** *
+  17:../src/r_cg_serial_user.c **** * Copyright (C) 2011, 2023 Renesas Electronics Corporation. All rights reserved.
+  18:../src/r_cg_serial_user.c **** ***************************************************************************************************
+  19:../src/r_cg_serial_user.c **** 
+  20:../src/r_cg_serial_user.c **** /**************************************************************************************************
+  21:../src/r_cg_serial_user.c **** * File Name    : r_cg_serial_user.c
+  22:../src/r_cg_serial_user.c **** * Version      : CodeGenerator for RL78/G13 V2.05.07.02 [17 Nov 2023]
+  23:../src/r_cg_serial_user.c **** * Device(s)    : R5F100LF
+  24:../src/r_cg_serial_user.c **** * Tool-Chain   : GCCRL78
+  25:../src/r_cg_serial_user.c **** * Description  : This file implements device driver for Serial module.
+  26:../src/r_cg_serial_user.c **** * Creation Date: 15/06/2024
+  27:../src/r_cg_serial_user.c **** ***************************************************************************************************
+  28:../src/r_cg_serial_user.c **** 
+  29:../src/r_cg_serial_user.c **** /**************************************************************************************************
+  30:../src/r_cg_serial_user.c **** Includes
+  31:../src/r_cg_serial_user.c **** ***************************************************************************************************
+  32:../src/r_cg_serial_user.c **** #include "r_cg_macrodriver.h"
+  33:../src/r_cg_serial_user.c **** #include "r_cg_serial.h"
+  34:../src/r_cg_serial_user.c **** /* Start user code for include. Do not edit comment generated here */
+  35:../src/r_cg_serial_user.c **** /* End user code. Do not edit comment generated here */
+  36:../src/r_cg_serial_user.c **** #include "r_cg_userdefine.h"
+  37:../src/r_cg_serial_user.c **** 
+  38:../src/r_cg_serial_user.c **** /**************************************************************************************************
+  39:../src/r_cg_serial_user.c **** Global variables and functions
+  40:../src/r_cg_serial_user.c **** ***************************************************************************************************
+  41:../src/r_cg_serial_user.c **** extern volatile uint8_t * gp_uart1_tx_address;         /* uart1 send buffer address */
+  42:../src/r_cg_serial_user.c **** extern volatile uint16_t  g_uart1_tx_count;            /* uart1 send data number */
+  43:../src/r_cg_serial_user.c **** extern volatile uint8_t * gp_uart1_rx_address;         /* uart1 receive buffer address */
+  44:../src/r_cg_serial_user.c **** extern volatile uint16_t  g_uart1_rx_count;            /* uart1 receive data number */
+  45:../src/r_cg_serial_user.c **** extern volatile uint16_t  g_uart1_rx_length;           /* uart1 receive data length */
+  46:../src/r_cg_serial_user.c **** /* Start user code for global. Do not edit comment generated here */
+  47:../src/r_cg_serial_user.c **** /* End user code. Do not edit comment generated here */
+  48:../src/r_cg_serial_user.c **** 
+  49:../src/r_cg_serial_user.c **** /**************************************************************************************************
+  50:../src/r_cg_serial_user.c **** * Function Name: r_uart1_interrupt_receive
+  51:../src/r_cg_serial_user.c **** * Description  : This function is INTSR1 interrupt service routine.
+  52:../src/r_cg_serial_user.c **** * Arguments    : None
+  53:../src/r_cg_serial_user.c **** * Return Value : None
+  54:../src/r_cg_serial_user.c **** ***************************************************************************************************
+  55:../src/r_cg_serial_user.c **** void r_uart1_interrupt_receive(void)
+  56:../src/r_cg_serial_user.c **** {
+  40                             		.loc 1 56 0
+  41                             		; start of function
+  42                             		; push 16: ax bc de hl r8 r10 r12 r14
+  43                             		; locals: 2 bytes
+  44                             		; outgoing: 2 bytes
+  45                             		; uses ES register
+  46 0000 61 CF                   		sel	rb0
+  47 0002 C1                      		push	ax
+  48                             	.LCFI0:
+  49 0003 C3                      		push	bc
+  50                             	.LCFI1:
+  51 0004 C5                      		push	de
+  52                             	.LCFI2:
+  53 0005 C7                      		push	hl
+  54                             	.LCFI3:
+  55 0006 61 DF                   		sel	rb1
+  56 0008 C1                      		push	ax ; r8
+  57                             	.LCFI4:
+  58 0009 C3                      		push	bc ; r10
+  59                             	.LCFI5:
+  60 000a C5                      		push	de ; r12
+  61                             	.LCFI6:
+  62 000b C7                      		push	hl ; r14
+  63                             	.LCFI7:
+  64 000c 61 CF                   		sel	rb0
+  65 000e 8E FD                   		mov	a, es
+  66 0010 C1                      		push	ax
+  67                             	.LCFI8:
+  68 0011 20 04                   		subw	sp, #4
+  69                             	.LCFI9:
+  57:../src/r_cg_serial_user.c ****     volatile uint8_t rx_data;
+  58:../src/r_cg_serial_user.c ****     volatile uint8_t err_type;
+  59:../src/r_cg_serial_user.c ****     
+  60:../src/r_cg_serial_user.c ****     err_type = (uint8_t)(SSR03 & 0x0007U);
+  70                             		.loc 1 60 0
+  71 0013 C9 F0 06 01             		movw	r8, #262
+  72 0017 AD F0                   		movw	ax, r8
+  73 0019 BD F2                   		movw	r10, ax
+  74 001b FA F2                   		movw	hl, r10
+  75 001d AB                      		movw	ax, [hl]
+  76 001e BD F0                   		movw	r8, ax
+  77 0020 5A F0 07                		and	r8, #7
+  78 0023 8D F0                   		mov	a, r8
+  79 0025 98 02                   		mov	[sp+2], a
+  61:../src/r_cg_serial_user.c ****     SIR03 = (uint16_t)err_type;
+  80                             		.loc 1 61 0
+  81 0027 C9 F2 0E 01             		movw	r10, #270
+  82 002b 88 02                   		mov	a, [sp+2]
+  83 002d 9D F0                   		mov	r8, a
+  84 002f F4 F1                   		clrb	r9
+  85 0031 AD F2                   		movw	ax, r10
+  86 0033 BD F4                   		movw	r12, ax
+  87 0035 EA F4                   		movw	de, r12
+  88 0037 AD F0                   		movw	ax, r8
+  89 0039 B9                      		movw	[de], ax
+  62:../src/r_cg_serial_user.c **** 
+  63:../src/r_cg_serial_user.c ****     if (err_type != 0U)
+  90                             		.loc 1 63 0
+  91 003a 88 02                   		mov	a, [sp+2]
+  92 003c 9D F0                   		mov	r8, a
+  93 003e D4 F0                   		cmp0	r8
+  94 0040 61 F8                   		 sknz
+  95 0042 EC 50 00 00             		 br	!!.L2
+  64:../src/r_cg_serial_user.c ****     {
+  65:../src/r_cg_serial_user.c ****         r_uart1_callback_error(err_type);
+  96                             		.loc 1 65 0
+  97 0046 88 02                   		mov	a, [sp+2]
+  98 0048 9D F0                   		mov	r8, a
+  99 004a 98 00                   		mov	[sp], a
+ 100 004c FC 00 00 00             		call	!!%code(_r_uart1_callback_error)
+ 101                             	.L2:
+  66:../src/r_cg_serial_user.c ****     }
+  67:../src/r_cg_serial_user.c ****     
+  68:../src/r_cg_serial_user.c ****     rx_data = RXD1;
+ 102                             		.loc 1 68 0
+ 103 0050 C9 F0 46 FF             		movw	r8, #-186
+ 104 0054 AD F0                   		movw	ax, r8
+ 105 0056 BD F2                   		movw	r10, ax
+ 106 0058 FA F2                   		movw	hl, r10
+ 107 005a 8B                      		mov	a, [hl]
+ 108 005b 9D F0                   		mov	r8, a
+ 109 005d 98 03                   		mov	[sp+3], a
+  69:../src/r_cg_serial_user.c **** 
+  70:../src/r_cg_serial_user.c ****     if (g_uart1_rx_length > g_uart1_rx_count)
+ 110                             		.loc 1 70 0
+ 111 005f AF 00 00                		movw	ax, !_g_uart1_rx_length
+ 112 0062 BD F2                   		movw	r10, ax
+ 113 0064 AF 00 00                		movw	ax, !_g_uart1_rx_count
+ 114 0067 BD F0                   		movw	r8, ax
+ 115 0069 AD F2                   		movw	ax, r10
+ 116 006b 46 F0                   		cmpw	ax, r8
+ 117 006d 61 E3                   		 skh
+ 118 006f EC B9 00 00             		 br	!!.L3
+  71:../src/r_cg_serial_user.c ****     {
+  72:../src/r_cg_serial_user.c ****         *gp_uart1_rx_address = rx_data;
+ 119                             		.loc 1 72 0
+ 120 0073 AF 00 00                		movw	ax, !_gp_uart1_rx_address
+ 121 0076 BD F0                   		movw	r8, ax
+ 122 0078 88 03                   		mov	a, [sp+3]
+ 123 007a 9D F2                   		mov	r10, a
+ 124 007c AD F0                   		movw	ax, r8
+ 125 007e BD F4                   		movw	r12, ax
+ 126 0080 EA F4                   		movw	de, r12
+ 127 0082 8D F2                   		mov	a, r10
+ 128 0084 99                      		mov	[de], a
+  73:../src/r_cg_serial_user.c ****         gp_uart1_rx_address++;
+ 129                             		.loc 1 73 0
+ 130 0085 AF 00 00                		movw	ax, !_gp_uart1_rx_address
+ 131 0088 BD F0                   		movw	r8, ax
+ 132 008a A6 F0                   		incw	r8
+ 133 008c AD F0                   		movw	ax, r8
+ 134 008e BF 00 00                		movw	!_gp_uart1_rx_address, ax
+  74:../src/r_cg_serial_user.c ****         g_uart1_rx_count++;
+ 135                             		.loc 1 74 0
+ 136 0091 AF 00 00                		movw	ax, !_g_uart1_rx_count
+ 137 0094 BD F0                   		movw	r8, ax
+ 138 0096 A6 F0                   		incw	r8
+ 139 0098 AD F0                   		movw	ax, r8
+ 140 009a BF 00 00                		movw	!_g_uart1_rx_count, ax
+  75:../src/r_cg_serial_user.c **** 
+  76:../src/r_cg_serial_user.c ****         if (g_uart1_rx_length == g_uart1_rx_count)
+ 141                             		.loc 1 76 0
+ 142 009d AF 00 00                		movw	ax, !_g_uart1_rx_length
+ 143 00a0 BD F2                   		movw	r10, ax
+ 144 00a2 AF 00 00                		movw	ax, !_g_uart1_rx_count
+ 145 00a5 BD F0                   		movw	r8, ax
+ 146 00a7 AD F2                   		movw	ax, r10
+ 147 00a9 46 F0                   		cmpw	ax, r8
+ 148 00ab 61 E8                   		 skz
+ 149 00ad EC C7 00 00             		 br	!!.L1
+  77:../src/r_cg_serial_user.c ****         {
+  78:../src/r_cg_serial_user.c ****             r_uart1_callback_receiveend();
+ 150                             		.loc 1 78 0
+ 151 00b1 FC 00 00 00             		call	!!%code(_r_uart1_callback_receiveend)
+ 152 00b5 EC C7 00 00             		br	!!.L1
+ 153                             	.L3:
+  79:../src/r_cg_serial_user.c ****         }
+  80:../src/r_cg_serial_user.c ****     }
+  81:../src/r_cg_serial_user.c ****     else
+  82:../src/r_cg_serial_user.c ****     {
+  83:../src/r_cg_serial_user.c ****         r_uart1_callback_softwareoverrun(rx_data);
+ 154                             		.loc 1 83 0
+ 155 00b9 88 03                   		mov	a, [sp+3]
+ 156 00bb 9D F0                   		mov	r8, a
+ 157 00bd F4 F1                   		clrb	r9
+ 158 00bf AD F0                   		movw	ax, r8
+ 159 00c1 B8 00                   		movw	[sp], ax
+ 160 00c3 FC 00 00 00             		call	!!%code(_r_uart1_callback_softwareoverrun)
+ 161                             	.L1:
+  84:../src/r_cg_serial_user.c ****     }
+  85:../src/r_cg_serial_user.c **** }
+ 162                             		.loc 1 85 0
+ 163 00c7 10 04                   		addw	sp, #4
+ 164 00c9 C0                      		pop	ax
+ 165 00ca 9E FD                   		mov	es, a
+ 166 00cc 61 DF                   		sel	rb1
+ 167 00ce C6                      		pop	hl ; r14
+ 168 00cf C4                      		pop	de ; r12
+ 169 00d0 C2                      		pop	bc ; r10
+ 170 00d1 C0                      		pop	ax ; r8
+ 171 00d2 61 CF                   		sel	rb0
+ 172 00d4 C6                      		pop	hl
+ 173 00d5 C4                      		pop	de
+ 174 00d6 C2                      		pop	bc
+ 175 00d7 C0                      		pop	ax
+ 176 00d8 61 FC                   		reti
+ 177                             	.LFE0:
+ 179                             		.section	.text.r_uart1_interrupt_send,"ax",@progbits
+ 180                             		.global	_r_uart1_interrupt_send
+ 182                             	_r_uart1_interrupt_send:
+ 183                             	.LFB1:
+  86:../src/r_cg_serial_user.c **** 
+  87:../src/r_cg_serial_user.c **** /**************************************************************************************************
+  88:../src/r_cg_serial_user.c **** * Function Name: r_uart1_interrupt_send
+  89:../src/r_cg_serial_user.c **** * Description  : This function is INTST1 interrupt service routine.
+  90:../src/r_cg_serial_user.c **** * Arguments    : None
+  91:../src/r_cg_serial_user.c **** * Return Value : None
+  92:../src/r_cg_serial_user.c **** ***************************************************************************************************
+  93:../src/r_cg_serial_user.c **** void r_uart1_interrupt_send(void)
+  94:../src/r_cg_serial_user.c **** {
+ 184                             		.loc 1 94 0
+ 185                             		; start of function
+ 186                             		; push 16: ax bc de hl r8 r10 r12 r14
+ 187                             		; uses ES register
+ 188 0000 61 CF                   		sel	rb0
+ 189 0002 C1                      		push	ax
+ 190                             	.LCFI10:
+ 191 0003 C3                      		push	bc
+ 192                             	.LCFI11:
+ 193 0004 C5                      		push	de
+ 194                             	.LCFI12:
+ 195 0005 C7                      		push	hl
+ 196                             	.LCFI13:
+ 197 0006 61 DF                   		sel	rb1
+ 198 0008 C1                      		push	ax ; r8
+ 199                             	.LCFI14:
+ 200 0009 C3                      		push	bc ; r10
+ 201                             	.LCFI15:
+ 202 000a C5                      		push	de ; r12
+ 203                             	.LCFI16:
+ 204 000b C7                      		push	hl ; r14
+ 205                             	.LCFI17:
+ 206 000c 61 CF                   		sel	rb0
+ 207 000e 8E FD                   		mov	a, es
+ 208 0010 C1                      		push	ax
+ 209                             	.LCFI18:
+  95:../src/r_cg_serial_user.c ****     if (g_uart1_tx_count > 0U)
+ 210                             		.loc 1 95 0
+ 211 0011 AF 00 00                		movw	ax, !_g_uart1_tx_count
+ 212 0014 BD F0                   		movw	r8, ax
+ 213 0016 44 00 00                		cmpw	ax, #0
+ 214 0019 61 F8                   		 sknz
+ 215 001b EC 54 00 00             		 br	!!.L7
+  96:../src/r_cg_serial_user.c ****     {
+  97:../src/r_cg_serial_user.c ****         TXD1 = *gp_uart1_tx_address;
+ 216                             		.loc 1 97 0
+ 217 001f C9 F2 44 FF             		movw	r10, #-188
+ 218 0023 AF 00 00                		movw	ax, !_gp_uart1_tx_address
+ 219 0026 BD F0                   		movw	r8, ax
+ 220 0028 BD F4                   		movw	r12, ax
+ 221 002a FA F4                   		movw	hl, r12
+ 222 002c 8B                      		mov	a, [hl]
+ 223 002d 9D F0                   		mov	r8, a
+ 224 002f AD F2                   		movw	ax, r10
+ 225 0031 BD F4                   		movw	r12, ax
+ 226 0033 EA F4                   		movw	de, r12
+ 227 0035 8D F0                   		mov	a, r8
+ 228 0037 99                      		mov	[de], a
+  98:../src/r_cg_serial_user.c ****         gp_uart1_tx_address++;
+ 229                             		.loc 1 98 0
+ 230 0038 AF 00 00                		movw	ax, !_gp_uart1_tx_address
+ 231 003b BD F0                   		movw	r8, ax
+ 232 003d A6 F0                   		incw	r8
+ 233 003f AD F0                   		movw	ax, r8
+ 234 0041 BF 00 00                		movw	!_gp_uart1_tx_address, ax
+  99:../src/r_cg_serial_user.c ****         g_uart1_tx_count--;
+ 235                             		.loc 1 99 0
+ 236 0044 AF 00 00                		movw	ax, !_g_uart1_tx_count
+ 237 0047 BD F0                   		movw	r8, ax
+ 238 0049 B6 F0                   		decw	r8
+ 239 004b AD F0                   		movw	ax, r8
+ 240 004d BF 00 00                		movw	!_g_uart1_tx_count, ax
+ 241 0050 EC 58 00 00             		br	!!.L6
+ 242                             	.L7:
+ 100:../src/r_cg_serial_user.c ****     }
+ 101:../src/r_cg_serial_user.c ****     else
+ 102:../src/r_cg_serial_user.c ****     {
+ 103:../src/r_cg_serial_user.c ****         r_uart1_callback_sendend();
+ 243                             		.loc 1 103 0
+ 244 0054 FC 00 00 00             		call	!!%code(_r_uart1_callback_sendend)
+ 245                             	.L6:
+ 104:../src/r_cg_serial_user.c ****     }
+ 105:../src/r_cg_serial_user.c **** }
+ 246                             		.loc 1 105 0
+ 247 0058 C0                      		pop	ax
+ 248 0059 9E FD                   		mov	es, a
+ 249 005b 61 DF                   		sel	rb1
+ 250 005d C6                      		pop	hl ; r14
+ 251 005e C4                      		pop	de ; r12
+ 252 005f C2                      		pop	bc ; r10
+ 253 0060 C0                      		pop	ax ; r8
+ 254 0061 61 CF                   		sel	rb0
+ 255 0063 C6                      		pop	hl
+ 256 0064 C4                      		pop	de
+ 257 0065 C2                      		pop	bc
+ 258 0066 C0                      		pop	ax
+ 259 0067 61 FC                   		reti
+ 260                             	.LFE1:
+ 262                             		.section	.text.r_uart1_callback_receiveend,"ax",@progbits
+ 264                             	_r_uart1_callback_receiveend:
+ 265                             	.LFB2:
+ 106:../src/r_cg_serial_user.c **** 
+ 107:../src/r_cg_serial_user.c **** /**************************************************************************************************
+ 108:../src/r_cg_serial_user.c **** * Function Name: r_uart1_callback_receiveend
+ 109:../src/r_cg_serial_user.c **** * Description  : This function is a callback function when UART1 finishes reception.
+ 110:../src/r_cg_serial_user.c **** * Arguments    : None
+ 111:../src/r_cg_serial_user.c **** * Return Value : None
+ 112:../src/r_cg_serial_user.c **** ***************************************************************************************************
+ 113:../src/r_cg_serial_user.c **** static void r_uart1_callback_receiveend(void)
+ 114:../src/r_cg_serial_user.c **** {
+ 266                             		.loc 1 114 0
+ 115:../src/r_cg_serial_user.c ****     /* Start user code. Do not edit comment generated here */
+ 116:../src/r_cg_serial_user.c ****     /* End user code. Do not edit comment generated here */
+ 117:../src/r_cg_serial_user.c **** }
+ 267                             		.loc 1 117 0
+ 268 0000 D7                      		ret
+ 269                             	.LFE2:
+ 271                             		.section	.text.r_uart1_callback_softwareoverrun,"ax",@progbits
+ 273                             	_r_uart1_callback_softwareoverrun:
+ 274                             	.LFB3:
+ 118:../src/r_cg_serial_user.c **** 
+ 119:../src/r_cg_serial_user.c **** /**************************************************************************************************
+ 120:../src/r_cg_serial_user.c **** * Function Name: r_uart1_callback_softwareoverrun
+ 121:../src/r_cg_serial_user.c **** * Description  : This function is a callback function when UART1 receives an overflow data.
+ 122:../src/r_cg_serial_user.c **** * Arguments    : rx_data -
+ 123:../src/r_cg_serial_user.c **** *                    receive data
+ 124:../src/r_cg_serial_user.c **** * Return Value : None
+ 125:../src/r_cg_serial_user.c **** ***************************************************************************************************
+ 126:../src/r_cg_serial_user.c **** static void r_uart1_callback_softwareoverrun(uint16_t rx_data)
+ 127:../src/r_cg_serial_user.c **** {
+ 275                             		.loc 1 127 0
+ 128:../src/r_cg_serial_user.c ****     /* Start user code. Do not edit comment generated here */
+ 129:../src/r_cg_serial_user.c ****     /* End user code. Do not edit comment generated here */
+ 130:../src/r_cg_serial_user.c **** }
+ 276                             		.loc 1 130 0
+ 277 0000 D7                      		ret
+ 278                             	.LFE3:
+ 280                             		.section	.text.r_uart1_callback_sendend,"ax",@progbits
+ 282                             	_r_uart1_callback_sendend:
+ 283                             	.LFB4:
+ 131:../src/r_cg_serial_user.c **** 
+ 132:../src/r_cg_serial_user.c **** /**************************************************************************************************
+ 133:../src/r_cg_serial_user.c **** * Function Name: r_uart1_callback_sendend
+ 134:../src/r_cg_serial_user.c **** * Description  : This function is a callback function when UART1 finishes transmission.
+ 135:../src/r_cg_serial_user.c **** * Arguments    : None
+ 136:../src/r_cg_serial_user.c **** * Return Value : None
+ 137:../src/r_cg_serial_user.c **** ***************************************************************************************************
+ 138:../src/r_cg_serial_user.c **** static void r_uart1_callback_sendend(void)
+ 139:../src/r_cg_serial_user.c **** {
+ 284                             		.loc 1 139 0
+ 140:../src/r_cg_serial_user.c ****     /* Start user code. Do not edit comment generated here */
+ 141:../src/r_cg_serial_user.c ****     /* End user code. Do not edit comment generated here */
+ 142:../src/r_cg_serial_user.c **** }
+ 285                             		.loc 1 142 0
+ 286 0000 D7                      		ret
+ 287                             	.LFE4:
+ 289                             		.section	.text.r_uart1_callback_error,"ax",@progbits
+ 291                             	_r_uart1_callback_error:
+ 292                             	.LFB5:
+ 143:../src/r_cg_serial_user.c **** 
+ 144:../src/r_cg_serial_user.c **** /**************************************************************************************************
+ 145:../src/r_cg_serial_user.c **** * Function Name: r_uart1_callback_error
+ 146:../src/r_cg_serial_user.c **** * Description  : This function is a callback function when UART1 reception error occurs.
+ 147:../src/r_cg_serial_user.c **** * Arguments    : err_type -
+ 148:../src/r_cg_serial_user.c **** *                    error type value
+ 149:../src/r_cg_serial_user.c **** * Return Value : None
+ 150:../src/r_cg_serial_user.c **** ***************************************************************************************************
+ 151:../src/r_cg_serial_user.c **** static void r_uart1_callback_error(uint8_t err_type)
+ 152:../src/r_cg_serial_user.c **** {
+ 293                             		.loc 1 152 0
+ 153:../src/r_cg_serial_user.c ****     /* Start user code. Do not edit comment generated here */
+ 154:../src/r_cg_serial_user.c ****     /* End user code. Do not edit comment generated here */
+ 155:../src/r_cg_serial_user.c **** }
+ 294                             		.loc 1 155 0
+ 295 0000 D7                      		ret
+ 296                             	.LFE5:
+ 476                             	.Letext0:
+ 477                             		.file 2 "../src/r_cg_macrodriver.h"

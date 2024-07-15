@@ -1,0 +1,862 @@
+   1                             	r8	=	0xffef0
+   2                             	r16	=	0xffee8
+   3                             	r24	=	0xffee0
+   4                             	r9	=	0xffef1
+   5                             	r17	=	0xffee9
+   6                             	r25	=	0xffee1
+   7                             	r10	=	0xffef2
+   8                             	r18	=	0xffeea
+   9                             	r26	=	0xffee2
+  10                             	r11	=	0xffef3
+  11                             	r19	=	0xffeeb
+  12                             	r27	=	0xffee3
+  13                             	r12	=	0xffef4
+  14                             	r20	=	0xffeec
+  15                             	r28	=	0xffee4
+  16                             	r13	=	0xffef5
+  17                             	r21	=	0xffeed
+  18                             	r29	=	0xffee5
+  19                             	r14	=	0xffef6
+  20                             	r22	=	0xffeee
+  21                             	r30	=	0xffee6
+  22                             	r15	=	0xffef7
+  23                             	r23	=	0xffeef
+  24                             	r31	=	0xffee7
+  25                             	MDUC	=	0xf00e8
+  26                             	MDAL	=	0xffff0
+  27                             	MDAH	=	0xffff2
+  28                             	MDBL	=	0xffff6
+  29                             	MDBH	=	0xffff4
+  30                             	MDCL	=	0xf00e0
+  31                             	MDCH	=	0xf00e2
+  32                             	.text
+  33                             	.Ltext0:
+  34                             		.section	.text.nlf,"ax",@progbits
+  35                             		.global	_nlf
+  37                             	_nlf:
+  38                             	.LFB0:
+  39                             		.file 1 "../KEELOQ/KeeLOQ.c"
+   1:../KEELOQ/KeeLOQ.c **** /*
+   2:../KEELOQ/KeeLOQ.c ****  * KeeLOQ.c
+   3:../KEELOQ/KeeLOQ.c ****  *
+   4:../KEELOQ/KeeLOQ.c ****  *  Created on: Jan 6, 2024
+   5:../KEELOQ/KeeLOQ.c ****  *      Author: Mr. Han
+   6:../KEELOQ/KeeLOQ.c ****  */
+   7:../KEELOQ/KeeLOQ.c **** 
+   8:../KEELOQ/KeeLOQ.c **** #include "keeloq.h"
+   9:../KEELOQ/KeeLOQ.c **** 
+  10:../KEELOQ/KeeLOQ.c **** char nlf(int d)
+  11:../KEELOQ/KeeLOQ.c **** {
+  40                             		.loc 1 11 0
+  41                             		; start of function
+  42                             		; locals: 4 bytes
+  43                             		; uses ES register
+  44 0000 20 04                   		subw	sp, #4
+  45                             	.LCFI0:
+  12:../KEELOQ/KeeLOQ.c ****     return (NLF_LOOKUP_CONSTANT >> d) & 0x1;
+  46                             		.loc 1 12 0
+  47 0002 30 2E 74                		movw	ax, #29742
+  48 0005 B8 00                   		movw	[sp], ax
+  49 0007 30 5C 3A                		movw	ax, #14940
+  50 000a B8 02                   		movw	[sp+2], ax
+  51 000c 88 08                   		mov	a, [sp+8]
+  52 000e 9D F0                   		mov	r8, a
+  53 0010 8D F0                   		mov a,r8 
+  54 0012 9D F4                   		 mov r12, a 
+  55 0014 A8 02                   		 movw ax,[sp+2] 
+  56 0016 12                      		 movw bc,ax 
+  57 0017 A8 00                   		 movw ax,[sp] 
+  58 0019 D4 F4                   		 cmp0  r12 
+  59 001b DD 0C                   		 bz $2f 
+  60                             		 1: 
+  61 001d 31 1E                   		 shrw ax, 1 
+  62 001f 33                      		 xchw ax, bc 
+  63 0020 31 1F                   		 sarw ax, 1 
+  64 0022 33                      		 xchw ax, bc 
+  65 0023 71 F9                   		 mov1 a.7, cy 
+  66 0025 B4 F4                   		 dec r12 
+  67 0027 DF F4                   		 bnz $1b 
+  68                             		  2: 
+  69 0029 BD F0                   		 movw r8,ax 
+  70 002b 13                      		 movw ax, bc 
+  71 002c BD F2                   		 movw r10,ax
+  72 002e 5A F0 01                		and	r8, #1
+  13:../KEELOQ/KeeLOQ.c **** }
+  73                             		.loc 1 13 0
+  74 0031 10 04                   		addw	sp, #4
+  75 0033 D7                      		ret
+  76                             	.LFE0:
+  78                             		.global	___ashrdi3
+  79                             		.section	.text.keeloq_encrypt,"ax",@progbits
+  80                             		.global	_keeloq_encrypt
+  82                             	_keeloq_encrypt:
+  83                             	.LFB1:
+  14:../KEELOQ/KeeLOQ.c **** 
+  15:../KEELOQ/KeeLOQ.c **** void keeloq_encrypt(long long *key, uint32_t *plaintext, uint32_t *ciphertext, int nrounds)
+  16:../KEELOQ/KeeLOQ.c **** {
+  84                             		.loc 1 16 0
+  85                             		; start of function
+  86                             		; push 6: r16 r18 r20
+  87                             		; locals: 62 bytes
+  88                             		; outgoing: 10 bytes
+  89                             		; uses ES register
+  90 0000 61 EF                   		sel	rb2
+  91 0002 C1                      		push	ax ; r16
+  92                             	.LCFI1:
+  93 0003 C3                      		push	bc ; r18
+  94                             	.LCFI2:
+  95 0004 C5                      		push	de ; r20
+  96                             	.LCFI3:
+  97 0005 61 CF                   		sel	rb0
+  98 0007 20 48                   		subw	sp, #72
+  99                             	.LCFI4:
+  17:../KEELOQ/KeeLOQ.c ****     *ciphertext = *plaintext;
+ 100                             		.loc 1 17 0
+ 101 0009 A8 54                   		movw	ax, [sp+84]
+ 102 000b BD F4                   		movw	r12, ax
+ 103 000d BD F6                   		movw	r14, ax
+ 104 000f FA F6                   		movw	hl, r14
+ 105 0011 AB                      		movw	ax, [hl]
+ 106 0012 BD F0                   		movw	r8, ax
+ 107 0014 FA F4                   		movw	hl, r12
+ 108 0016 AC 02                   		movw	ax, [hl+2]
+ 109 0018 BD F2                   		movw	r10, ax
+ 110 001a A8 56                   		movw	ax, [sp+86]
+ 111 001c BD F4                   		movw	r12, ax
+ 112 001e BD F6                   		movw	r14, ax
+ 113 0020 EA F6                   		movw	de, r14
+ 114 0022 AD F0                   		movw	ax, r8
+ 115 0024 B9                      		movw	[de], ax
+ 116 0025 EA F4                   		movw	de, r12
+ 117 0027 AD F2                   		movw	ax, r10
+ 118 0029 BA 02                   		movw	[de+2], ax
+  18:../KEELOQ/KeeLOQ.c ****     unsigned char out, xor, nlf_input;
+  19:../KEELOQ/KeeLOQ.c ****     uint16_t i;
+  20:../KEELOQ/KeeLOQ.c ****     for (i = 0; i < nrounds; i++)
+ 119                             		.loc 1 20 0
+ 120 002b F6                      		clrw	ax
+ 121 002c B8 46                   		movw	[sp+70], ax
+ 122 002e EC 6F 02 00             		br	!!.L4
+ 123                             	.L5:
+  21:../KEELOQ/KeeLOQ.c ****     {
+  22:../KEELOQ/KeeLOQ.c ****         nlf_input = (((*ciphertext >> 31) & 0x1) << 4) | (((*ciphertext >> 26) & 0x1) << 3) |
+ 124                             		.loc 1 22 0 discriminator 3
+ 125 0032 A8 56                   		movw	ax, [sp+86]
+ 126 0034 BD F0                   		movw	r8, ax
+ 127 0036 BD F2                   		movw	r10, ax
+ 128 0038 FA F2                   		movw	hl, r10
+ 129 003a AB                      		movw	ax, [hl]
+ 130 003b BD EA                   		movw	r18, ax
+ 131 003d FA F0                   		movw	hl, r8
+ 132 003f AC 02                   		movw	ax, [hl+2]
+ 133 0041 BD EC                   		movw	r20, ax
+ 134 0043 AD EC                   		movw ax,r20 
+ 135 0045 31 7A                   		 shr a,7 
+ 136 0047 9D F0                   		 mov r8,a 
+ 137 0049 F6                      		 clrw ax 
+ 138 004a BD F2                   		 movw r10,ax 
+ 139 004c 9D F1                   		 mov r9,a
+ 140 004e 8D F0                   		mov	a, r8
+ 141 0050 31 49                   		shl	a, 4
+ 142 0052 9D F6                   		mov	r14, a
+ 143 0054 A8 56                   		movw	ax, [sp+86]
+ 144 0056 BD F0                   		movw	r8, ax
+ 145 0058 BD F4                   		movw	r12, ax
+ 146 005a FA F4                   		movw	hl, r12
+ 147 005c AB                      		movw	ax, [hl]
+ 148 005d BD F4                   		movw	r12, ax
+ 149 005f B8 3E                   		movw	[sp+62], ax
+ 150 0061 FA F0                   		movw	hl, r8
+ 151 0063 AC 02                   		movw	ax, [hl+2]
+ 152 0065 BD F2                   		movw	r10, ax
+ 153 0067 B8 40                   		movw	[sp+64], ax
+ 154 0069 A8 40                   		movw ax,[sp+64] 
+ 155 006b 31 2A                   		 shr a,2 
+ 156 006d 9D F0                   		 mov r8,a 
+ 157 006f F6                      		 clrw ax 
+ 158 0070 BD F2                   		 movw r10,ax 
+ 159 0072 9D F1                   		 mov r9,a
+ 160 0074 5A F0 01                		and	r8, #1
+ 161 0077 8D F0                   		mov	a, r8
+ 162 0079 31 39                   		shl	a, 3
+ 163 007b 9D F0                   		mov	r8, a
+ 164 007d 8D F6                   		mov	a, r14
+ 165 007f 6B F0                   		or	a, r8
+ 166 0081 9D F6                   		mov	r14, a
+  23:../KEELOQ/KeeLOQ.c ****                     (((*ciphertext >> 20) & 0x1) << 2) | (((*ciphertext >> 9) & 0x1) << 1) | ((*cip
+ 167                             		.loc 1 23 0 discriminator 3
+ 168 0083 A8 56                   		movw	ax, [sp+86]
+ 169 0085 BD F0                   		movw	r8, ax
+ 170 0087 BD F4                   		movw	r12, ax
+ 171 0089 FA F4                   		movw	hl, r12
+ 172 008b AB                      		movw	ax, [hl]
+ 173 008c BD F4                   		movw	r12, ax
+ 174 008e B8 3A                   		movw	[sp+58], ax
+ 175 0090 FA F0                   		movw	hl, r8
+ 176 0092 AC 02                   		movw	ax, [hl+2]
+ 177 0094 BD F2                   		movw	r10, ax
+ 178 0096 B8 3C                   		movw	[sp+60], ax
+ 179 0098 A8 3C                   		movw ax,[sp+60] 
+ 180 009a 31 4E                   		 shrw ax,4 
+ 181 009c BD F0                   		 movw r8,ax 
+ 182 009e F6                      		 clrw ax 
+ 183 009f BD F2                   		 movw r10,ax
+  22:../KEELOQ/KeeLOQ.c ****                     (((*ciphertext >> 20) & 0x1) << 2) | (((*ciphertext >> 9) & 0x1) << 1) | ((*cip
+ 184                             		.loc 1 22 0 discriminator 3
+ 185 00a1 5A F0 01                		and	r8, #1
+ 186 00a4 8D F0                   		mov	a, r8
+ 187 00a6 31 29                   		shl	a, 2
+ 188 00a8 9D F0                   		mov	r8, a
+ 189 00aa 8D F6                   		mov	a, r14
+ 190 00ac 6B F0                   		or	a, r8
+ 191 00ae 9D F6                   		mov	r14, a
+ 192                             		.loc 1 23 0 discriminator 3
+ 193 00b0 A8 56                   		movw	ax, [sp+86]
+ 194 00b2 BD F0                   		movw	r8, ax
+ 195 00b4 BD F4                   		movw	r12, ax
+ 196 00b6 FA F4                   		movw	hl, r12
+ 197 00b8 AB                      		movw	ax, [hl]
+ 198 00b9 BD F4                   		movw	r12, ax
+ 199 00bb B8 36                   		movw	[sp+54], ax
+ 200 00bd FA F0                   		movw	hl, r8
+ 201 00bf AC 02                   		movw	ax, [hl+2]
+ 202 00c1 BD F2                   		movw	r10, ax
+ 203 00c3 B8 38                   		movw	[sp+56], ax
+ 204 00c5 88 37                   		mov a,[sp+55] 
+ 205 00c7 70                      		 mov x,a 
+ 206 00c8 88 38                   		 mov a,[sp+56] 
+ 207 00ca 31 7D                   		 shlw ax,7 
+ 208 00cc 9D F0                   		 mov r8,a 
+ 209 00ce A8 38                   		 movw ax,[sp+56] 
+ 210 00d0 31 7D                   		 shlw ax,7 
+ 211 00d2 9D F1                   		 mov r9,a 
+ 212 00d4 A8 38                   		 movw ax,[sp+56] 
+ 213 00d6 31 9E                   		 shrw ax,9 
+ 214 00d8 BD F2                   		 movw r10,ax
+  22:../KEELOQ/KeeLOQ.c ****                     (((*ciphertext >> 20) & 0x1) << 2) | (((*ciphertext >> 9) & 0x1) << 1) | ((*cip
+ 215                             		.loc 1 22 0 discriminator 3
+ 216 00da 5A F0 01                		and	r8, #1
+ 217 00dd 8D F0                   		mov	a, r8
+ 218 00df 61 01                   		add	a, a
+ 219 00e1 9D F0                   		mov	r8, a
+ 220 00e3 8D F6                   		mov	a, r14
+ 221 00e5 6B F0                   		or	a, r8
+ 222 00e7 9D F6                   		mov	r14, a
+ 223                             		.loc 1 23 0 discriminator 3
+ 224 00e9 A8 56                   		movw	ax, [sp+86]
+ 225 00eb BD F0                   		movw	r8, ax
+ 226 00ed BD F4                   		movw	r12, ax
+ 227 00ef FA F4                   		movw	hl, r12
+ 228 00f1 AB                      		movw	ax, [hl]
+ 229 00f2 BD F4                   		movw	r12, ax
+ 230 00f4 B8 32                   		movw	[sp+50], ax
+ 231 00f6 FA F0                   		movw	hl, r8
+ 232 00f8 AC 02                   		movw	ax, [hl+2]
+ 233 00fa BD F2                   		movw	r10, ax
+ 234 00fc B8 34                   		movw	[sp+52], ax
+ 235 00fe A8 34                   		movw ax,[sp+52] 
+ 236 0100 31 1E                   		 shrw ax,1 
+ 237 0102 BD F2                   		 movw r10,ax 
+ 238 0104 88 33                   		 mov a,[sp+51] 
+ 239 0106 61 FB                   		 rorc a,1 
+ 240 0108 9D F1                   		 mov r9,a 
+ 241 010a 88 32                   		 mov a,[sp+50] 
+ 242 010c 61 FB                   		 rorc a,1 
+ 243 010e 9D F0                   		 mov r8,a
+  22:../KEELOQ/KeeLOQ.c ****                     (((*ciphertext >> 20) & 0x1) << 2) | (((*ciphertext >> 9) & 0x1) << 1) | ((*cip
+ 244                             		.loc 1 22 0 discriminator 3
+ 245 0110 5A F0 01                		and	r8, #1
+ 246 0113 8D F6                   		mov	a, r14
+ 247 0115 6B F0                   		or	a, r8
+ 248 0117 98 45                   		mov	[sp+69], a
+  24:../KEELOQ/KeeLOQ.c ****         out = nlf(nlf_input);
+ 249                             		.loc 1 24 0 discriminator 3
+ 250 0119 31 8E                   		shrw	ax, 8
+ 251 011b BD F0                   		movw	r8, ax
+ 252 011d B8 00                   		movw	[sp], ax
+ 253 011f FC 00 00 00             		call	!!%code(_nlf)
+ 254 0123 8D F0                   		mov	a, r8
+ 255 0125 98 44                   		mov	[sp+68], a
+  25:../KEELOQ/KeeLOQ.c ****         xor = ((*key >> (i % 64)) & 0x1) ^ ((*ciphertext >> 16) & 0x1) ^ (*ciphertext & 0x1) ^ out;
+ 256                             		.loc 1 25 0 discriminator 3
+ 257 0127 A8 52                   		movw	ax, [sp+82]
+ 258 0129 BD F0                   		movw	r8, ax
+ 259 012b BD F4                   		movw	r12, ax
+ 260 012d FA F4                   		movw	hl, r12
+ 261 012f AB                      		movw	ax, [hl]
+ 262 0130 BD F4                   		movw	r12, ax
+ 263 0132 B8 2A                   		movw	[sp+42], ax
+ 264 0134 FA F0                   		movw	hl, r8
+ 265 0136 AC 02                   		movw	ax, [hl+2]
+ 266 0138 BD F6                   		movw	r14, ax
+ 267 013a B8 2C                   		movw	[sp+44], ax
+ 268 013c AC 04                   		movw	ax, [hl+4]
+ 269 013e BD F2                   		movw	r10, ax
+ 270 0140 B8 2E                   		movw	[sp+46], ax
+ 271 0142 AC 06                   		movw	ax, [hl+6]
+ 272 0144 BD F4                   		movw	r12, ax
+ 273 0146 B8 30                   		movw	[sp+48], ax
+ 274 0148 A8 46                   		movw	ax, [sp+70]
+ 275 014a BD F0                   		movw	r8, ax
+ 276 014c 5A F0 3F                		and	r8, #63
+ 277 014f F4 F1                   		clrb	r9 ;andhi3 r8,r8,#63
+ 278 0151 A8 2A                   		movw	ax, [sp+42]
+ 279 0153 BD F6                   		movw	r14, ax
+ 280 0155 B8 00                   		movw	[sp], ax
+ 281 0157 A8 2C                   		movw	ax, [sp+44]
+ 282 0159 BD F2                   		movw	r10, ax
+ 283 015b B8 02                   		movw	[sp+2], ax
+ 284 015d A8 2E                   		movw	ax, [sp+46]
+ 285 015f BD F4                   		movw	r12, ax
+ 286 0161 B8 04                   		movw	[sp+4], ax
+ 287 0163 A8 30                   		movw	ax, [sp+48]
+ 288 0165 BD F6                   		movw	r14, ax
+ 289 0167 B8 06                   		movw	[sp+6], ax
+ 290 0169 8D F0                   		mov	a, r8
+ 291 016b 98 08                   		mov	[sp+8], a
+ 292 016d FC 00 00 00             		call	!!___ashrdi3
+ 293 0171 AD F0                   		movw	ax, r8
+ 294 0173 B8 0A                   		movw	[sp+10], ax
+ 295 0175 AD F2                   		movw	ax, r10
+ 296 0177 B8 0C                   		movw	[sp+12], ax
+ 297 0179 AD F4                   		movw	ax, r12
+ 298 017b B8 0E                   		movw	[sp+14], ax
+ 299 017d AD F6                   		movw	ax, r14
+ 300 017f B8 10                   		movw	[sp+16], ax
+ 301 0181 A8 0A                   		movw	ax, [sp+10]
+ 302 0183 BD F0                   		movw	r8, ax
+ 303 0185 B8 22                   		movw	[sp+34], ax
+ 304 0187 A8 0C                   		movw	ax, [sp+12]
+ 305 0189 BD F2                   		movw	r10, ax
+ 306 018b B8 24                   		movw	[sp+36], ax
+ 307 018d A8 0E                   		movw	ax, [sp+14]
+ 308 018f BD F4                   		movw	r12, ax
+ 309 0191 B8 26                   		movw	[sp+38], ax
+ 310 0193 A8 10                   		movw	ax, [sp+16]
+ 311 0195 BD F6                   		movw	r14, ax
+ 312 0197 B8 28                   		movw	[sp+40], ax
+ 313 0199 88 22                   		mov	a, [sp+34]
+ 314 019b 9D F0                   		mov	r8, a
+ 315 019d 5C 01                   		and	a, #1
+ 316 019f 9D F6                   		mov	r14, a
+ 317 01a1 A8 56                   		movw	ax, [sp+86]
+ 318 01a3 BD F0                   		movw	r8, ax
+ 319 01a5 BD F2                   		movw	r10, ax
+ 320 01a7 FA F2                   		movw	hl, r10
+ 321 01a9 AB                      		movw	ax, [hl]
+ 322 01aa BD F2                   		movw	r10, ax
+ 323 01ac B8 1E                   		movw	[sp+30], ax
+ 324 01ae FA F0                   		movw	hl, r8
+ 325 01b0 AC 02                   		movw	ax, [hl+2]
+ 326 01b2 BD F4                   		movw	r12, ax
+ 327 01b4 B8 20                   		movw	[sp+32], ax
+ 328 01b6 A8 20                   		movw ax,[sp+32] 
+ 329 01b8 BD F0                   		 movw r8,ax 
+ 330 01ba F6                      		 clrw ax 
+ 331 01bb BD F2                   		 movw r10,ax
+ 332 01bd 5A F0 01                		and	r8, #1
+ 333 01c0 8D F6                   		mov	a, r14
+ 334 01c2 7B F0                   		xor	a, r8
+ 335 01c4 9D F2                   		mov	r10, a
+ 336 01c6 A8 56                   		movw	ax, [sp+86]
+ 337 01c8 BD F0                   		movw	r8, ax
+ 338 01ca BD F6                   		movw	r14, ax
+ 339 01cc FA F6                   		movw	hl, r14
+ 340 01ce AB                      		movw	ax, [hl]
+ 341 01cf BD F6                   		movw	r14, ax
+ 342 01d1 B8 1A                   		movw	[sp+26], ax
+ 343 01d3 FA F0                   		movw	hl, r8
+ 344 01d5 AC 02                   		movw	ax, [hl+2]
+ 345 01d7 BD F4                   		movw	r12, ax
+ 346 01d9 B8 1C                   		movw	[sp+28], ax
+ 347 01db 88 1A                   		mov	a, [sp+26]
+ 348 01dd 9D F0                   		mov	r8, a
+ 349 01df 5A F0 01                		and	r8, #1
+ 350 01e2 8D F2                   		mov	a, r10
+ 351 01e4 7B F0                   		xor	a, r8
+ 352 01e6 9D F1                   		mov	r9, a
+ 353 01e8 88 44                   		mov	a, [sp+68]
+ 354 01ea 9D F0                   		mov	r8, a
+ 355 01ec 8D F1                   		mov	a, r9
+ 356 01ee 7B F0                   		xor	a, r8
+ 357 01f0 9D F0                   		mov	r8, a
+ 358 01f2 98 43                   		mov	[sp+67], a
+  26:../KEELOQ/KeeLOQ.c ****         *ciphertext = (*ciphertext >> 1) | (xor << 31);
+ 359                             		.loc 1 26 0 discriminator 3
+ 360 01f4 A8 56                   		movw	ax, [sp+86]
+ 361 01f6 BD F0                   		movw	r8, ax
+ 362 01f8 BD F6                   		movw	r14, ax
+ 363 01fa FA F6                   		movw	hl, r14
+ 364 01fc AB                      		movw	ax, [hl]
+ 365 01fd BD F6                   		movw	r14, ax
+ 366 01ff B8 16                   		movw	[sp+22], ax
+ 367 0201 FA F0                   		movw	hl, r8
+ 368 0203 AC 02                   		movw	ax, [hl+2]
+ 369 0205 BD F2                   		movw	r10, ax
+ 370 0207 B8 18                   		movw	[sp+24], ax
+ 371 0209 A8 18                   		movw ax,[sp+24] 
+ 372 020b 31 1E                   		 shrw ax,1 
+ 373 020d BD E8                   		 movw r16,ax 
+ 374 020f 88 17                   		 mov a,[sp+23] 
+ 375 0211 61 FB                   		 rorc a,1 
+ 376 0213 9D F7                   		 mov r15,a 
+ 377 0215 88 16                   		 mov a,[sp+22] 
+ 378 0217 61 FB                   		 rorc a,1 
+ 379 0219 9D F6                   		 mov r14,a
+ 380 021b 88 43                   		mov	a, [sp+67]
+ 381 021d 31 8E                   		shrw	ax, 8
+ 382 021f BD F0                   		movw	r8, ax
+ 383 0221 51 1F                   		mov	a, #31
+ 384 0223 72                      		mov	c, a
+ 385 0224 AD F0                   		movw	ax, r8
+ 386 0226 D2                      		cmp0 c
+ 387 0227 DD 05                   		 bz $2f
+ 388 0229 31 1D                   		 1: shlw	ax, 1 
+ 389 022b 92                      		dec c 
+ 390 022c DF FB                   		bnz $1b
+ 391                             		2:
+ 392 022e BD F0                   		movw	r8, ax
+ 393 0230 B8 12                   		movw	[sp+18], ax
+ 394 0232 31 7B                   		sar	a, 7
+ 395 0234 9D F0                   		mov	r8, a
+ 396 0236 98 14                   		mov	[sp+20], a
+ 397 0238 98 15                   		mov	[sp+21], a
+ 398 023a FB F8 FF                		movw	hl, sp
+ 399 023d AD F6                   		movw	ax, r14
+ 400 023f 12                      		movw	bc, ax
+ 401 0240 AC 12                   		movw	ax, [hl+18]
+ 402 0242 61 63                   		or	b, a
+ 403 0244 62                      		mov	a, c
+ 404 0245 61 60                   		or	x, a
+ 405 0247 63                      		mov	a, b
+ 406 0248 BD F2                   		movw	r10, ax
+ 407 024a AD E8                   		movw	ax, r16
+ 408 024c 12                      		movw	bc, ax
+ 409 024d AC 14                   		movw	ax, [hl+20]
+ 410 024f 61 63                   		or	b, a
+ 411 0251 62                      		mov	a, c
+ 412 0252 61 60                   		or	x, a
+ 413 0254 63                      		mov	a, b
+ 414 0255 BD F4                   		movw	r12, ax ;iorsi3 r10,r14,[hl+18]
+ 415 0257 A8 56                   		movw	ax, [sp+86]
+ 416 0259 BD F0                   		movw	r8, ax
+ 417 025b BD F6                   		movw	r14, ax
+ 418 025d EA F6                   		movw	de, r14
+ 419 025f AD F2                   		movw	ax, r10
+ 420 0261 B9                      		movw	[de], ax
+ 421 0262 EA F0                   		movw	de, r8
+ 422 0264 AD F4                   		movw	ax, r12
+ 423 0266 BA 02                   		movw	[de+2], ax
+  20:../KEELOQ/KeeLOQ.c ****     {
+ 424                             		.loc 1 20 0 discriminator 3
+ 425 0268 A8 46                   		movw	ax, [sp+70]
+ 426 026a BD F0                   		movw	r8, ax
+ 427 026c A1                      		incw	ax
+ 428 026d B8 46                   		movw	[sp+70], ax
+ 429                             	.L4:
+  20:../KEELOQ/KeeLOQ.c ****     {
+ 430                             		.loc 1 20 0 is_stmt 0 discriminator 1
+ 431 026f A8 58                   		movw	ax, [sp+88]
+ 432 0271 BD F2                   		movw	r10, ax
+ 433 0273 A8 46                   		movw	ax, [sp+70]
+ 434 0275 BD F0                   		movw	r8, ax
+ 435 0277 AD F2                   		movw	ax, r10
+ 436 0279 46 F0                   		cmpw	ax, r8
+ 437 027b 61 F3                   		 sknh
+ 438 027d EC 32 00 00             		 br	!!.L5
+  27:../KEELOQ/KeeLOQ.c ****     }
+  28:../KEELOQ/KeeLOQ.c **** }
+ 439                             		.loc 1 28 0 is_stmt 1
+ 440 0281 10 48                   		addw	sp, #72
+ 441 0283 61 EF                   		sel	rb2
+ 442 0285 C4                      		pop	de ; r20
+ 443 0286 C2                      		pop	bc ; r18
+ 444 0287 C0                      		pop	ax ; r16
+ 445 0288 61 CF                   		sel	rb0
+ 446 028a D7                      		ret
+ 447                             	.LFE1:
+ 449                             		.section	.text.keeloq_decrypt,"ax",@progbits
+ 450                             		.global	_keeloq_decrypt
+ 452                             	_keeloq_decrypt:
+ 453                             	.LFB2:
+  29:../KEELOQ/KeeLOQ.c **** 
+  30:../KEELOQ/KeeLOQ.c **** void keeloq_decrypt(long long *key, uint32_t *plaintext, uint32_t *ciphertext, int nrounds)
+  31:../KEELOQ/KeeLOQ.c **** {
+ 454                             		.loc 1 31 0
+ 455                             		; start of function
+ 456                             		; push 4: r16 r18
+ 457                             		; locals: 66 bytes
+ 458                             		; outgoing: 10 bytes
+ 459                             		; uses ES register
+ 460 0000 61 EF                   		sel	rb2
+ 461 0002 C1                      		push	ax ; r16
+ 462                             	.LCFI5:
+ 463 0003 C3                      		push	bc ; r18
+ 464                             	.LCFI6:
+ 465 0004 61 CF                   		sel	rb0
+ 466 0006 20 4C                   		subw	sp, #76
+ 467                             	.LCFI7:
+  32:../KEELOQ/KeeLOQ.c ****     *plaintext = *ciphertext;
+ 468                             		.loc 1 32 0
+ 469 0008 A8 58                   		movw	ax, [sp+88]
+ 470 000a BD F4                   		movw	r12, ax
+ 471 000c BD F6                   		movw	r14, ax
+ 472 000e FA F6                   		movw	hl, r14
+ 473 0010 AB                      		movw	ax, [hl]
+ 474 0011 BD F0                   		movw	r8, ax
+ 475 0013 FA F4                   		movw	hl, r12
+ 476 0015 AC 02                   		movw	ax, [hl+2]
+ 477 0017 BD F2                   		movw	r10, ax
+ 478 0019 A8 56                   		movw	ax, [sp+86]
+ 479 001b BD F4                   		movw	r12, ax
+ 480 001d BD F6                   		movw	r14, ax
+ 481 001f EA F6                   		movw	de, r14
+ 482 0021 AD F0                   		movw	ax, r8
+ 483 0023 B9                      		movw	[de], ax
+ 484 0024 EA F4                   		movw	de, r12
+ 485 0026 AD F2                   		movw	ax, r10
+ 486 0028 BA 02                   		movw	[de+2], ax
+  33:../KEELOQ/KeeLOQ.c ****     char out, xor, nlf_input;
+  34:../KEELOQ/KeeLOQ.c ****     uint16_t i;
+  35:../KEELOQ/KeeLOQ.c ****     for (i = 0; i < nrounds; i++)
+ 487                             		.loc 1 35 0
+ 488 002a F6                      		clrw	ax
+ 489 002b B8 4A                   		movw	[sp+74], ax
+ 490 002d EC 6A 02 00             		br	!!.L7
+ 491                             	.L8:
+  36:../KEELOQ/KeeLOQ.c ****     {
+  37:../KEELOQ/KeeLOQ.c ****         nlf_input = (((*plaintext >> 30) & 0x1) << 4) | (((*plaintext >> 25) & 0x1) << 3) |
+ 492                             		.loc 1 37 0 discriminator 3
+ 493 0031 A8 56                   		movw	ax, [sp+86]
+ 494 0033 BD F0                   		movw	r8, ax
+ 495 0035 BD F2                   		movw	r10, ax
+ 496 0037 FA F2                   		movw	hl, r10
+ 497 0039 AB                      		movw	ax, [hl]
+ 498 003a BD F2                   		movw	r10, ax
+ 499 003c B8 42                   		movw	[sp+66], ax
+ 500 003e FA F0                   		movw	hl, r8
+ 501 0040 AC 02                   		movw	ax, [hl+2]
+ 502 0042 BD F4                   		movw	r12, ax
+ 503 0044 B8 44                   		movw	[sp+68], ax
+ 504 0046 A8 44                   		movw ax,[sp+68] 
+ 505 0048 31 6A                   		 shr a,6 
+ 506 004a 9D F0                   		 mov r8,a 
+ 507 004c F6                      		 clrw ax 
+ 508 004d BD F2                   		 movw r10,ax 
+ 509 004f 9D F1                   		 mov r9,a
+ 510 0051 5A F0 01                		and	r8, #1
+ 511 0054 8D F0                   		mov	a, r8
+ 512 0056 31 49                   		shl	a, 4
+ 513 0058 9D F6                   		mov	r14, a
+ 514 005a A8 56                   		movw	ax, [sp+86]
+ 515 005c BD F0                   		movw	r8, ax
+ 516 005e BD F2                   		movw	r10, ax
+ 517 0060 FA F2                   		movw	hl, r10
+ 518 0062 AB                      		movw	ax, [hl]
+ 519 0063 BD F2                   		movw	r10, ax
+ 520 0065 B8 3E                   		movw	[sp+62], ax
+ 521 0067 FA F0                   		movw	hl, r8
+ 522 0069 AC 02                   		movw	ax, [hl+2]
+ 523 006b BD F4                   		movw	r12, ax
+ 524 006d B8 40                   		movw	[sp+64], ax
+ 525 006f A8 40                   		movw ax,[sp+64] 
+ 526 0071 31 1A                   		 shr a,1 
+ 527 0073 9D F0                   		 mov r8,a 
+ 528 0075 F6                      		 clrw ax 
+ 529 0076 BD F2                   		 movw r10,ax 
+ 530 0078 9D F1                   		 mov r9,a
+ 531 007a 5A F0 01                		and	r8, #1
+ 532 007d 8D F0                   		mov	a, r8
+ 533 007f 31 39                   		shl	a, 3
+ 534 0081 9D F0                   		mov	r8, a
+ 535 0083 8D F6                   		mov	a, r14
+ 536 0085 6B F0                   		or	a, r8
+ 537 0087 9D F6                   		mov	r14, a
+  38:../KEELOQ/KeeLOQ.c ****                     (((*plaintext >> 19) & 0x1) << 2) | (((*plaintext >> 8) & 0x1) << 1) | (*plaint
+ 538                             		.loc 1 38 0 discriminator 3
+ 539 0089 A8 56                   		movw	ax, [sp+86]
+ 540 008b BD F0                   		movw	r8, ax
+ 541 008d BD F2                   		movw	r10, ax
+ 542 008f FA F2                   		movw	hl, r10
+ 543 0091 AB                      		movw	ax, [hl]
+ 544 0092 BD F2                   		movw	r10, ax
+ 545 0094 B8 3A                   		movw	[sp+58], ax
+ 546 0096 FA F0                   		movw	hl, r8
+ 547 0098 AC 02                   		movw	ax, [hl+2]
+ 548 009a BD F4                   		movw	r12, ax
+ 549 009c B8 3C                   		movw	[sp+60], ax
+ 550 009e A8 3C                   		movw ax,[sp+60] 
+ 551 00a0 31 3E                   		 shrw ax,3 
+ 552 00a2 BD F0                   		 movw r8,ax 
+ 553 00a4 F6                      		 clrw ax 
+ 554 00a5 BD F2                   		 movw r10,ax
+  37:../KEELOQ/KeeLOQ.c ****                     (((*plaintext >> 19) & 0x1) << 2) | (((*plaintext >> 8) & 0x1) << 1) | (*plaint
+ 555                             		.loc 1 37 0 discriminator 3
+ 556 00a7 5A F0 01                		and	r8, #1
+ 557 00aa 8D F0                   		mov	a, r8
+ 558 00ac 31 29                   		shl	a, 2
+ 559 00ae 9D F0                   		mov	r8, a
+ 560 00b0 8D F6                   		mov	a, r14
+ 561 00b2 6B F0                   		or	a, r8
+ 562 00b4 9D F6                   		mov	r14, a
+ 563                             		.loc 1 38 0 discriminator 3
+ 564 00b6 A8 56                   		movw	ax, [sp+86]
+ 565 00b8 BD F0                   		movw	r8, ax
+ 566 00ba BD F2                   		movw	r10, ax
+ 567 00bc FA F2                   		movw	hl, r10
+ 568 00be AB                      		movw	ax, [hl]
+ 569 00bf BD F2                   		movw	r10, ax
+ 570 00c1 B8 36                   		movw	[sp+54], ax
+ 571 00c3 FA F0                   		movw	hl, r8
+ 572 00c5 AC 02                   		movw	ax, [hl+2]
+ 573 00c7 BD F4                   		movw	r12, ax
+ 574 00c9 B8 38                   		movw	[sp+56], ax
+ 575 00cb 88 37                   		mov a,[sp+55] 
+ 576 00cd 70                      		 mov x, a 
+ 577 00ce 88 38                   		 mov a,[sp+56] 
+ 578 00d0 BD F0                   		 movw r8,ax 
+ 579 00d2 A8 38                   		 movw ax,[sp+56] 
+ 580 00d4 31 8E                   		 shrw ax,8 
+ 581 00d6 BD F2                   		 movw r10,ax
+  37:../KEELOQ/KeeLOQ.c ****                     (((*plaintext >> 19) & 0x1) << 2) | (((*plaintext >> 8) & 0x1) << 1) | (*plaint
+ 582                             		.loc 1 37 0 discriminator 3
+ 583 00d8 5A F0 01                		and	r8, #1
+ 584 00db 8D F0                   		mov	a, r8
+ 585 00dd 61 01                   		add	a, a
+ 586 00df 9D F0                   		mov	r8, a
+ 587 00e1 8D F6                   		mov	a, r14
+ 588 00e3 6B F0                   		or	a, r8
+ 589 00e5 9D F2                   		mov	r10, a
+ 590                             		.loc 1 38 0 discriminator 3
+ 591 00e7 A8 56                   		movw	ax, [sp+86]
+ 592 00e9 BD F0                   		movw	r8, ax
+ 593 00eb BD F6                   		movw	r14, ax
+ 594 00ed FA F6                   		movw	hl, r14
+ 595 00ef AB                      		movw	ax, [hl]
+ 596 00f0 BD F6                   		movw	r14, ax
+ 597 00f2 B8 32                   		movw	[sp+50], ax
+ 598 00f4 FA F0                   		movw	hl, r8
+ 599 00f6 AC 02                   		movw	ax, [hl+2]
+ 600 00f8 BD F4                   		movw	r12, ax
+ 601 00fa B8 34                   		movw	[sp+52], ax
+  37:../KEELOQ/KeeLOQ.c ****                     (((*plaintext >> 19) & 0x1) << 2) | (((*plaintext >> 8) & 0x1) << 1) | (*plaint
+ 602                             		.loc 1 37 0 discriminator 3
+ 603 00fc 88 32                   		mov	a, [sp+50]
+ 604 00fe 9D F0                   		mov	r8, a
+ 605 0100 5A F0 01                		and	r8, #1
+ 606 0103 8D F2                   		mov	a, r10
+ 607 0105 6B F0                   		or	a, r8
+ 608 0107 98 49                   		mov	[sp+73], a
+  39:../KEELOQ/KeeLOQ.c ****         out = nlf(nlf_input);
+ 609                             		.loc 1 39 0 discriminator 3
+ 610 0109 31 8E                   		shrw	ax, 8
+ 611 010b BD F0                   		movw	r8, ax
+ 612 010d B8 00                   		movw	[sp], ax
+ 613 010f FC 00 00 00             		call	!!%code(_nlf)
+ 614 0113 8D F0                   		mov	a, r8
+ 615 0115 98 48                   		mov	[sp+72], a
+  40:../KEELOQ/KeeLOQ.c ****         xor = ((*key >> ((15 - i) % 64)) & 0x1) ^ ((*plaintext >> 31) & 0x1) ^ ((*plaintext >> 15) 
+ 616                             		.loc 1 40 0 discriminator 3
+ 617 0117 A8 54                   		movw	ax, [sp+84]
+ 618 0119 BD F0                   		movw	r8, ax
+ 619 011b BD F6                   		movw	r14, ax
+ 620 011d FA F6                   		movw	hl, r14
+ 621 011f AB                      		movw	ax, [hl]
+ 622 0120 BD F6                   		movw	r14, ax
+ 623 0122 B8 2A                   		movw	[sp+42], ax
+ 624 0124 FA F0                   		movw	hl, r8
+ 625 0126 AC 02                   		movw	ax, [hl+2]
+ 626 0128 BD F2                   		movw	r10, ax
+ 627 012a B8 2C                   		movw	[sp+44], ax
+ 628 012c AC 04                   		movw	ax, [hl+4]
+ 629 012e BD F4                   		movw	r12, ax
+ 630 0130 B8 2E                   		movw	[sp+46], ax
+ 631 0132 AC 06                   		movw	ax, [hl+6]
+ 632 0134 BD F6                   		movw	r14, ax
+ 633 0136 B8 30                   		movw	[sp+48], ax
+ 634 0138 A8 4A                   		movw	ax, [sp+74]
+ 635 013a 12                      		movw	bc, ax
+ 636 013b 30 0F 00                		movw	ax, #15
+ 637 013e 23                      		subw	ax, bc
+ 638 013f BD F0                   		movw	r8, ax
+ 639 0141 5A F0 3F                		and	r8, #63
+ 640 0144 F4 F1                   		clrb	r9 ;andhi3 r8,r8,#63
+ 641 0146 A8 2A                   		movw	ax, [sp+42]
+ 642 0148 BD F2                   		movw	r10, ax
+ 643 014a B8 00                   		movw	[sp], ax
+ 644 014c A8 2C                   		movw	ax, [sp+44]
+ 645 014e BD F4                   		movw	r12, ax
+ 646 0150 B8 02                   		movw	[sp+2], ax
+ 647 0152 A8 2E                   		movw	ax, [sp+46]
+ 648 0154 BD F6                   		movw	r14, ax
+ 649 0156 B8 04                   		movw	[sp+4], ax
+ 650 0158 A8 30                   		movw	ax, [sp+48]
+ 651 015a BD F2                   		movw	r10, ax
+ 652 015c B8 06                   		movw	[sp+6], ax
+ 653 015e 8D F0                   		mov	a, r8
+ 654 0160 98 08                   		mov	[sp+8], a
+ 655 0162 FC 00 00 00             		call	!!___ashrdi3
+ 656 0166 AD F0                   		movw	ax, r8
+ 657 0168 B8 0E                   		movw	[sp+14], ax
+ 658 016a AD F2                   		movw	ax, r10
+ 659 016c B8 10                   		movw	[sp+16], ax
+ 660 016e AD F4                   		movw	ax, r12
+ 661 0170 B8 12                   		movw	[sp+18], ax
+ 662 0172 AD F6                   		movw	ax, r14
+ 663 0174 B8 14                   		movw	[sp+20], ax
+ 664 0176 A8 0E                   		movw	ax, [sp+14]
+ 665 0178 BD F4                   		movw	r12, ax
+ 666 017a B8 22                   		movw	[sp+34], ax
+ 667 017c A8 10                   		movw	ax, [sp+16]
+ 668 017e BD F6                   		movw	r14, ax
+ 669 0180 B8 24                   		movw	[sp+36], ax
+ 670 0182 A8 12                   		movw	ax, [sp+18]
+ 671 0184 BD F0                   		movw	r8, ax
+ 672 0186 B8 26                   		movw	[sp+38], ax
+ 673 0188 A8 14                   		movw	ax, [sp+20]
+ 674 018a BD F2                   		movw	r10, ax
+ 675 018c B8 28                   		movw	[sp+40], ax
+ 676 018e 88 22                   		mov	a, [sp+34]
+ 677 0190 9D F0                   		mov	r8, a
+ 678 0192 5C 01                   		and	a, #1
+ 679 0194 9D F6                   		mov	r14, a
+ 680 0196 A8 56                   		movw	ax, [sp+86]
+ 681 0198 BD F0                   		movw	r8, ax
+ 682 019a BD F4                   		movw	r12, ax
+ 683 019c FA F4                   		movw	hl, r12
+ 684 019e AB                      		movw	ax, [hl]
+ 685 019f BD F4                   		movw	r12, ax
+ 686 01a1 B8 1E                   		movw	[sp+30], ax
+ 687 01a3 FA F0                   		movw	hl, r8
+ 688 01a5 AC 02                   		movw	ax, [hl+2]
+ 689 01a7 BD F2                   		movw	r10, ax
+ 690 01a9 B8 20                   		movw	[sp+32], ax
+ 691 01ab A8 20                   		movw ax,[sp+32] 
+ 692 01ad 31 7A                   		 shr a,7 
+ 693 01af 9D F0                   		 mov r8,a 
+ 694 01b1 F6                      		 clrw ax 
+ 695 01b2 BD F2                   		 movw r10,ax 
+ 696 01b4 9D F1                   		 mov r9,a
+ 697 01b6 5A F0 01                		and	r8, #1
+ 698 01b9 8D F6                   		mov	a, r14
+ 699 01bb 7B F0                   		xor	a, r8
+ 700 01bd 9D F6                   		mov	r14, a
+ 701 01bf A8 56                   		movw	ax, [sp+86]
+ 702 01c1 BD F0                   		movw	r8, ax
+ 703 01c3 BD F4                   		movw	r12, ax
+ 704 01c5 FA F4                   		movw	hl, r12
+ 705 01c7 AB                      		movw	ax, [hl]
+ 706 01c8 BD F4                   		movw	r12, ax
+ 707 01ca B8 1A                   		movw	[sp+26], ax
+ 708 01cc FA F0                   		movw	hl, r8
+ 709 01ce AC 02                   		movw	ax, [hl+2]
+ 710 01d0 BD F2                   		movw	r10, ax
+ 711 01d2 B8 1C                   		movw	[sp+28], ax
+ 712 01d4 88 1B                   		mov a,[sp+27] 
+ 713 01d6 70                      		 mov x,a 
+ 714 01d7 88 1C                   		 mov a,[sp+28] 
+ 715 01d9 31 1D                   		 shlw ax,1 
+ 716 01db 9D F0                   		 mov r8,a 
+ 717 01dd A8 1C                   		 movw ax,[sp+28] 
+ 718 01df 31 1D                   		 shlw ax,1 
+ 719 01e1 9D F1                   		 mov r9,a 
+ 720 01e3 A8 1C                   		 movw ax,[sp+28] 
+ 721 01e5 31 FE                   		 shrw ax,15 
+ 722 01e7 BD F2                   		 movw r10,ax
+ 723 01e9 5A F0 01                		and	r8, #1
+ 724 01ec 8D F6                   		mov	a, r14
+ 725 01ee 7B F0                   		xor	a, r8
+ 726 01f0 9D F1                   		mov	r9, a
+ 727 01f2 88 48                   		mov	a, [sp+72]
+ 728 01f4 9D F0                   		mov	r8, a
+ 729 01f6 8D F1                   		mov	a, r9
+ 730 01f8 7B F0                   		xor	a, r8
+ 731 01fa 9D F0                   		mov	r8, a
+ 732 01fc 98 47                   		mov	[sp+71], a
+  41:../KEELOQ/KeeLOQ.c ****         *plaintext = (*plaintext << 1) | xor;
+ 733                             		.loc 1 41 0 discriminator 3
+ 734 01fe A8 56                   		movw	ax, [sp+86]
+ 735 0200 BD F0                   		movw	r8, ax
+ 736 0202 BD F4                   		movw	r12, ax
+ 737 0204 FA F4                   		movw	hl, r12
+ 738 0206 AB                      		movw	ax, [hl]
+ 739 0207 BD F4                   		movw	r12, ax
+ 740 0209 B8 16                   		movw	[sp+22], ax
+ 741 020b FA F0                   		movw	hl, r8
+ 742 020d AC 02                   		movw	ax, [hl+2]
+ 743 020f BD F6                   		movw	r14, ax
+ 744 0211 B8 18                   		movw	[sp+24], ax
+ 745 0213 A8 16                   		movw ax,[sp+22] 
+ 746 0215 01                      		 addw ax,ax 
+ 747 0216 BD F0                   		 movw r8,ax 
+ 748 0218 A8 18                   		 movw ax,[sp+24] 
+ 749 021a 61 EE                   		 rolwc ax,1 
+ 750 021c BD F2                   		 movw r10,ax
+ 751 021e 88 47                   		mov	a, [sp+71]
+ 752 0220 9D F4                   		mov	r12, a
+ 753 0222 9D E8                   		mov	r16, a
+ 754 0224 F4 E9                   		clrb	r17
+ 755 0226 F4 EA                   		clrb	r18
+ 756 0228 F4 EB                   		clrb	r19
+ 757 022a AD F0                   		movw	ax, r8
+ 758 022c 12                      		movw	bc, ax
+ 759 022d AD E8                   		movw	ax, r16
+ 760 022f 61 63                   		or	b, a
+ 761 0231 62                      		mov	a, c
+ 762 0232 61 60                   		or	x, a
+ 763 0234 63                      		mov	a, b
+ 764 0235 BD F4                   		movw	r12, ax
+ 765 0237 AD F2                   		movw	ax, r10
+ 766 0239 12                      		movw	bc, ax
+ 767 023a AD EA                   		movw	ax, r18
+ 768 023c 61 63                   		or	b, a
+ 769 023e 62                      		mov	a, c
+ 770 023f 61 60                   		or	x, a
+ 771 0241 63                      		mov	a, b
+ 772 0242 BD F6                   		movw	r14, ax ;iorsi3 r12,r8,r16
+ 773 0244 AD F4                   		movw	ax, r12
+ 774 0246 B8 0A                   		movw	[sp+10], ax
+ 775 0248 AD F6                   		movw	ax, r14
+ 776 024a B8 0C                   		movw	[sp+12], ax
+ 777 024c A8 56                   		movw	ax, [sp+86]
+ 778 024e BD F0                   		movw	r8, ax
+ 779 0250 A8 0A                   		movw	ax, [sp+10]
+ 780 0252 BD F2                   		movw	r10, ax
+ 781 0254 AD F0                   		movw	ax, r8
+ 782 0256 BD F6                   		movw	r14, ax
+ 783 0258 EA F6                   		movw	de, r14
+ 784 025a AD F2                   		movw	ax, r10
+ 785 025c B9                      		movw	[de], ax
+ 786 025d A8 0C                   		movw	ax, [sp+12]
+ 787 025f BD F4                   		movw	r12, ax
+ 788 0261 BA 02                   		movw	[de+2], ax
+  35:../KEELOQ/KeeLOQ.c ****     {
+ 789                             		.loc 1 35 0 discriminator 3
+ 790 0263 A8 4A                   		movw	ax, [sp+74]
+ 791 0265 BD F0                   		movw	r8, ax
+ 792 0267 A1                      		incw	ax
+ 793 0268 B8 4A                   		movw	[sp+74], ax
+ 794                             	.L7:
+  35:../KEELOQ/KeeLOQ.c ****     {
+ 795                             		.loc 1 35 0 is_stmt 0 discriminator 1
+ 796 026a A8 5A                   		movw	ax, [sp+90]
+ 797 026c BD F2                   		movw	r10, ax
+ 798 026e A8 4A                   		movw	ax, [sp+74]
+ 799 0270 BD F0                   		movw	r8, ax
+ 800 0272 AD F2                   		movw	ax, r10
+ 801 0274 46 F0                   		cmpw	ax, r8
+ 802 0276 61 F3                   		 sknh
+ 803 0278 EC 31 00 00             		 br	!!.L8
+  42:../KEELOQ/KeeLOQ.c ****     }
+  43:../KEELOQ/KeeLOQ.c **** }
+ 804                             		.loc 1 43 0 is_stmt 1
+ 805 027c 10 4C                   		addw	sp, #76
+ 806 027e 61 EF                   		sel	rb2
+ 807 0280 C2                      		pop	bc ; r18
+ 808 0281 C0                      		pop	ax ; r16
+ 809 0282 61 CF                   		sel	rb0
+ 810 0284 D7                      		ret
+ 811                             	.LFE2:
+ 897                             	.Letext0:
+ 898                             		.file 2 "c:\\programdata\\gcc for renesas rl78 4.9.2.202201-gnurl78-elf\\rl78-elf\\rl78-elf\\rl78-
+ 899                             		.file 3 "c:\\programdata\\gcc for renesas rl78 4.9.2.202201-gnurl78-elf\\rl78-elf\\rl78-elf\\rl78-
