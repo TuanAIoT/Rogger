@@ -1,0 +1,1057 @@
+   1                             	r8	=	0xffef0
+   2                             	r16	=	0xffee8
+   3                             	r24	=	0xffee0
+   4                             	r9	=	0xffef1
+   5                             	r17	=	0xffee9
+   6                             	r25	=	0xffee1
+   7                             	r10	=	0xffef2
+   8                             	r18	=	0xffeea
+   9                             	r26	=	0xffee2
+  10                             	r11	=	0xffef3
+  11                             	r19	=	0xffeeb
+  12                             	r27	=	0xffee3
+  13                             	r12	=	0xffef4
+  14                             	r20	=	0xffeec
+  15                             	r28	=	0xffee4
+  16                             	r13	=	0xffef5
+  17                             	r21	=	0xffeed
+  18                             	r29	=	0xffee5
+  19                             	r14	=	0xffef6
+  20                             	r22	=	0xffeee
+  21                             	r30	=	0xffee6
+  22                             	r15	=	0xffef7
+  23                             	r23	=	0xffeef
+  24                             	r31	=	0xffee7
+  25                             	MDUC	=	0xf00e8
+  26                             	MDAL	=	0xffff0
+  27                             	MDAH	=	0xffff2
+  28                             	MDBL	=	0xffff6
+  29                             	MDBH	=	0xffff4
+  30                             	MDCL	=	0xf00e0
+  31                             	MDCH	=	0xf00e2
+  32                             	.text
+  33                             	.Ltext0:
+  34                             		.section	.text.Check_Safety_and_Limit_Switch,"ax",@progbits
+  35                             		.global	_Check_Safety_and_Limit_Switch
+  37                             	_Check_Safety_and_Limit_Switch:
+  38                             	.LFB0:
+  39                             		.file 1 "../DGC_A230_Functions/DGC_A230_Test_Mode.c"
+   1:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** /*
+   2:../DGC_A230_Functions/DGC_A230_Test_Mode.c ****  * DGC_A230_Test_Mode.c
+   3:../DGC_A230_Functions/DGC_A230_Test_Mode.c ****  *
+   4:../DGC_A230_Functions/DGC_A230_Test_Mode.c ****  *  Created on: Nov 22, 2023
+   5:../DGC_A230_Functions/DGC_A230_Test_Mode.c ****  *      Author: Mr. Han
+   6:../DGC_A230_Functions/DGC_A230_Test_Mode.c ****  */
+   7:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+   8:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** #include "r_cg_macrodriver.h"
+   9:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** #include "r_cg_userdefine.h"
+  10:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  11:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** #include "string.h"
+  12:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  13:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** #include <DGC_A230_Define.h>
+  14:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** #include <Common.h>
+  15:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  16:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** extern uint8_t 	Display_Mode;
+  17:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** extern char 	Parameter_Name[2];
+  18:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** extern char 	Parameter_Value[2];
+  19:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** extern uint8_t	HMI_Flash_Count;
+  20:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** extern uint16_t Key_Tick_Count;
+  21:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** extern uint8_t 	Mask;
+  22:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** extern uint8_t	CFG_Parameters_Value[128];
+  23:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  24:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** uint8_t Check_Safety_and_Limit_Switch (void)
+  25:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** {
+  40                             		.loc 1 25 0
+  41                             		; start of function
+  42                             		; locals: 2 bytes
+  43                             		; uses ES register
+  44 0000 20 02                   		subw	sp, #2
+  45                             	.LCFI0:
+  26:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	uint8_t Alarm_And_Limit_Error_Code = 0x00;
+  46                             		.loc 1 26 0
+  47 0002 F1                      		clrb	a
+  48 0003 98 01                   		mov	[sp+1], a
+  27:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	uint8_t Limit_Switch_Activated_Count;
+  28:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  29:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	if (E_STOP)
+  49                             		.loc 1 29 0
+  50 0005 C9 F0 07 FF             		movw	r8, #-249
+  51 0009 AD F0                   		movw	ax, r8
+  52 000b BD F2                   		movw	r10, ax
+  53 000d FA F2                   		movw	hl, r10
+  54 000f 8B                      		mov	a, [hl]
+  55 0010 9D F0                   		mov	r8, a
+  56 0012 31 4A                   		shr	a, 4
+  57 0014 9D F0                   		mov	r8, a
+  58 0016 5A F0 01                		and	r8, #1
+  59 0019 61 F8                   		sknz
+  60 001b EC 26 00 00             		 br	!!.L2
+  61                             		 # zero-comparison eliminated
+  30:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+  31:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		return (EMEGENCY_STOP_CONTACT_IS_OPENED);
+  62                             		.loc 1 31 0
+  63 001f CD F0 41                		mov	r8, #65
+  64 0022 EC D8 02 00             		br	!!.L3
+  65                             	.L2:
+  32:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+  33:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  34:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	if ((COS1) && (CFG_Parameters_Value[73] != 0x00))
+  66                             		.loc 1 34 0
+  67 0026 C9 F0 07 FF             		movw	r8, #-249
+  68 002a AD F0                   		movw	ax, r8
+  69 002c BD F2                   		movw	r10, ax
+  70 002e FA F2                   		movw	hl, r10
+  71 0030 8B                      		mov	a, [hl]
+  72 0031 9D F0                   		mov	r8, a
+  73 0033 31 3A                   		shr	a, 3
+  74 0035 9D F0                   		mov	r8, a
+  75 0037 5A F0 01                		and	r8, #1
+  76 003a 61 F8                   		sknz
+  77 003c EC 54 00 00             		 br	!!.L4
+  78                             		 # zero-comparison eliminated
+  79                             		.loc 1 34 0 is_stmt 0 discriminator 1
+  80 0040 8F 00 00                		mov	a, !_CFG_Parameters_Value+73
+  81 0043 9D F0                   		mov	r8, a
+  82 0045 D4 F0                   		cmp0	r8
+  83 0047 61 F8                   		 sknz
+  84 0049 EC 54 00 00             		 br	!!.L4
+  35:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+  36:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		return (SENSING_EDGE_COS1_CONTACT_IS_OPENED);
+  85                             		.loc 1 36 0 is_stmt 1
+  86 004d CD F0 39                		mov	r8, #57
+  87 0050 EC D8 02 00             		br	!!.L3
+  88                             	.L4:
+  37:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+  38:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  39:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	if ((COS2) && (CFG_Parameters_Value[74] != 0x00))
+  89                             		.loc 1 39 0
+  90 0054 C9 F0 07 FF             		movw	r8, #-249
+  91 0058 AD F0                   		movw	ax, r8
+  92 005a BD F2                   		movw	r10, ax
+  93 005c FA F2                   		movw	hl, r10
+  94 005e 8B                      		mov	a, [hl]
+  95 005f 9D F0                   		mov	r8, a
+  96 0061 31 2A                   		shr	a, 2
+  97 0063 9D F0                   		mov	r8, a
+  98 0065 5A F0 01                		and	r8, #1
+  99 0068 61 F8                   		sknz
+ 100 006a EC 82 00 00             		 br	!!.L5
+ 101                             		 # zero-comparison eliminated
+ 102                             		.loc 1 39 0 is_stmt 0 discriminator 1
+ 103 006e 8F 00 00                		mov	a, !_CFG_Parameters_Value+74
+ 104 0071 9D F0                   		mov	r8, a
+ 105 0073 D4 F0                   		cmp0	r8
+ 106 0075 61 F8                   		 sknz
+ 107 0077 EC 82 00 00             		 br	!!.L5
+  40:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+  41:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		return (SENSING_EDGE_COS2_CONTACT_IS_OPENED);
+ 108                             		.loc 1 41 0 is_stmt 1
+ 109 007b CD F0 38                		mov	r8, #56
+ 110 007e EC D8 02 00             		br	!!.L3
+ 111                             	.L5:
+  42:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+  43:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  44:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	if ((FT1) && (!((CFG_Parameters_Value[50] == 0x00) && (CFG_Parameters_Value[51] == 0x00))))
+ 112                             		.loc 1 44 0
+ 113 0082 C9 F0 07 FF             		movw	r8, #-249
+ 114 0086 AD F0                   		movw	ax, r8
+ 115 0088 BD F2                   		movw	r10, ax
+ 116 008a FA F2                   		movw	hl, r10
+ 117 008c 8B                      		mov	a, [hl]
+ 118 008d 9D F0                   		mov	r8, a
+ 119 008f 31 1A                   		shr	a, 1
+ 120 0091 9D F0                   		mov	r8, a
+ 121 0093 5A F0 01                		and	r8, #1
+ 122 0096 61 F8                   		sknz
+ 123 0098 EC BD 00 00             		 br	!!.L6
+ 124                             		 # zero-comparison eliminated
+ 125                             		.loc 1 44 0 is_stmt 0 discriminator 1
+ 126 009c 8F 00 00                		mov	a, !_CFG_Parameters_Value+50
+ 127 009f 9D F0                   		mov	r8, a
+ 128 00a1 D4 F0                   		cmp0	r8
+ 129 00a3 61 E8                   		 skz
+ 130 00a5 EC B6 00 00             		 br	!!.L7
+ 131                             		.loc 1 44 0 discriminator 2
+ 132 00a9 8F 00 00                		mov	a, !_CFG_Parameters_Value+51
+ 133 00ac 9D F0                   		mov	r8, a
+ 134 00ae D4 F0                   		cmp0	r8
+ 135 00b0 61 F8                   		 sknz
+ 136 00b2 EC BD 00 00             		 br	!!.L6
+ 137                             	.L7:
+  45:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+  46:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		return (PHOTOCELL_FT1_CONTACT_IS_OPENED);
+ 138                             		.loc 1 46 0 is_stmt 1
+ 139 00b6 CD F0 37                		mov	r8, #55
+ 140 00b9 EC D8 02 00             		br	!!.L3
+ 141                             	.L6:
+  47:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+  48:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  49:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	if ((FT2) && (!((CFG_Parameters_Value[53] == 0x00) && (CFG_Parameters_Value[54] == 0x00))))
+ 142                             		.loc 1 49 0
+ 143 00bd C9 F0 07 FF             		movw	r8, #-249
+ 144 00c1 AD F0                   		movw	ax, r8
+ 145 00c3 BD F2                   		movw	r10, ax
+ 146 00c5 EA F2                   		movw	de, r10
+ 147 00c7 89                      		mov	a, [de]
+ 148 00c8 5C 01                   		and	a, #1
+ 149 00ca 9D F0                   		mov	r8, a
+ 150 00cc D4 F0                   		cmp0	r8
+ 151 00ce 61 F8                   		 sknz
+ 152 00d0 EC F5 00 00             		 br	!!.L8
+ 153                             		.loc 1 49 0 is_stmt 0 discriminator 1
+ 154 00d4 8F 00 00                		mov	a, !_CFG_Parameters_Value+53
+ 155 00d7 9D F0                   		mov	r8, a
+ 156 00d9 D4 F0                   		cmp0	r8
+ 157 00db 61 E8                   		 skz
+ 158 00dd EC EE 00 00             		 br	!!.L9
+ 159                             		.loc 1 49 0 discriminator 2
+ 160 00e1 8F 00 00                		mov	a, !_CFG_Parameters_Value+54
+ 161 00e4 9D F0                   		mov	r8, a
+ 162 00e6 D4 F0                   		cmp0	r8
+ 163 00e8 61 F8                   		 sknz
+ 164 00ea EC F5 00 00             		 br	!!.L8
+ 165                             	.L9:
+  50:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+  51:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		return (PHOTOCELL_FT2_CONTACT_IS_OPENED);
+ 166                             		.loc 1 51 0 is_stmt 1
+ 167 00ee CD F0 36                		mov	r8, #54
+ 168 00f1 EC D8 02 00             		br	!!.L3
+ 169                             	.L8:
+  52:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+  53:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  54:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	Limit_Switch_Activated_Count = 0;
+ 170                             		.loc 1 54 0
+ 171 00f5 F1                      		clrb	a
+ 172 00f6 98 00                   		mov	[sp], a
+  55:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	if (FCC2_IN && (CFG_Parameters_Value[72] == 0x01))
+ 173                             		.loc 1 55 0
+ 174 00f8 C9 F0 0C FF             		movw	r8, #-244
+ 175 00fc AD F0                   		movw	ax, r8
+ 176 00fe BD F2                   		movw	r10, ax
+ 177 0100 EA F2                   		movw	de, r10
+ 178 0102 89                      		mov	a, [de]
+ 179 0103 5C 01                   		and	a, #1
+ 180 0105 9D F0                   		mov	r8, a
+ 181 0107 D4 F0                   		cmp0	r8
+ 182 0109 61 F8                   		 sknz
+ 183 010b EC 26 01 00             		 br	!!.L10
+ 184                             		.loc 1 55 0 is_stmt 0 discriminator 1
+ 185 010f 8F 00 00                		mov	a, !_CFG_Parameters_Value+72
+ 186 0112 9D F0                   		mov	r8, a
+ 187 0114 4A F0 01                		cmp	r8, #1
+ 188 0117 61 E8                   		 skz
+ 189 0119 EC 26 01 00             		 br	!!.L10
+  56:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+  57:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		Alarm_And_Limit_Error_Code = MOTOR_2_CLOSED_LIMIT_SWITCH_IS_ACTIVATED;
+ 190                             		.loc 1 57 0 is_stmt 1
+ 191 011d 51 23                   		mov	a, #35
+ 192 011f 98 01                   		mov	[sp+1], a
+  58:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		Limit_Switch_Activated_Count += 1;
+ 193                             		.loc 1 58 0
+ 194 0121 88 00                   		mov	a, [sp]
+ 195 0123 81                      		inc	a
+ 196 0124 98 00                   		mov	[sp], a
+ 197                             	.L10:
+  59:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+  60:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	if (FCA2_IN && (CFG_Parameters_Value[72] != 0x00))
+ 198                             		.loc 1 60 0
+ 199 0126 C9 F0 04 FF             		movw	r8, #-252
+ 200 012a AD F0                   		movw	ax, r8
+ 201 012c BD F2                   		movw	r10, ax
+ 202 012e FA F2                   		movw	hl, r10
+ 203 0130 8B                      		mov	a, [hl]
+ 204 0131 9D F0                   		mov	r8, a
+ 205 0133 31 3A                   		shr	a, 3
+ 206 0135 9D F0                   		mov	r8, a
+ 207 0137 5A F0 01                		and	r8, #1
+ 208 013a 61 F8                   		sknz
+ 209 013c EC 56 01 00             		 br	!!.L11
+ 210                             		 # zero-comparison eliminated
+ 211                             		.loc 1 60 0 is_stmt 0 discriminator 1
+ 212 0140 8F 00 00                		mov	a, !_CFG_Parameters_Value+72
+ 213 0143 9D F0                   		mov	r8, a
+ 214 0145 D4 F0                   		cmp0	r8
+ 215 0147 61 F8                   		 sknz
+ 216 0149 EC 56 01 00             		 br	!!.L11
+  61:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+  62:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		Alarm_And_Limit_Error_Code = MOTOR_2_OPEN_LIMIT_SWITCH_IS_ACTIVATED;
+ 217                             		.loc 1 62 0 is_stmt 1
+ 218 014d 51 22                   		mov	a, #34
+ 219 014f 98 01                   		mov	[sp+1], a
+  63:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		Limit_Switch_Activated_Count += 1;
+ 220                             		.loc 1 63 0
+ 221 0151 88 00                   		mov	a, [sp]
+ 222 0153 81                      		inc	a
+ 223 0154 98 00                   		mov	[sp], a
+ 224                             	.L11:
+  64:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+  65:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	if (FCC1_IN && (CFG_Parameters_Value[72] == 0x01))
+ 225                             		.loc 1 65 0
+ 226 0156 C9 F0 04 FF             		movw	r8, #-252
+ 227 015a AD F0                   		movw	ax, r8
+ 228 015c BD F2                   		movw	r10, ax
+ 229 015e FA F2                   		movw	hl, r10
+ 230 0160 8B                      		mov	a, [hl]
+ 231 0161 9D F0                   		mov	r8, a
+ 232 0163 31 2A                   		shr	a, 2
+ 233 0165 9D F0                   		mov	r8, a
+ 234 0167 5A F0 01                		and	r8, #1
+ 235 016a 61 F8                   		sknz
+ 236 016c EC 87 01 00             		 br	!!.L12
+ 237                             		 # zero-comparison eliminated
+ 238                             		.loc 1 65 0 is_stmt 0 discriminator 1
+ 239 0170 8F 00 00                		mov	a, !_CFG_Parameters_Value+72
+ 240 0173 9D F0                   		mov	r8, a
+ 241 0175 4A F0 01                		cmp	r8, #1
+ 242 0178 61 E8                   		 skz
+ 243 017a EC 87 01 00             		 br	!!.L12
+  66:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+  67:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		Alarm_And_Limit_Error_Code = MOTOR_1_CLOSED_LIMIT_SWITCH_IS_ACTIVATED;
+ 244                             		.loc 1 67 0 is_stmt 1
+ 245 017e 51 21                   		mov	a, #33
+ 246 0180 98 01                   		mov	[sp+1], a
+  68:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		Limit_Switch_Activated_Count += 1;
+ 247                             		.loc 1 68 0
+ 248 0182 88 00                   		mov	a, [sp]
+ 249 0184 81                      		inc	a
+ 250 0185 98 00                   		mov	[sp], a
+ 251                             	.L12:
+  69:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+  70:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	if (FCA1_IN && (CFG_Parameters_Value[72] != 0x00))
+ 252                             		.loc 1 70 0
+ 253 0187 C9 F0 04 FF             		movw	r8, #-252
+ 254 018b AD F0                   		movw	ax, r8
+ 255 018d BD F2                   		movw	r10, ax
+ 256 018f FA F2                   		movw	hl, r10
+ 257 0191 8B                      		mov	a, [hl]
+ 258 0192 9D F0                   		mov	r8, a
+ 259 0194 31 1A                   		shr	a, 1
+ 260 0196 9D F0                   		mov	r8, a
+ 261 0198 5A F0 01                		and	r8, #1
+ 262 019b 61 F8                   		sknz
+ 263 019d EC B7 01 00             		 br	!!.L13
+ 264                             		 # zero-comparison eliminated
+ 265                             		.loc 1 70 0 is_stmt 0 discriminator 1
+ 266 01a1 8F 00 00                		mov	a, !_CFG_Parameters_Value+72
+ 267 01a4 9D F0                   		mov	r8, a
+ 268 01a6 D4 F0                   		cmp0	r8
+ 269 01a8 61 F8                   		 sknz
+ 270 01aa EC B7 01 00             		 br	!!.L13
+  71:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+  72:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		Alarm_And_Limit_Error_Code = MOTOR_1_OPEN_LIMIT_SWITCH_IS_ACTIVATED;
+ 271                             		.loc 1 72 0 is_stmt 1
+ 272 01ae 51 20                   		mov	a, #32
+ 273 01b0 98 01                   		mov	[sp+1], a
+  73:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		Limit_Switch_Activated_Count += 1;
+ 274                             		.loc 1 73 0
+ 275 01b2 88 00                   		mov	a, [sp]
+ 276 01b4 81                      		inc	a
+ 277 01b5 98 00                   		mov	[sp], a
+ 278                             	.L13:
+  74:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+  75:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  76:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	if ((FCC1_IN && (CFG_Parameters_Value[72] == 0x01) && (CFG_Parameters_Value[70] == 0x01))
+ 279                             		.loc 1 76 0
+ 280 01b7 C9 F0 04 FF             		movw	r8, #-252
+ 281 01bb AD F0                   		movw	ax, r8
+ 282 01bd BD F2                   		movw	r10, ax
+ 283 01bf FA F2                   		movw	hl, r10
+ 284 01c1 8B                      		mov	a, [hl]
+ 285 01c2 9D F0                   		mov	r8, a
+ 286 01c4 31 2A                   		shr	a, 2
+ 287 01c6 9D F0                   		mov	r8, a
+ 288 01c8 5A F0 01                		and	r8, #1
+ 289 01cb 61 F8                   		sknz
+ 290 01cd EC ED 01 00             		 br	!!.L14
+ 291                             		 # zero-comparison eliminated
+ 292                             		.loc 1 76 0 is_stmt 0 discriminator 1
+ 293 01d1 8F 00 00                		mov	a, !_CFG_Parameters_Value+72
+ 294 01d4 9D F0                   		mov	r8, a
+ 295 01d6 4A F0 01                		cmp	r8, #1
+ 296 01d9 61 E8                   		 skz
+ 297 01db EC ED 01 00             		 br	!!.L14
+ 298                             		.loc 1 76 0 discriminator 2
+ 299 01df 8F 00 00                		mov	a, !_CFG_Parameters_Value+70
+ 300 01e2 9D F0                   		mov	r8, a
+ 301 01e4 4A F0 01                		cmp	r8, #1
+ 302 01e7 61 F8                   		 sknz
+ 303 01e9 EC 3A 02 00             		 br	!!.L15
+ 304                             	.L14:
+  77:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			|| (FCC1_IN && FCC2_IN && (CFG_Parameters_Value[72] == 0x01) && (CFG_Parameters_Value[70] == 0x0
+ 305                             		.loc 1 77 0 is_stmt 1
+ 306 01ed C9 F0 04 FF             		movw	r8, #-252
+ 307 01f1 AD F0                   		movw	ax, r8
+ 308 01f3 BD F2                   		movw	r10, ax
+ 309 01f5 FA F2                   		movw	hl, r10
+ 310 01f7 8B                      		mov	a, [hl]
+ 311 01f8 9D F0                   		mov	r8, a
+ 312 01fa 31 2A                   		shr	a, 2
+ 313 01fc 9D F0                   		mov	r8, a
+ 314 01fe 5A F0 01                		and	r8, #1
+ 315 0201 61 F8                   		sknz
+ 316 0203 EC 3E 02 00             		 br	!!.L16
+ 317                             		 # zero-comparison eliminated
+ 318                             		.loc 1 77 0 is_stmt 0 discriminator 1
+ 319 0207 C9 F0 0C FF             		movw	r8, #-244
+ 320 020b AD F0                   		movw	ax, r8
+ 321 020d BD F2                   		movw	r10, ax
+ 322 020f EA F2                   		movw	de, r10
+ 323 0211 89                      		mov	a, [de]
+ 324 0212 5C 01                   		and	a, #1
+ 325 0214 9D F0                   		mov	r8, a
+ 326 0216 D4 F0                   		cmp0	r8
+ 327 0218 61 F8                   		 sknz
+ 328 021a EC 3E 02 00             		 br	!!.L16
+ 329                             		.loc 1 77 0 discriminator 2
+ 330 021e 8F 00 00                		mov	a, !_CFG_Parameters_Value+72
+ 331 0221 9D F0                   		mov	r8, a
+ 332 0223 4A F0 01                		cmp	r8, #1
+ 333 0226 61 E8                   		 skz
+ 334 0228 EC 3E 02 00             		 br	!!.L16
+ 335                             		.loc 1 77 0 discriminator 3
+ 336 022c 8F 00 00                		mov	a, !_CFG_Parameters_Value+70
+ 337 022f 9D F0                   		mov	r8, a
+ 338 0231 4A F0 02                		cmp	r8, #2
+ 339 0234 61 E8                   		 skz
+ 340 0236 EC 3E 02 00             		 br	!!.L16
+ 341                             	.L15:
+  78:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+  79:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		Alarm_And_Limit_Error_Code = GATE_CLOSED_LIMIT_SWITCH_IS_ACTIVATED;
+ 342                             		.loc 1 79 0 is_stmt 1
+ 343 023a 51 FC                   		mov	a, #-4
+ 344 023c 98 01                   		mov	[sp+1], a
+ 345                             	.L16:
+  80:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+  81:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  82:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	if ((FCA1_IN && (CFG_Parameters_Value[72] != 0x00) && (CFG_Parameters_Value[70] == 0x01))
+ 346                             		.loc 1 82 0
+ 347 023e C9 F0 04 FF             		movw	r8, #-252
+ 348 0242 AD F0                   		movw	ax, r8
+ 349 0244 BD F2                   		movw	r10, ax
+ 350 0246 FA F2                   		movw	hl, r10
+ 351 0248 8B                      		mov	a, [hl]
+ 352 0249 9D F0                   		mov	r8, a
+ 353 024b 31 1A                   		shr	a, 1
+ 354 024d 9D F0                   		mov	r8, a
+ 355 024f 5A F0 01                		and	r8, #1
+ 356 0252 61 F8                   		sknz
+ 357 0254 EC 73 02 00             		 br	!!.L17
+ 358                             		 # zero-comparison eliminated
+ 359                             		.loc 1 82 0 is_stmt 0 discriminator 1
+ 360 0258 8F 00 00                		mov	a, !_CFG_Parameters_Value+72
+ 361 025b 9D F0                   		mov	r8, a
+ 362 025d D4 F0                   		cmp0	r8
+ 363 025f 61 F8                   		 sknz
+ 364 0261 EC 73 02 00             		 br	!!.L17
+ 365                             		.loc 1 82 0 discriminator 2
+ 366 0265 8F 00 00                		mov	a, !_CFG_Parameters_Value+70
+ 367 0268 9D F0                   		mov	r8, a
+ 368 026a 4A F0 01                		cmp	r8, #1
+ 369 026d 61 F8                   		 sknz
+ 370 026f EC C2 02 00             		 br	!!.L18
+ 371                             	.L17:
+  83:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			|| (FCA1_IN && FCA2_IN && (CFG_Parameters_Value[72] != 0x00) && (CFG_Parameters_Value[70] == 0x0
+ 372                             		.loc 1 83 0 is_stmt 1
+ 373 0273 C9 F0 04 FF             		movw	r8, #-252
+ 374 0277 AD F0                   		movw	ax, r8
+ 375 0279 BD F2                   		movw	r10, ax
+ 376 027b FA F2                   		movw	hl, r10
+ 377 027d 8B                      		mov	a, [hl]
+ 378 027e 9D F0                   		mov	r8, a
+ 379 0280 31 1A                   		shr	a, 1
+ 380 0282 9D F0                   		mov	r8, a
+ 381 0284 5A F0 01                		and	r8, #1
+ 382 0287 61 F8                   		sknz
+ 383 0289 EC C6 02 00             		 br	!!.L19
+ 384                             		 # zero-comparison eliminated
+ 385                             		.loc 1 83 0 is_stmt 0 discriminator 1
+ 386 028d C9 F0 04 FF             		movw	r8, #-252
+ 387 0291 AD F0                   		movw	ax, r8
+ 388 0293 BD F2                   		movw	r10, ax
+ 389 0295 FA F2                   		movw	hl, r10
+ 390 0297 8B                      		mov	a, [hl]
+ 391 0298 9D F0                   		mov	r8, a
+ 392 029a 31 3A                   		shr	a, 3
+ 393 029c 9D F0                   		mov	r8, a
+ 394 029e 5A F0 01                		and	r8, #1
+ 395 02a1 61 F8                   		sknz
+ 396 02a3 EC C6 02 00             		 br	!!.L19
+ 397                             		 # zero-comparison eliminated
+ 398                             		.loc 1 83 0 discriminator 2
+ 399 02a7 8F 00 00                		mov	a, !_CFG_Parameters_Value+72
+ 400 02aa 9D F0                   		mov	r8, a
+ 401 02ac D4 F0                   		cmp0	r8
+ 402 02ae 61 F8                   		 sknz
+ 403 02b0 EC C6 02 00             		 br	!!.L19
+ 404                             		.loc 1 83 0 discriminator 3
+ 405 02b4 8F 00 00                		mov	a, !_CFG_Parameters_Value+70
+ 406 02b7 9D F0                   		mov	r8, a
+ 407 02b9 4A F0 02                		cmp	r8, #2
+ 408 02bc 61 E8                   		 skz
+ 409 02be EC C6 02 00             		 br	!!.L19
+ 410                             	.L18:
+  84:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+  85:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		Alarm_And_Limit_Error_Code = GATE_OPEN_LIMIT_SWITCH_IS_ACTIVATED;
+ 411                             		.loc 1 85 0 is_stmt 1
+ 412 02c2 51 FA                   		mov	a, #-6
+ 413 02c4 98 01                   		mov	[sp+1], a
+ 414                             	.L19:
+  86:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+  87:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  88:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	if (Limit_Switch_Activated_Count >= 3)
+ 415                             		.loc 1 88 0
+ 416 02c6 88 00                   		mov	a, [sp]
+ 417 02c8 4C 02                   		cmp	a, #2
+ 418 02ca 61 E3                   		 skh
+ 419 02cc EC D4 02 00             		 br	!!.L20
+  89:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+  90:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		Alarm_And_Limit_Error_Code = MORE_THAN_THREE_LIMIT_SW_IS_ACTIVATED;
+ 420                             		.loc 1 90 0
+ 421 02d0 51 FE                   		mov	a, #-2
+ 422 02d2 98 01                   		mov	[sp+1], a
+ 423                             	.L20:
+  91:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+  92:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+  93:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	return (Alarm_And_Limit_Error_Code);
+ 424                             		.loc 1 93 0
+ 425 02d4 88 01                   		mov	a, [sp+1]
+ 426 02d6 9D F0                   		mov	r8, a
+ 427                             	.L3:
+  94:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** }
+ 428                             		.loc 1 94 0
+ 429 02d8 10 02                   		addw	sp, #2
+ 430 02da D7                      		ret
+ 431                             	.LFE0:
+ 433                             		.section	.rodata
+ 434                             	.LC0:
+ 435 0000 20 20 00                		.string	"  "
+ 436                             	.LC1:
+ 437 0003 4F 72 00                		.string	"Or"
+ 438                             	.LC2:
+ 439 0006 41 50 00                		.string	"AP"
+ 440                             	.LC3:
+ 441 0009 43 48 00                		.string	"CH"
+ 442                             	.LC4:
+ 443 000c 50 50 00                		.string	"PP"
+ 444                             	.LC5:
+ 445 000f 50 45 00                		.string	"PE"
+ 446                             		.section	.text.Test_Command_Process,"ax",@progbits
+ 447                             		.global	_Test_Command_Process
+ 449                             	_Test_Command_Process:
+ 450                             	.LFB1:
+  95:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** void Test_Command_Process ()
+  96:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** {
+ 451                             		.loc 1 96 0
+ 452                             		; start of function
+ 453                             		; locals: 2 bytes
+ 454                             		; outgoing: 6 bytes
+ 455                             		; uses ES register
+ 456 0000 20 08                   		subw	sp, #8
+ 457                             	.LCFI1:
+  97:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	uint8_t working_done = 0;
+ 458                             		.loc 1 97 0
+ 459 0002 F1                      		clrb	a
+ 460 0003 98 07                   		mov	[sp+7], a
+  98:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	uint8_t Alarm_And_Limit_Error_Code = 0x00;
+ 461                             		.loc 1 98 0
+ 462 0005 F1                      		clrb	a
+ 463 0006 98 06                   		mov	[sp+6], a
+  99:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+ 100:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	Display_Mode = TEST_MODE;
+ 464                             		.loc 1 100 0
+ 465 0008 E5 00 00                		oneb	!_Display_Mode
+ 101:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+ 102:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	memcpy(&Parameter_Name, "  ", 2);
+ 466                             		.loc 1 102 0
+ 467 000b C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 468 000f C9 F2 00 00             		movw	r10, #.LC0
+ 469 0013 C9 F0 02 00             		movw	r8, #2
+ 470 0017 AD F4                   		movw	ax, r12
+ 471 0019 B8 00                   		movw	[sp], ax
+ 472 001b AD F2                   		movw	ax, r10
+ 473 001d B8 02                   		movw	[sp+2], ax
+ 474 001f AD F0                   		movw	ax, r8
+ 475 0021 B8 04                   		movw	[sp+4], ax
+ 476 0023 FC 00 00 00             		call	!!%code(_memcpy)
+ 103:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	convert_binary_to_ascii(Alarm_And_Limit_Error_Code, &Parameter_Value[0], &Parameter_Value[1]);
+ 477                             		.loc 1 103 0
+ 478 0027 88 06                   		mov	a, [sp+6]
+ 479 0029 31 8E                   		shrw	ax, 8
+ 480 002b BD F0                   		movw	r8, ax
+ 481 002d B8 00                   		movw	[sp], ax
+ 482 002f 30 00 00                		movw	ax, #_Parameter_Value
+ 483 0032 B8 02                   		movw	[sp+2], ax
+ 484 0034 30 00 00                		movw	ax, #_Parameter_Value+1
+ 485 0037 B8 04                   		movw	[sp+4], ax
+ 486 0039 FC 00 00 00             		call	!!%code(_convert_binary_to_ascii)
+ 104:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+ 105:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	Key_Tick_Count = 0;				// Reset Tick count
+ 487                             		.loc 1 105 0
+ 488 003d F6                      		clrw	ax
+ 489 003e BF 00 00                		movw	!_Key_Tick_Count, ax
+ 106:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+ 107:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	while ((working_done == 0) && (Key_Tick_Count < 2000))
+ 490                             		.loc 1 107 0
+ 491 0041 EC 25 03 00             		br	!!.L22
+ 492                             	.L40:
+ 108:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+ 109:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		Alarm_And_Limit_Error_Code = Check_Safety_and_Limit_Switch();
+ 493                             		.loc 1 109 0
+ 494 0045 FC 00 00 00             		call	!!%code(_Check_Safety_and_Limit_Switch)
+ 495 0049 8D F0                   		mov	a, r8
+ 496 004b 98 06                   		mov	[sp+6], a
+ 110:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		convert_binary_to_ascii(Alarm_And_Limit_Error_Code, &Parameter_Value[0], &Parameter_Value[1]);
+ 497                             		.loc 1 110 0
+ 498 004d 31 8E                   		shrw	ax, 8
+ 499 004f BD F0                   		movw	r8, ax
+ 500 0051 B8 00                   		movw	[sp], ax
+ 501 0053 30 00 00                		movw	ax, #_Parameter_Value
+ 502 0056 B8 02                   		movw	[sp+2], ax
+ 503 0058 30 00 00                		movw	ax, #_Parameter_Value+1
+ 504 005b B8 04                   		movw	[sp+4], ax
+ 505 005d FC 00 00 00             		call	!!%code(_convert_binary_to_ascii)
+ 111:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+ 112:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		if (!TEST_KEY)										// Test_Key is pressed
+ 506                             		.loc 1 112 0
+ 507 0061 C9 F0 0E FF             		movw	r8, #-242
+ 508 0065 AD F0                   		movw	ax, r8
+ 509 0067 BD F2                   		movw	r10, ax
+ 510 0069 FA F2                   		movw	hl, r10
+ 511 006b 8B                      		mov	a, [hl]
+ 512 006c 9D F0                   		mov	r8, a
+ 513 006e 31 7A                   		shr	a, 7
+ 514 0070 9D F0                   		mov	r8, a
+ 515 0072 D4 F0                   		cmp0	r8
+ 516 0074 61 E8                   		 skz
+ 517 0076 EC 97 00 00             		 br	!!.L23
+ 113:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		{
+ 114:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			while(!TEST_KEY);								// Do nothing while Test_Key is still pressed
+ 518                             		.loc 1 114 0
+ 519 007a 00                      		nop
+ 520                             	.L24:
+ 521                             		.loc 1 114 0 is_stmt 0 discriminator 1
+ 522 007b C9 F0 0E FF             		movw	r8, #-242
+ 523 007f AD F0                   		movw	ax, r8
+ 524 0081 BD F2                   		movw	r10, ax
+ 525 0083 FA F2                   		movw	hl, r10
+ 526 0085 8B                      		mov	a, [hl]
+ 527 0086 9D F0                   		mov	r8, a
+ 528 0088 31 7A                   		shr	a, 7
+ 529 008a 9D F0                   		mov	r8, a
+ 530 008c D4 F0                   		cmp0	r8
+ 531 008e 61 F8                   		 sknz
+ 532 0090 EC 7B 00 00             		 br	!!.L24
+ 115:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			working_done = 1;
+ 533                             		.loc 1 115 0 is_stmt 1
+ 534 0094 E1                      		oneb	a
+ 535 0095 98 07                   		mov	[sp+7], a
+ 536                             	.L23:
+ 116:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		}
+ 117:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+ 118:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		if (!ORO_IN)
+ 537                             		.loc 1 118 0
+ 538 0097 C9 F0 03 FF             		movw	r8, #-253
+ 539 009b AD F0                   		movw	ax, r8
+ 540 009d BD F2                   		movw	r10, ax
+ 541 009f FA F2                   		movw	hl, r10
+ 542 00a1 8B                      		mov	a, [hl]
+ 543 00a2 9D F0                   		mov	r8, a
+ 544 00a4 31 1A                   		shr	a, 1
+ 545 00a6 9D F0                   		mov	r8, a
+ 546 00a8 5A F0 01                		and	r8, #1
+ 547 00ab 61 E8                   		skz
+ 548 00ad EC 1B 01 00             		 br	!!.L25
+ 549                             		 # zero-comparison eliminated
+ 119:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		{
+ 120:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			while(!ORO_IN);
+ 550                             		.loc 1 120 0
+ 551 00b1 00                      		nop
+ 552                             	.L26:
+ 553                             		.loc 1 120 0 is_stmt 0 discriminator 1
+ 554 00b2 C9 F0 03 FF             		movw	r8, #-253
+ 555 00b6 AD F0                   		movw	ax, r8
+ 556 00b8 BD F2                   		movw	r10, ax
+ 557 00ba FA F2                   		movw	hl, r10
+ 558 00bc 8B                      		mov	a, [hl]
+ 559 00bd 9D F0                   		mov	r8, a
+ 560 00bf 31 1A                   		shr	a, 1
+ 561 00c1 9D F0                   		mov	r8, a
+ 562 00c3 5A F0 01                		and	r8, #1
+ 563 00c6 61 F8                   		sknz
+ 564 00c8 EC B2 00 00             		 br	!!.L26
+ 565                             		 # zero-comparison eliminated
+ 121:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			Key_Tick_Count = 0;								// Reset Tick count
+ 566                             		.loc 1 121 0 is_stmt 1
+ 567 00cc F6                      		clrw	ax
+ 568 00cd BF 00 00                		movw	!_Key_Tick_Count, ax
+ 122:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			memcpy(&Parameter_Name, CLOCK_COMMAND, 2);		// Indicate that is Open Command activated
+ 569                             		.loc 1 122 0
+ 570 00d0 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 571 00d4 C9 F2 03 00             		movw	r10, #.LC1
+ 572 00d8 C9 F0 02 00             		movw	r8, #2
+ 573 00dc AD F4                   		movw	ax, r12
+ 574 00de B8 00                   		movw	[sp], ax
+ 575 00e0 AD F2                   		movw	ax, r10
+ 576 00e2 B8 02                   		movw	[sp+2], ax
+ 577 00e4 AD F0                   		movw	ax, r8
+ 578 00e6 B8 04                   		movw	[sp+4], ax
+ 579 00e8 FC 00 00 00             		call	!!%code(_memcpy)
+ 123:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			while (Key_Tick_Count < 1000);					// Do nothing in 5 second
+ 580                             		.loc 1 123 0
+ 581 00ec 00                      		nop
+ 582                             	.L27:
+ 583                             		.loc 1 123 0 is_stmt 0 discriminator 1
+ 584 00ed AF 00 00                		movw	ax, !_Key_Tick_Count
+ 585 00f0 BD F0                   		movw	r8, ax
+ 586 00f2 44 E7 03                		cmpw	ax, #999
+ 587 00f5 61 E3                   		 skh
+ 588 00f7 EC ED 00 00             		 br	!!.L27
+ 124:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			memcpy(&Parameter_Name, "  ", 2);				// Clear Command Indicator
+ 589                             		.loc 1 124 0 is_stmt 1
+ 590 00fb C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 591 00ff C9 F2 00 00             		movw	r10, #.LC0
+ 592 0103 C9 F0 02 00             		movw	r8, #2
+ 593 0107 AD F4                   		movw	ax, r12
+ 594 0109 B8 00                   		movw	[sp], ax
+ 595 010b AD F2                   		movw	ax, r10
+ 596 010d B8 02                   		movw	[sp+2], ax
+ 597 010f AD F0                   		movw	ax, r8
+ 598 0111 B8 04                   		movw	[sp+4], ax
+ 599 0113 FC 00 00 00             		call	!!%code(_memcpy)
+ 125:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			Key_Tick_Count = 0;								// Reset Tick count
+ 600                             		.loc 1 125 0
+ 601 0117 F6                      		clrw	ax
+ 602 0118 BF 00 00                		movw	!_Key_Tick_Count, ax
+ 603                             	.L25:
+ 126:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		}
+ 127:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+ 128:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		if (!AP_IN)
+ 604                             		.loc 1 128 0
+ 605 011b C9 F0 06 FF             		movw	r8, #-250
+ 606 011f AD F0                   		movw	ax, r8
+ 607 0121 BD F2                   		movw	r10, ax
+ 608 0123 FA F2                   		movw	hl, r10
+ 609 0125 8B                      		mov	a, [hl]
+ 610 0126 9D F0                   		mov	r8, a
+ 611 0128 31 3A                   		shr	a, 3
+ 612 012a 9D F0                   		mov	r8, a
+ 613 012c 5A F0 01                		and	r8, #1
+ 614 012f 61 E8                   		skz
+ 615 0131 EC 9F 01 00             		 br	!!.L28
+ 616                             		 # zero-comparison eliminated
+ 129:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		{
+ 130:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			while(!AP_IN);
+ 617                             		.loc 1 130 0
+ 618 0135 00                      		nop
+ 619                             	.L29:
+ 620                             		.loc 1 130 0 is_stmt 0 discriminator 1
+ 621 0136 C9 F0 06 FF             		movw	r8, #-250
+ 622 013a AD F0                   		movw	ax, r8
+ 623 013c BD F2                   		movw	r10, ax
+ 624 013e FA F2                   		movw	hl, r10
+ 625 0140 8B                      		mov	a, [hl]
+ 626 0141 9D F0                   		mov	r8, a
+ 627 0143 31 3A                   		shr	a, 3
+ 628 0145 9D F0                   		mov	r8, a
+ 629 0147 5A F0 01                		and	r8, #1
+ 630 014a 61 F8                   		sknz
+ 631 014c EC 36 01 00             		 br	!!.L29
+ 632                             		 # zero-comparison eliminated
+ 131:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			Key_Tick_Count = 0;								// Reset Tick count
+ 633                             		.loc 1 131 0 is_stmt 1
+ 634 0150 F6                      		clrw	ax
+ 635 0151 BF 00 00                		movw	!_Key_Tick_Count, ax
+ 132:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			memcpy(&Parameter_Name, OPEN_COMMAND, 2);		// Indicate that is Open Command activated
+ 636                             		.loc 1 132 0
+ 637 0154 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 638 0158 C9 F2 06 00             		movw	r10, #.LC2
+ 639 015c C9 F0 02 00             		movw	r8, #2
+ 640 0160 AD F4                   		movw	ax, r12
+ 641 0162 B8 00                   		movw	[sp], ax
+ 642 0164 AD F2                   		movw	ax, r10
+ 643 0166 B8 02                   		movw	[sp+2], ax
+ 644 0168 AD F0                   		movw	ax, r8
+ 645 016a B8 04                   		movw	[sp+4], ax
+ 646 016c FC 00 00 00             		call	!!%code(_memcpy)
+ 133:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			while (Key_Tick_Count < 1000);					// Do nothing in 5 second
+ 647                             		.loc 1 133 0
+ 648 0170 00                      		nop
+ 649                             	.L30:
+ 650                             		.loc 1 133 0 is_stmt 0 discriminator 1
+ 651 0171 AF 00 00                		movw	ax, !_Key_Tick_Count
+ 652 0174 BD F0                   		movw	r8, ax
+ 653 0176 44 E7 03                		cmpw	ax, #999
+ 654 0179 61 E3                   		 skh
+ 655 017b EC 71 01 00             		 br	!!.L30
+ 134:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			memcpy(&Parameter_Name, "  ", 2);				// Clear Command Indicator
+ 656                             		.loc 1 134 0 is_stmt 1
+ 657 017f C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 658 0183 C9 F2 00 00             		movw	r10, #.LC0
+ 659 0187 C9 F0 02 00             		movw	r8, #2
+ 660 018b AD F4                   		movw	ax, r12
+ 661 018d B8 00                   		movw	[sp], ax
+ 662 018f AD F2                   		movw	ax, r10
+ 663 0191 B8 02                   		movw	[sp+2], ax
+ 664 0193 AD F0                   		movw	ax, r8
+ 665 0195 B8 04                   		movw	[sp+4], ax
+ 666 0197 FC 00 00 00             		call	!!%code(_memcpy)
+ 135:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			Key_Tick_Count = 0;								// Reset Tick count
+ 667                             		.loc 1 135 0
+ 668 019b F6                      		clrw	ax
+ 669 019c BF 00 00                		movw	!_Key_Tick_Count, ax
+ 670                             	.L28:
+ 136:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		}
+ 137:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+ 138:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		if (!CH_IN)
+ 671                             		.loc 1 138 0
+ 672 019f C9 F0 06 FF             		movw	r8, #-250
+ 673 01a3 AD F0                   		movw	ax, r8
+ 674 01a5 BD F2                   		movw	r10, ax
+ 675 01a7 FA F2                   		movw	hl, r10
+ 676 01a9 8B                      		mov	a, [hl]
+ 677 01aa 9D F0                   		mov	r8, a
+ 678 01ac 31 2A                   		shr	a, 2
+ 679 01ae 9D F0                   		mov	r8, a
+ 680 01b0 5A F0 01                		and	r8, #1
+ 681 01b3 61 E8                   		skz
+ 682 01b5 EC 23 02 00             		 br	!!.L31
+ 683                             		 # zero-comparison eliminated
+ 139:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		{
+ 140:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			while(!CH_IN);
+ 684                             		.loc 1 140 0
+ 685 01b9 00                      		nop
+ 686                             	.L32:
+ 687                             		.loc 1 140 0 is_stmt 0 discriminator 1
+ 688 01ba C9 F0 06 FF             		movw	r8, #-250
+ 689 01be AD F0                   		movw	ax, r8
+ 690 01c0 BD F2                   		movw	r10, ax
+ 691 01c2 FA F2                   		movw	hl, r10
+ 692 01c4 8B                      		mov	a, [hl]
+ 693 01c5 9D F0                   		mov	r8, a
+ 694 01c7 31 2A                   		shr	a, 2
+ 695 01c9 9D F0                   		mov	r8, a
+ 696 01cb 5A F0 01                		and	r8, #1
+ 697 01ce 61 F8                   		sknz
+ 698 01d0 EC BA 01 00             		 br	!!.L32
+ 699                             		 # zero-comparison eliminated
+ 141:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			Key_Tick_Count = 0;								// Reset Tick count
+ 700                             		.loc 1 141 0 is_stmt 1
+ 701 01d4 F6                      		clrw	ax
+ 702 01d5 BF 00 00                		movw	!_Key_Tick_Count, ax
+ 142:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			memcpy(&Parameter_Name, CLOSE_COMMAND, 2);		// Indicate that is Open Command activated
+ 703                             		.loc 1 142 0
+ 704 01d8 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 705 01dc C9 F2 09 00             		movw	r10, #.LC3
+ 706 01e0 C9 F0 02 00             		movw	r8, #2
+ 707 01e4 AD F4                   		movw	ax, r12
+ 708 01e6 B8 00                   		movw	[sp], ax
+ 709 01e8 AD F2                   		movw	ax, r10
+ 710 01ea B8 02                   		movw	[sp+2], ax
+ 711 01ec AD F0                   		movw	ax, r8
+ 712 01ee B8 04                   		movw	[sp+4], ax
+ 713 01f0 FC 00 00 00             		call	!!%code(_memcpy)
+ 143:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			while (Key_Tick_Count < 1000);					// Do nothing in 5 second
+ 714                             		.loc 1 143 0
+ 715 01f4 00                      		nop
+ 716                             	.L33:
+ 717                             		.loc 1 143 0 is_stmt 0 discriminator 1
+ 718 01f5 AF 00 00                		movw	ax, !_Key_Tick_Count
+ 719 01f8 BD F0                   		movw	r8, ax
+ 720 01fa 44 E7 03                		cmpw	ax, #999
+ 721 01fd 61 E3                   		 skh
+ 722 01ff EC F5 01 00             		 br	!!.L33
+ 144:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			memcpy(&Parameter_Name, "  ", 2);				// Clear Command Indicator
+ 723                             		.loc 1 144 0 is_stmt 1
+ 724 0203 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 725 0207 C9 F2 00 00             		movw	r10, #.LC0
+ 726 020b C9 F0 02 00             		movw	r8, #2
+ 727 020f AD F4                   		movw	ax, r12
+ 728 0211 B8 00                   		movw	[sp], ax
+ 729 0213 AD F2                   		movw	ax, r10
+ 730 0215 B8 02                   		movw	[sp+2], ax
+ 731 0217 AD F0                   		movw	ax, r8
+ 732 0219 B8 04                   		movw	[sp+4], ax
+ 733 021b FC 00 00 00             		call	!!%code(_memcpy)
+ 145:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			Key_Tick_Count = 0;								// Reset Tick count
+ 734                             		.loc 1 145 0
+ 735 021f F6                      		clrw	ax
+ 736 0220 BF 00 00                		movw	!_Key_Tick_Count, ax
+ 737                             	.L31:
+ 146:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		}
+ 147:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+ 148:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		if (!PP_IN)
+ 738                             		.loc 1 148 0
+ 739 0223 C9 F0 06 FF             		movw	r8, #-250
+ 740 0227 AD F0                   		movw	ax, r8
+ 741 0229 BD F2                   		movw	r10, ax
+ 742 022b FA F2                   		movw	hl, r10
+ 743 022d 8B                      		mov	a, [hl]
+ 744 022e 9D F0                   		mov	r8, a
+ 745 0230 31 1A                   		shr	a, 1
+ 746 0232 9D F0                   		mov	r8, a
+ 747 0234 5A F0 01                		and	r8, #1
+ 748 0237 61 E8                   		skz
+ 749 0239 EC A7 02 00             		 br	!!.L34
+ 750                             		 # zero-comparison eliminated
+ 149:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		{
+ 150:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			while(!PP_IN);
+ 751                             		.loc 1 150 0
+ 752 023d 00                      		nop
+ 753                             	.L35:
+ 754                             		.loc 1 150 0 is_stmt 0 discriminator 1
+ 755 023e C9 F0 06 FF             		movw	r8, #-250
+ 756 0242 AD F0                   		movw	ax, r8
+ 757 0244 BD F2                   		movw	r10, ax
+ 758 0246 FA F2                   		movw	hl, r10
+ 759 0248 8B                      		mov	a, [hl]
+ 760 0249 9D F0                   		mov	r8, a
+ 761 024b 31 1A                   		shr	a, 1
+ 762 024d 9D F0                   		mov	r8, a
+ 763 024f 5A F0 01                		and	r8, #1
+ 764 0252 61 F8                   		sknz
+ 765 0254 EC 3E 02 00             		 br	!!.L35
+ 766                             		 # zero-comparison eliminated
+ 151:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			Key_Tick_Count = 0;								// Reset Tick count
+ 767                             		.loc 1 151 0 is_stmt 1
+ 768 0258 F6                      		clrw	ax
+ 769 0259 BF 00 00                		movw	!_Key_Tick_Count, ax
+ 152:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			memcpy(&Parameter_Name, STEP_COMMAND, 2);		// Indicate that is Open Command activated
+ 770                             		.loc 1 152 0
+ 771 025c C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 772 0260 C9 F2 0C 00             		movw	r10, #.LC4
+ 773 0264 C9 F0 02 00             		movw	r8, #2
+ 774 0268 AD F4                   		movw	ax, r12
+ 775 026a B8 00                   		movw	[sp], ax
+ 776 026c AD F2                   		movw	ax, r10
+ 777 026e B8 02                   		movw	[sp+2], ax
+ 778 0270 AD F0                   		movw	ax, r8
+ 779 0272 B8 04                   		movw	[sp+4], ax
+ 780 0274 FC 00 00 00             		call	!!%code(_memcpy)
+ 153:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			while (Key_Tick_Count < 1000);					// Do nothing in 5 second
+ 781                             		.loc 1 153 0
+ 782 0278 00                      		nop
+ 783                             	.L36:
+ 784                             		.loc 1 153 0 is_stmt 0 discriminator 1
+ 785 0279 AF 00 00                		movw	ax, !_Key_Tick_Count
+ 786 027c BD F0                   		movw	r8, ax
+ 787 027e 44 E7 03                		cmpw	ax, #999
+ 788 0281 61 E3                   		 skh
+ 789 0283 EC 79 02 00             		 br	!!.L36
+ 154:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			memcpy(&Parameter_Name, "  ", 2);				// Clear Command Indicator
+ 790                             		.loc 1 154 0 is_stmt 1
+ 791 0287 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 792 028b C9 F2 00 00             		movw	r10, #.LC0
+ 793 028f C9 F0 02 00             		movw	r8, #2
+ 794 0293 AD F4                   		movw	ax, r12
+ 795 0295 B8 00                   		movw	[sp], ax
+ 796 0297 AD F2                   		movw	ax, r10
+ 797 0299 B8 02                   		movw	[sp+2], ax
+ 798 029b AD F0                   		movw	ax, r8
+ 799 029d B8 04                   		movw	[sp+4], ax
+ 800 029f FC 00 00 00             		call	!!%code(_memcpy)
+ 155:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			Key_Tick_Count = 0;								// Reset Tick count
+ 801                             		.loc 1 155 0
+ 802 02a3 F6                      		clrw	ax
+ 803 02a4 BF 00 00                		movw	!_Key_Tick_Count, ax
+ 804                             	.L34:
+ 156:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		}
+ 157:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+ 158:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		if (!PED_IN)
+ 805                             		.loc 1 158 0
+ 806 02a7 C9 F0 06 FF             		movw	r8, #-250
+ 807 02ab AD F0                   		movw	ax, r8
+ 808 02ad BD F2                   		movw	r10, ax
+ 809 02af EA F2                   		movw	de, r10
+ 810 02b1 89                      		mov	a, [de]
+ 811 02b2 5C 01                   		and	a, #1
+ 812 02b4 9D F0                   		mov	r8, a
+ 813 02b6 D4 F0                   		cmp0	r8
+ 814 02b8 61 E8                   		 skz
+ 815 02ba EC 25 03 00             		 br	!!.L22
+ 159:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		{
+ 160:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			while(!PED_IN);
+ 816                             		.loc 1 160 0
+ 817 02be 00                      		nop
+ 818                             	.L37:
+ 819                             		.loc 1 160 0 is_stmt 0 discriminator 1
+ 820 02bf C9 F0 06 FF             		movw	r8, #-250
+ 821 02c3 AD F0                   		movw	ax, r8
+ 822 02c5 BD F2                   		movw	r10, ax
+ 823 02c7 EA F2                   		movw	de, r10
+ 824 02c9 89                      		mov	a, [de]
+ 825 02ca 5C 01                   		and	a, #1
+ 826 02cc 9D F0                   		mov	r8, a
+ 827 02ce D4 F0                   		cmp0	r8
+ 828 02d0 61 F8                   		 sknz
+ 829 02d2 EC BF 02 00             		 br	!!.L37
+ 161:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			Key_Tick_Count = 0;								// Reset Tick count
+ 830                             		.loc 1 161 0 is_stmt 1
+ 831 02d6 F6                      		clrw	ax
+ 832 02d7 BF 00 00                		movw	!_Key_Tick_Count, ax
+ 162:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			memcpy(&Parameter_Name, PATIAL_COMMAND, 2);		// Indicate that is Open Command activated
+ 833                             		.loc 1 162 0
+ 834 02da C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 835 02de C9 F2 0F 00             		movw	r10, #.LC5
+ 836 02e2 C9 F0 02 00             		movw	r8, #2
+ 837 02e6 AD F4                   		movw	ax, r12
+ 838 02e8 B8 00                   		movw	[sp], ax
+ 839 02ea AD F2                   		movw	ax, r10
+ 840 02ec B8 02                   		movw	[sp+2], ax
+ 841 02ee AD F0                   		movw	ax, r8
+ 842 02f0 B8 04                   		movw	[sp+4], ax
+ 843 02f2 FC 00 00 00             		call	!!%code(_memcpy)
+ 163:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			while (Key_Tick_Count < 1000);					// Do nothing in 5 second
+ 844                             		.loc 1 163 0
+ 845 02f6 00                      		nop
+ 846                             	.L38:
+ 847                             		.loc 1 163 0 is_stmt 0 discriminator 1
+ 848 02f7 AF 00 00                		movw	ax, !_Key_Tick_Count
+ 849 02fa BD F0                   		movw	r8, ax
+ 850 02fc 44 E7 03                		cmpw	ax, #999
+ 851 02ff 61 E3                   		 skh
+ 852 0301 EC F7 02 00             		 br	!!.L38
+ 164:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			memcpy(&Parameter_Name, "  ", 2);				// Clear Command Indicator
+ 853                             		.loc 1 164 0 is_stmt 1
+ 854 0305 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 855 0309 C9 F2 00 00             		movw	r10, #.LC0
+ 856 030d C9 F0 02 00             		movw	r8, #2
+ 857 0311 AD F4                   		movw	ax, r12
+ 858 0313 B8 00                   		movw	[sp], ax
+ 859 0315 AD F2                   		movw	ax, r10
+ 860 0317 B8 02                   		movw	[sp+2], ax
+ 861 0319 AD F0                   		movw	ax, r8
+ 862 031b B8 04                   		movw	[sp+4], ax
+ 863 031d FC 00 00 00             		call	!!%code(_memcpy)
+ 165:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 			Key_Tick_Count = 0;								// Reset Tick count
+ 864                             		.loc 1 165 0
+ 865 0321 F6                      		clrw	ax
+ 866 0322 BF 00 00                		movw	!_Key_Tick_Count, ax
+ 867                             	.L22:
+ 107:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+ 868                             		.loc 1 107 0
+ 869 0325 88 07                   		mov	a, [sp+7]
+ 870 0327 D1                      		cmp0	a
+ 871 0328 61 E8                   		 skz
+ 872 032a EC 3C 03 00             		 br	!!.L39
+ 107:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	{
+ 873                             		.loc 1 107 0 is_stmt 0 discriminator 1
+ 874 032e AF 00 00                		movw	ax, !_Key_Tick_Count
+ 875 0331 BD F0                   		movw	r8, ax
+ 876 0333 44 CF 07                		cmpw	ax, #1999
+ 877 0336 61 E3                   		 skh
+ 878 0338 EC 45 00 00             		 br	!!.L40
+ 879                             	.L39:
+ 166:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 		}
+ 167:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	}
+ 168:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 
+ 169:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** 	Display_Mode = NORMAL_MODE;
+ 880                             		.loc 1 169 0 is_stmt 1
+ 881 033c F5 00 00                		clrb	!_Display_Mode
+ 170:../DGC_A230_Functions/DGC_A230_Test_Mode.c **** }
+ 882                             		.loc 1 170 0
+ 883 033f 10 08                   		addw	sp, #8
+ 884 0341 D7                      		ret
+ 885                             	.LFE1:
+ 929                             	.Letext0:
+ 930                             		.file 2 "E:/AIoT/Code/Rogger/DGC_A230_6_Rev_1_0_Software/generate/iodefine.h"
+ 931                             		.file 3 "E:\\AIoT\\Code\\Rogger\\DGC_A230_6_Rev_1_0_Software\\src/r_cg_macrodriver.h"

@@ -1,0 +1,1382 @@
+   1                             	r8	=	0xffef0
+   2                             	r16	=	0xffee8
+   3                             	r24	=	0xffee0
+   4                             	r9	=	0xffef1
+   5                             	r17	=	0xffee9
+   6                             	r25	=	0xffee1
+   7                             	r10	=	0xffef2
+   8                             	r18	=	0xffeea
+   9                             	r26	=	0xffee2
+  10                             	r11	=	0xffef3
+  11                             	r19	=	0xffeeb
+  12                             	r27	=	0xffee3
+  13                             	r12	=	0xffef4
+  14                             	r20	=	0xffeec
+  15                             	r28	=	0xffee4
+  16                             	r13	=	0xffef5
+  17                             	r21	=	0xffeed
+  18                             	r29	=	0xffee5
+  19                             	r14	=	0xffef6
+  20                             	r22	=	0xffeee
+  21                             	r30	=	0xffee6
+  22                             	r15	=	0xffef7
+  23                             	r23	=	0xffeef
+  24                             	r31	=	0xffee7
+  25                             	MDUC	=	0xf00e8
+  26                             	MDAL	=	0xffff0
+  27                             	MDAH	=	0xffff2
+  28                             	MDBL	=	0xffff6
+  29                             	MDBH	=	0xffff4
+  30                             	MDCL	=	0xf00e0
+  31                             	MDCH	=	0xf00e2
+  32                             	.text
+  33                             	.Ltext0:
+  34                             		.comm	_Tick_Count,2,2
+  35                             		.comm	_M1_Tick_Count,2,2
+  36                             		.comm	_M2_Tick_Count,2,2
+  37                             		.comm	_Brake_Tick_Count,2,2
+  38                             		.comm	_Disable_Tick_Count,2,2
+  39                             		.comm	_M1_Position_Count,2,2
+  40                             		.comm	_M2_Position_Count,2,2
+  41                             		.comm	_HMI_Flash_Count,1,1
+  42                             		.global	_HMI_Flash_Enable
+  43                             		.section	.bss.HMI_Flash_Enable,"aw",@nobits
+  46                             	_HMI_Flash_Enable:
+  47 0000 00                      		.zero	1
+  48                             		.comm	_Flash_Frequency_Count,1,1
+  49                             		.section	.text.r_tau0_channel0_interrupt,"ax",@progbits
+  50                             		.global	_r_tau0_channel0_interrupt
+  52                             	_r_tau0_channel0_interrupt:
+  53                             	.LFB0:
+  54                             		.file 1 "../src/r_cg_timer_user.c"
+   1:../src/r_cg_timer_user.c **** /**************************************************************************************************
+   2:../src/r_cg_timer_user.c **** * DISCLAIMER
+   3:../src/r_cg_timer_user.c **** * This software is supplied by Renesas Electronics Corporation and is only intended for use with Re
+   4:../src/r_cg_timer_user.c **** * No other uses are authorized. This software is owned by Renesas Electronics Corporation and is pr
+   5:../src/r_cg_timer_user.c **** * applicable laws, including copyright laws. 
+   6:../src/r_cg_timer_user.c **** * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING THIS SOFTWARE, WHETHE
+   7:../src/r_cg_timer_user.c **** * OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULA
+   8:../src/r_cg_timer_user.c **** * NON-INFRINGEMENT.  ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.TO THE MAXIMUM EXTENT PERMITTED N
+   9:../src/r_cg_timer_user.c **** * LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE 
+  10:../src/r_cg_timer_user.c **** * INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS SOFTWARE, E
+  11:../src/r_cg_timer_user.c **** * ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  12:../src/r_cg_timer_user.c **** * Renesas reserves the right, without notice, to make changes to this software and to discontinue t
+  13:../src/r_cg_timer_user.c **** * of this software. By using this software, you agree to the additional terms and conditions found 
+  14:../src/r_cg_timer_user.c **** * following link:
+  15:../src/r_cg_timer_user.c **** * http://www.renesas.com/disclaimer
+  16:../src/r_cg_timer_user.c **** *
+  17:../src/r_cg_timer_user.c **** * Copyright (C) 2011, 2021 Renesas Electronics Corporation. All rights reserved.
+  18:../src/r_cg_timer_user.c **** ***************************************************************************************************
+  19:../src/r_cg_timer_user.c **** 
+  20:../src/r_cg_timer_user.c **** /**************************************************************************************************
+  21:../src/r_cg_timer_user.c **** * File Name    : r_cg_timer_user.c
+  22:../src/r_cg_timer_user.c **** * Version      : CodeGenerator for RL78/G13 V2.05.06.02 [08 Nov 2021]
+  23:../src/r_cg_timer_user.c **** * Device(s)    : R5F100LF
+  24:../src/r_cg_timer_user.c **** * Tool-Chain   : GCCRL78
+  25:../src/r_cg_timer_user.c **** * Description  : This file implements device driver for TAU module.
+  26:../src/r_cg_timer_user.c **** * Creation Date: 7/28/2024
+  27:../src/r_cg_timer_user.c **** ***************************************************************************************************
+  28:../src/r_cg_timer_user.c **** 
+  29:../src/r_cg_timer_user.c **** /**************************************************************************************************
+  30:../src/r_cg_timer_user.c **** Includes
+  31:../src/r_cg_timer_user.c **** ***************************************************************************************************
+  32:../src/r_cg_timer_user.c **** #include "r_cg_macrodriver.h"
+  33:../src/r_cg_timer_user.c **** #include "r_cg_timer.h"
+  34:../src/r_cg_timer_user.c **** /* Start user code for include. Do not edit comment generated here */
+  35:../src/r_cg_timer_user.c **** #include <DGC_A230_Define.h>
+  36:../src/r_cg_timer_user.c **** /* End user code. Do not edit comment generated here */
+  37:../src/r_cg_timer_user.c **** #include "r_cg_userdefine.h"
+  38:../src/r_cg_timer_user.c **** 
+  39:../src/r_cg_timer_user.c **** /**************************************************************************************************
+  40:../src/r_cg_timer_user.c **** Global variables and functions
+  41:../src/r_cg_timer_user.c **** ***************************************************************************************************
+  42:../src/r_cg_timer_user.c **** /* Start user code for global. Do not edit comment generated here */
+  43:../src/r_cg_timer_user.c **** extern uint8_t Digit_Count;
+  44:../src/r_cg_timer_user.c **** extern uint8_t Display_Mode;
+  45:../src/r_cg_timer_user.c **** extern uint8_t Mask;
+  46:../src/r_cg_timer_user.c **** 
+  47:../src/r_cg_timer_user.c **** uint16_t Tick_Count, M1_Tick_Count, M2_Tick_Count, Brake_Tick_Count, Disable_Tick_Count;
+  48:../src/r_cg_timer_user.c **** uint16_t M1_Position_Count, M2_Position_Count;
+  49:../src/r_cg_timer_user.c **** 
+  50:../src/r_cg_timer_user.c **** uint8_t	HMI_Flash_Count;
+  51:../src/r_cg_timer_user.c **** uint8_t HMI_Flash_Enable = 0;
+  52:../src/r_cg_timer_user.c **** 
+  53:../src/r_cg_timer_user.c **** extern uint16_t Key_Tick_Count;
+  54:../src/r_cg_timer_user.c **** extern uint8_t Braking_Time_Enable, Disable_Time_Enable;
+  55:../src/r_cg_timer_user.c **** 
+  56:../src/r_cg_timer_user.c **** 
+  57:../src/r_cg_timer_user.c **** extern uint8_t	M1_Timestamp, M2_Timestamp;
+  58:../src/r_cg_timer_user.c **** extern uint16_t Torque_Inc;
+  59:../src/r_cg_timer_user.c **** extern uint16_t M1_Torque_Setting, M2_Torque_Setting;
+  60:../src/r_cg_timer_user.c **** 
+  61:../src/r_cg_timer_user.c **** extern uint8_t	Flash_Timer_Counter, Pre_Flash_Type, Flash_Frequency_Config, Flash_Enable;
+  62:../src/r_cg_timer_user.c **** uint8_t Flash_Frequency_Count;
+  63:../src/r_cg_timer_user.c **** 
+  64:../src/r_cg_timer_user.c **** extern uint8_t  Courtesy_Light_Enable;
+  65:../src/r_cg_timer_user.c **** extern uint16_t Courtesy_Light_Time, Courtesy_Light_Count;
+  66:../src/r_cg_timer_user.c **** extern uint8_t Leaf_No1_State, Leaf_No2_State;
+  67:../src/r_cg_timer_user.c **** 
+  68:../src/r_cg_timer_user.c **** extern uint8_t Machine_State;
+  69:../src/r_cg_timer_user.c **** 
+  70:../src/r_cg_timer_user.c **** extern struct Device_Config_Parameters CFG_parameter;
+  71:../src/r_cg_timer_user.c **** 
+  72:../src/r_cg_timer_user.c **** extern uint8_t Gate_Open_Indicator_Mode;
+  73:../src/r_cg_timer_user.c **** extern uint8_t Gate_Open_Indicator_Flash_Count;
+  74:../src/r_cg_timer_user.c **** 
+  75:../src/r_cg_timer_user.c **** extern uint8_t Auto_Close_Gate_Command;
+  76:../src/r_cg_timer_user.c **** extern uint8_t Auto_Close_Gate_Timer_Enable;
+  77:../src/r_cg_timer_user.c **** extern uint16_t Auto_Close_Gate_Timer_Counter;
+  78:../src/r_cg_timer_user.c **** 
+  79:../src/r_cg_timer_user.c **** extern uint8_t Stop_Timer_Enable;
+  80:../src/r_cg_timer_user.c **** extern uint8_t Stop_Timer_Counter;
+  81:../src/r_cg_timer_user.c **** 
+  82:../src/r_cg_timer_user.c **** /* End user code. Do not edit comment generated here */
+  83:../src/r_cg_timer_user.c **** 
+  84:../src/r_cg_timer_user.c **** /**************************************************************************************************
+  85:../src/r_cg_timer_user.c **** * Function Name: r_tau0_channel0_interrupt
+  86:../src/r_cg_timer_user.c **** * Description  : This function is INTTM00 interrupt service routine.
+  87:../src/r_cg_timer_user.c **** * Arguments    : None
+  88:../src/r_cg_timer_user.c **** * Return Value : None
+  89:../src/r_cg_timer_user.c **** ***************************************************************************************************
+  90:../src/r_cg_timer_user.c **** void r_tau0_channel0_interrupt(void)
+  91:../src/r_cg_timer_user.c **** {
+  55                             		.loc 1 91 0
+  56                             		; start of function
+  57                             		; push 16: ax bc de hl r8 r10 r12 r14
+  58                             		; uses ES register
+  59 0000 61 CF                   		sel	rb0
+  60 0002 C1                      		push	ax
+  61                             	.LCFI0:
+  62 0003 C3                      		push	bc
+  63                             	.LCFI1:
+  64 0004 C5                      		push	de
+  65                             	.LCFI2:
+  66 0005 C7                      		push	hl
+  67                             	.LCFI3:
+  68 0006 61 DF                   		sel	rb1
+  69 0008 C1                      		push	ax ; r8
+  70                             	.LCFI4:
+  71 0009 C3                      		push	bc ; r10
+  72                             	.LCFI5:
+  73 000a C5                      		push	de ; r12
+  74                             	.LCFI6:
+  75 000b C7                      		push	hl ; r14
+  76                             	.LCFI7:
+  77 000c 61 CF                   		sel	rb0
+  78 000e 8E FD                   		mov	a, es
+  79 0010 C1                      		push	ax
+  80                             	.LCFI8:
+  92:../src/r_cg_timer_user.c ****     /* Start user code. Do not edit comment generated here */
+  93:../src/r_cg_timer_user.c **** 	Key_Tick_Count += 1;
+  81                             		.loc 1 93 0
+  82 0011 AF 00 00                		movw	ax, !_Key_Tick_Count
+  83 0014 BD F0                   		movw	r8, ax
+  84 0016 A6 F0                   		incw	r8
+  85 0018 AD F0                   		movw	ax, r8
+  86 001a BF 00 00                		movw	!_Key_Tick_Count, ax
+  94:../src/r_cg_timer_user.c **** 	if (++Digit_Count == 4)
+  87                             		.loc 1 94 0
+  88 001d 8F 00 00                		mov	a, !_Digit_Count
+  89 0020 9D F0                   		mov	r8, a
+  90 0022 A4 F0                   		inc	r8
+  91 0024 8D F0                   		mov	a, r8
+  92 0026 9F 00 00                		mov	!_Digit_Count, a
+  93 0029 9D F0                   		mov	r8, a
+  94 002b 4A F0 04                		cmp	r8, #4
+  95 002e 61 E8                   		 skz
+  96 0030 EC 37 00 00             		 br	!!.L2
+  95:../src/r_cg_timer_user.c **** 	{
+  96:../src/r_cg_timer_user.c **** 		Digit_Count = 0;
+  97                             		.loc 1 96 0
+  98 0034 F5 00 00                		clrb	!_Digit_Count
+  99                             	.L2:
+  97:../src/r_cg_timer_user.c **** 	}
+  98:../src/r_cg_timer_user.c **** 	if (Display_Mode == NORMAL_MODE)
+ 100                             		.loc 1 98 0
+ 101 0037 8F 00 00                		mov	a, !_Display_Mode
+ 102 003a 9D F0                   		mov	r8, a
+ 103 003c D4 F0                   		cmp0	r8
+ 104 003e 61 E8                   		 skz
+ 105 0040 EC 50 00 00             		 br	!!.L3
+ 106                             	.LBB2:
+  99:../src/r_cg_timer_user.c **** 		{
+ 100:../src/r_cg_timer_user.c **** 		Check_Safety_Device_Status();
+ 107                             		.loc 1 100 0
+ 108 0044 FC 00 00 00             		call	!!%code(_Check_Safety_Device_Status)
+ 101:../src/r_cg_timer_user.c **** 		Display_Status_Callback();
+ 109                             		.loc 1 101 0
+ 110 0048 FC 00 00 00             		call	!!%code(_Display_Status_Callback)
+ 111                             	.LBE2:
+ 112 004c EC 54 00 00             		br	!!.L4
+ 113                             	.L3:
+ 114                             	.LBB3:
+ 102:../src/r_cg_timer_user.c **** 		}
+ 103:../src/r_cg_timer_user.c **** 	else
+ 104:../src/r_cg_timer_user.c **** 		{
+ 105:../src/r_cg_timer_user.c **** 		Display_Parameter_Callback();
+ 115                             		.loc 1 105 0
+ 116 0050 FC 00 00 00             		call	!!%code(_Display_Parameter_Callback)
+ 117                             	.L4:
+ 118                             	.LBE3:
+ 106:../src/r_cg_timer_user.c **** 		}
+ 107:../src/r_cg_timer_user.c **** 
+ 108:../src/r_cg_timer_user.c **** 	if (Stop_Timer_Enable == 0x01)
+ 119                             		.loc 1 108 0
+ 120 0054 8F 00 00                		mov	a, !_Stop_Timer_Enable
+ 121 0057 9D F0                   		mov	r8, a
+ 122 0059 4A F0 01                		cmp	r8, #1
+ 123 005c 61 E8                   		 skz
+ 124 005e EC 7C 00 00             		 br	!!.L1
+ 109:../src/r_cg_timer_user.c **** 	{
+ 110:../src/r_cg_timer_user.c **** 		if (++Stop_Timer_Counter == STOP_TIMER_PERIOD_NUMBER)
+ 125                             		.loc 1 110 0
+ 126 0062 8F 00 00                		mov	a, !_Stop_Timer_Counter
+ 127 0065 9D F0                   		mov	r8, a
+ 128 0067 A4 F0                   		inc	r8
+ 129 0069 8D F0                   		mov	a, r8
+ 130 006b 9F 00 00                		mov	!_Stop_Timer_Counter, a
+ 131 006e 9D F0                   		mov	r8, a
+ 132 0070 4A F0 14                		cmp	r8, #20
+ 133 0073 61 E8                   		 skz
+ 134 0075 EC 7C 00 00             		 br	!!.L1
+ 111:../src/r_cg_timer_user.c **** 		{
+ 112:../src/r_cg_timer_user.c **** 			Stop_Timer_Enable = 0x00;
+ 135                             		.loc 1 112 0
+ 136 0079 F5 00 00                		clrb	!_Stop_Timer_Enable
+ 137                             	.L1:
+ 113:../src/r_cg_timer_user.c **** 		}
+ 114:../src/r_cg_timer_user.c **** 	}
+ 115:../src/r_cg_timer_user.c **** 	/* End user code. Do not edit comment generated here */
+ 116:../src/r_cg_timer_user.c **** }
+ 138                             		.loc 1 116 0
+ 139 007c C0                      		pop	ax
+ 140 007d 9E FD                   		mov	es, a
+ 141 007f 61 DF                   		sel	rb1
+ 142 0081 C6                      		pop	hl ; r14
+ 143 0082 C4                      		pop	de ; r12
+ 144 0083 C2                      		pop	bc ; r10
+ 145 0084 C0                      		pop	ax ; r8
+ 146 0085 61 CF                   		sel	rb0
+ 147 0087 C6                      		pop	hl
+ 148 0088 C4                      		pop	de
+ 149 0089 C2                      		pop	bc
+ 150 008a C0                      		pop	ax
+ 151 008b 61 FC                   		reti
+ 152                             	.LFE0:
+ 154                             		.section	.text.r_tau0_channel1_interrupt,"ax",@progbits
+ 155                             		.global	_r_tau0_channel1_interrupt
+ 157                             	_r_tau0_channel1_interrupt:
+ 158                             	.LFB1:
+ 117:../src/r_cg_timer_user.c **** 
+ 118:../src/r_cg_timer_user.c **** /**************************************************************************************************
+ 119:../src/r_cg_timer_user.c **** * Function Name: r_tau0_channel1_interrupt
+ 120:../src/r_cg_timer_user.c **** * Description  : This function is INTTM01 interrupt service routine.
+ 121:../src/r_cg_timer_user.c **** * Arguments    : None
+ 122:../src/r_cg_timer_user.c **** * Return Value : None
+ 123:../src/r_cg_timer_user.c **** ***************************************************************************************************
+ 124:../src/r_cg_timer_user.c **** void r_tau0_channel1_interrupt(void)
+ 125:../src/r_cg_timer_user.c **** {
+ 159                             		.loc 1 125 0
+ 160                             		; start of function
+ 161                             		; push 16: ax bc de hl r8 r10 r12 r14
+ 162                             		; uses ES register
+ 163 0000 61 CF                   		sel	rb0
+ 164 0002 C1                      		push	ax
+ 165                             	.LCFI9:
+ 166 0003 C3                      		push	bc
+ 167                             	.LCFI10:
+ 168 0004 C5                      		push	de
+ 169                             	.LCFI11:
+ 170 0005 C7                      		push	hl
+ 171                             	.LCFI12:
+ 172 0006 61 DF                   		sel	rb1
+ 173 0008 C1                      		push	ax ; r8
+ 174                             	.LCFI13:
+ 175 0009 C3                      		push	bc ; r10
+ 176                             	.LCFI14:
+ 177 000a C5                      		push	de ; r12
+ 178                             	.LCFI15:
+ 179 000b C7                      		push	hl ; r14
+ 180                             	.LCFI16:
+ 181 000c 61 CF                   		sel	rb0
+ 182 000e 8E FD                   		mov	a, es
+ 183 0010 C1                      		push	ax
+ 184                             	.LCFI17:
+ 126:../src/r_cg_timer_user.c ****     /* Start user code. Do not edit comment generated here */
+ 127:../src/r_cg_timer_user.c **** 	Tick_Count +=1;
+ 185                             		.loc 1 127 0
+ 186 0011 AF 00 00                		movw	ax, !_Tick_Count
+ 187 0014 BD F0                   		movw	r8, ax
+ 188 0016 A6 F0                   		incw	r8
+ 189 0018 AD F0                   		movw	ax, r8
+ 190 001a BF 00 00                		movw	!_Tick_Count, ax
+ 128:../src/r_cg_timer_user.c **** 	if ((Leaf_No1_State == GATE_STATE_OPENING) || (Leaf_No1_State == GATE_STATE_CLOSING))
+ 191                             		.loc 1 128 0
+ 192 001d 8F 00 00                		mov	a, !_Leaf_No1_State
+ 193 0020 9D F0                   		mov	r8, a
+ 194 0022 4A F0 02                		cmp	r8, #2
+ 195 0025 61 F8                   		 sknz
+ 196 0027 EC 39 00 00             		 br	!!.L7
+ 197                             		.loc 1 128 0 is_stmt 0 discriminator 1
+ 198 002b 8F 00 00                		mov	a, !_Leaf_No1_State
+ 199 002e 9D F0                   		mov	r8, a
+ 200 0030 4A F0 04                		cmp	r8, #4
+ 201 0033 61 E8                   		 skz
+ 202 0035 EC 7E 00 00             		 br	!!.L8
+ 203                             	.L7:
+ 129:../src/r_cg_timer_user.c **** 	{
+ 130:../src/r_cg_timer_user.c **** 		M1_Tick_Count += 1;
+ 204                             		.loc 1 130 0 is_stmt 1
+ 205 0039 AF 00 00                		movw	ax, !_M1_Tick_Count
+ 206 003c BD F0                   		movw	r8, ax
+ 207 003e A6 F0                   		incw	r8
+ 208 0040 AD F0                   		movw	ax, r8
+ 209 0042 BF 00 00                		movw	!_M1_Tick_Count, ax
+ 131:../src/r_cg_timer_user.c **** 		if ((M1_Timestamp == NORMAL_TIMESTAMP) || (M1_Timestamp == BOOST_TIMESTAMP))
+ 210                             		.loc 1 131 0
+ 211 0045 8F 00 00                		mov	a, !_M1_Timestamp
+ 212 0048 9D F0                   		mov	r8, a
+ 213 004a 4A F0 03                		cmp	r8, #3
+ 214 004d 61 F8                   		 sknz
+ 215 004f EC 61 00 00             		 br	!!.L9
+ 216                             		.loc 1 131 0 is_stmt 0 discriminator 1
+ 217 0053 8F 00 00                		mov	a, !_M1_Timestamp
+ 218 0056 9D F0                   		mov	r8, a
+ 219 0058 4A F0 02                		cmp	r8, #2
+ 220 005b 61 E8                   		 skz
+ 221 005d EC 72 00 00             		 br	!!.L10
+ 222                             	.L9:
+ 132:../src/r_cg_timer_user.c **** 		{
+ 133:../src/r_cg_timer_user.c **** 			M1_Position_Count += 3;
+ 223                             		.loc 1 133 0 is_stmt 1
+ 224 0061 AF 00 00                		movw	ax, !_M1_Position_Count
+ 225 0064 BD F0                   		movw	r8, ax
+ 226 0066 04 03 00                		addw	ax, #3
+ 227 0069 BD F0                   		movw	r8, ax
+ 228 006b BF 00 00                		movw	!_M1_Position_Count, ax
+ 229 006e EC 7E 00 00             		br	!!.L8
+ 230                             	.L10:
+ 134:../src/r_cg_timer_user.c **** 		}
+ 135:../src/r_cg_timer_user.c **** 		else
+ 136:../src/r_cg_timer_user.c **** 		{
+ 137:../src/r_cg_timer_user.c **** 			M1_Position_Count += 1;
+ 231                             		.loc 1 137 0
+ 232 0072 AF 00 00                		movw	ax, !_M1_Position_Count
+ 233 0075 BD F0                   		movw	r8, ax
+ 234 0077 A6 F0                   		incw	r8
+ 235 0079 AD F0                   		movw	ax, r8
+ 236 007b BF 00 00                		movw	!_M1_Position_Count, ax
+ 237                             	.L8:
+ 138:../src/r_cg_timer_user.c **** 		}
+ 139:../src/r_cg_timer_user.c **** 	}
+ 140:../src/r_cg_timer_user.c **** 	if ((Leaf_No2_State == GATE_STATE_OPENING) || (Leaf_No2_State == GATE_STATE_CLOSING))
+ 238                             		.loc 1 140 0
+ 239 007e 8F 00 00                		mov	a, !_Leaf_No2_State
+ 240 0081 9D F0                   		mov	r8, a
+ 241 0083 4A F0 02                		cmp	r8, #2
+ 242 0086 61 F8                   		 sknz
+ 243 0088 EC 9A 00 00             		 br	!!.L11
+ 244                             		.loc 1 140 0 is_stmt 0 discriminator 1
+ 245 008c 8F 00 00                		mov	a, !_Leaf_No2_State
+ 246 008f 9D F0                   		mov	r8, a
+ 247 0091 4A F0 04                		cmp	r8, #4
+ 248 0094 61 E8                   		 skz
+ 249 0096 EC DF 00 00             		 br	!!.L12
+ 250                             	.L11:
+ 141:../src/r_cg_timer_user.c **** 	{
+ 142:../src/r_cg_timer_user.c **** 		M2_Tick_Count += 1;
+ 251                             		.loc 1 142 0 is_stmt 1
+ 252 009a AF 00 00                		movw	ax, !_M2_Tick_Count
+ 253 009d BD F0                   		movw	r8, ax
+ 254 009f A6 F0                   		incw	r8
+ 255 00a1 AD F0                   		movw	ax, r8
+ 256 00a3 BF 00 00                		movw	!_M2_Tick_Count, ax
+ 143:../src/r_cg_timer_user.c **** 		if ((M2_Timestamp == NORMAL_TIMESTAMP) || (M2_Timestamp == BOOST_TIMESTAMP))
+ 257                             		.loc 1 143 0
+ 258 00a6 8F 00 00                		mov	a, !_M2_Timestamp
+ 259 00a9 9D F0                   		mov	r8, a
+ 260 00ab 4A F0 03                		cmp	r8, #3
+ 261 00ae 61 F8                   		 sknz
+ 262 00b0 EC C2 00 00             		 br	!!.L13
+ 263                             		.loc 1 143 0 is_stmt 0 discriminator 1
+ 264 00b4 8F 00 00                		mov	a, !_M2_Timestamp
+ 265 00b7 9D F0                   		mov	r8, a
+ 266 00b9 4A F0 02                		cmp	r8, #2
+ 267 00bc 61 E8                   		 skz
+ 268 00be EC D3 00 00             		 br	!!.L14
+ 269                             	.L13:
+ 144:../src/r_cg_timer_user.c **** 		{
+ 145:../src/r_cg_timer_user.c **** 			M2_Position_Count += 3;
+ 270                             		.loc 1 145 0 is_stmt 1
+ 271 00c2 AF 00 00                		movw	ax, !_M2_Position_Count
+ 272 00c5 BD F0                   		movw	r8, ax
+ 273 00c7 04 03 00                		addw	ax, #3
+ 274 00ca BD F0                   		movw	r8, ax
+ 275 00cc BF 00 00                		movw	!_M2_Position_Count, ax
+ 276 00cf EC DF 00 00             		br	!!.L12
+ 277                             	.L14:
+ 146:../src/r_cg_timer_user.c **** 		}
+ 147:../src/r_cg_timer_user.c **** 		else
+ 148:../src/r_cg_timer_user.c **** 		{
+ 149:../src/r_cg_timer_user.c **** 			M2_Position_Count += 1;
+ 278                             		.loc 1 149 0
+ 279 00d3 AF 00 00                		movw	ax, !_M2_Position_Count
+ 280 00d6 BD F0                   		movw	r8, ax
+ 281 00d8 A6 F0                   		incw	r8
+ 282 00da AD F0                   		movw	ax, r8
+ 283 00dc BF 00 00                		movw	!_M2_Position_Count, ax
+ 284                             	.L12:
+ 150:../src/r_cg_timer_user.c **** 		}
+ 151:../src/r_cg_timer_user.c **** 	}
+ 152:../src/r_cg_timer_user.c **** 
+ 153:../src/r_cg_timer_user.c **** 	if (Disable_Time_Enable == 0x01)
+ 285                             		.loc 1 153 0
+ 286 00df 8F 00 00                		mov	a, !_Disable_Time_Enable
+ 287 00e2 9D F0                   		mov	r8, a
+ 288 00e4 4A F0 01                		cmp	r8, #1
+ 289 00e7 61 E8                   		 skz
+ 290 00e9 EC 07 01 00             		 br	!!.L15
+ 154:../src/r_cg_timer_user.c **** 	{
+ 155:../src/r_cg_timer_user.c **** 		if (++Disable_Tick_Count == 4)
+ 291                             		.loc 1 155 0
+ 292 00ed AF 00 00                		movw	ax, !_Disable_Tick_Count
+ 293 00f0 BD F0                   		movw	r8, ax
+ 294 00f2 A6 F0                   		incw	r8
+ 295 00f4 AD F0                   		movw	ax, r8
+ 296 00f6 BF 00 00                		movw	!_Disable_Tick_Count, ax
+ 297 00f9 BD F0                   		movw	r8, ax
+ 298 00fb 44 04 00                		cmpw	ax, #4
+ 299 00fe 61 E8                   		 skz
+ 300 0100 EC 07 01 00             		 br	!!.L15
+ 156:../src/r_cg_timer_user.c **** 		{
+ 157:../src/r_cg_timer_user.c **** 			Disable_Time_Enable = 0x00;
+ 301                             		.loc 1 157 0
+ 302 0104 F5 00 00                		clrb	!_Disable_Time_Enable
+ 303                             	.L15:
+ 158:../src/r_cg_timer_user.c **** 		}
+ 159:../src/r_cg_timer_user.c **** 	}
+ 160:../src/r_cg_timer_user.c **** 
+ 161:../src/r_cg_timer_user.c **** 	if (Braking_Time_Enable == 0x01)
+ 304                             		.loc 1 161 0
+ 305 0107 8F 00 00                		mov	a, !_Braking_Time_Enable
+ 306 010a 9D F0                   		mov	r8, a
+ 307 010c 4A F0 01                		cmp	r8, #1
+ 308 010f 61 E8                   		 skz
+ 309 0111 EC 35 01 00             		 br	!!.L16
+ 162:../src/r_cg_timer_user.c **** 	{
+ 163:../src/r_cg_timer_user.c **** 		if (++Brake_Tick_Count == CFG_parameter.Braking_Time)
+ 310                             		.loc 1 163 0
+ 311 0115 AF 00 00                		movw	ax, !_Brake_Tick_Count
+ 312 0118 BD F0                   		movw	r8, ax
+ 313 011a A6 F0                   		incw	r8
+ 314 011c AD F0                   		movw	ax, r8
+ 315 011e BF 00 00                		movw	!_Brake_Tick_Count, ax
+ 316 0121 BD F2                   		movw	r10, ax
+ 317 0123 AF 00 00                		movw	ax, !_CFG_parameter+92
+ 318 0126 BD F0                   		movw	r8, ax
+ 319 0128 AD F2                   		movw	ax, r10
+ 320 012a 46 F0                   		cmpw	ax, r8
+ 321 012c 61 E8                   		 skz
+ 322 012e EC 35 01 00             		 br	!!.L16
+ 164:../src/r_cg_timer_user.c **** 		{
+ 165:../src/r_cg_timer_user.c **** 			Braking_Time_Enable = 0x00;
+ 323                             		.loc 1 165 0
+ 324 0132 F5 00 00                		clrb	!_Braking_Time_Enable
+ 325                             	.L16:
+ 166:../src/r_cg_timer_user.c **** 		}
+ 167:../src/r_cg_timer_user.c **** 	}
+ 168:../src/r_cg_timer_user.c **** 	/*
+ 169:../src/r_cg_timer_user.c **** 	 * Control by state Revision 2024/03/13
+ 170:../src/r_cg_timer_user.c **** 	 */
+ 171:../src/r_cg_timer_user.c **** 	if (Machine_State != MACHINE_STATE_STOP)
+ 326                             		.loc 1 171 0
+ 327 0135 8F 00 00                		mov	a, !_Machine_State
+ 328 0138 9D F0                   		mov	r8, a
+ 329 013a D4 F0                   		cmp0	r8
+ 330 013c 61 F8                   		 sknz
+ 331 013e EC 46 01 00             		 br	!!.L17
+ 172:../src/r_cg_timer_user.c **** 		Timing_Motor_Machine_State();
+ 332                             		.loc 1 172 0
+ 333 0142 FC 00 00 00             		call	!!%code(_Timing_Motor_Machine_State)
+ 334                             	.L17:
+ 173:../src/r_cg_timer_user.c **** 	/*
+ 174:../src/r_cg_timer_user.c **** 	 * End of  control by state
+ 175:../src/r_cg_timer_user.c **** 	 */
+ 176:../src/r_cg_timer_user.c **** 	if (M1_Timestamp == STARTUP_TIMESTAMP)
+ 335                             		.loc 1 176 0
+ 336 0146 8F 00 00                		mov	a, !_M1_Timestamp
+ 337 0149 9D F0                   		mov	r8, a
+ 338 014b 4A F0 01                		cmp	r8, #1
+ 339 014e 61 E8                   		 skz
+ 340 0150 EC 67 01 00             		 br	!!.L18
+ 177:../src/r_cg_timer_user.c **** 	{
+ 178:../src/r_cg_timer_user.c **** 		M1_Torque_Setting -= Torque_Inc;
+ 341                             		.loc 1 178 0
+ 342 0154 AF 00 00                		movw	ax, !_M1_Torque_Setting
+ 343 0157 BD F2                   		movw	r10, ax
+ 344 0159 AF 00 00                		movw	ax, !_Torque_Inc
+ 345 015c BD F0                   		movw	r8, ax
+ 346 015e AD F2                   		movw	ax, r10
+ 347 0160 26 F0                   		subw	ax, r8
+ 348 0162 BD F0                   		movw	r8, ax
+ 349 0164 BF 00 00                		movw	!_M1_Torque_Setting, ax
+ 350                             	.L18:
+ 179:../src/r_cg_timer_user.c **** 	}
+ 180:../src/r_cg_timer_user.c **** 	if (M2_Timestamp == STARTUP_TIMESTAMP)
+ 351                             		.loc 1 180 0
+ 352 0167 8F 00 00                		mov	a, !_M2_Timestamp
+ 353 016a 9D F0                   		mov	r8, a
+ 354 016c 4A F0 01                		cmp	r8, #1
+ 355 016f 61 E8                   		 skz
+ 356 0171 EC 88 01 00             		 br	!!.L6
+ 181:../src/r_cg_timer_user.c **** 	{
+ 182:../src/r_cg_timer_user.c **** 		M2_Torque_Setting -= Torque_Inc;
+ 357                             		.loc 1 182 0
+ 358 0175 AF 00 00                		movw	ax, !_M2_Torque_Setting
+ 359 0178 BD F2                   		movw	r10, ax
+ 360 017a AF 00 00                		movw	ax, !_Torque_Inc
+ 361 017d BD F0                   		movw	r8, ax
+ 362 017f AD F2                   		movw	ax, r10
+ 363 0181 26 F0                   		subw	ax, r8
+ 364 0183 BD F0                   		movw	r8, ax
+ 365 0185 BF 00 00                		movw	!_M2_Torque_Setting, ax
+ 366                             	.L6:
+ 183:../src/r_cg_timer_user.c **** 	}
+ 184:../src/r_cg_timer_user.c **** //	if (M1_Timestamp == FINISHED_TIMESTAMP)
+ 185:../src/r_cg_timer_user.c **** //	{
+ 186:../src/r_cg_timer_user.c **** //		M1_Torque_Setting += Torque_Dec;
+ 187:../src/r_cg_timer_user.c **** //	}
+ 188:../src/r_cg_timer_user.c **** //	if (M2_Timestamp == FINISHED_TIMESTAMP)
+ 189:../src/r_cg_timer_user.c **** //	{
+ 190:../src/r_cg_timer_user.c **** //		M2_Torque_Setting += Torque_Dec;
+ 191:../src/r_cg_timer_user.c **** //	}
+ 192:../src/r_cg_timer_user.c ****     /* End user code. Do not edit comment generated here */
+ 193:../src/r_cg_timer_user.c **** }
+ 367                             		.loc 1 193 0
+ 368 0188 C0                      		pop	ax
+ 369 0189 9E FD                   		mov	es, a
+ 370 018b 61 DF                   		sel	rb1
+ 371 018d C6                      		pop	hl ; r14
+ 372 018e C4                      		pop	de ; r12
+ 373 018f C2                      		pop	bc ; r10
+ 374 0190 C0                      		pop	ax ; r8
+ 375 0191 61 CF                   		sel	rb0
+ 376 0193 C6                      		pop	hl
+ 377 0194 C4                      		pop	de
+ 378 0195 C2                      		pop	bc
+ 379 0196 C0                      		pop	ax
+ 380 0197 61 FC                   		reti
+ 381                             	.LFE1:
+ 383                             		.section	.text.r_tau0_channel2_interrupt,"ax",@progbits
+ 384                             		.global	_r_tau0_channel2_interrupt
+ 386                             	_r_tau0_channel2_interrupt:
+ 387                             	.LFB2:
+ 194:../src/r_cg_timer_user.c **** 
+ 195:../src/r_cg_timer_user.c **** /**************************************************************************************************
+ 196:../src/r_cg_timer_user.c **** * Function Name: r_tau0_channel2_interrupt
+ 197:../src/r_cg_timer_user.c **** * Description  : This function is INTTM02 interrupt service routine.
+ 198:../src/r_cg_timer_user.c **** * Arguments    : None
+ 199:../src/r_cg_timer_user.c **** * Return Value : None
+ 200:../src/r_cg_timer_user.c **** ***************************************************************************************************
+ 201:../src/r_cg_timer_user.c **** void r_tau0_channel2_interrupt(void)
+ 202:../src/r_cg_timer_user.c **** {
+ 388                             		.loc 1 202 0
+ 389                             		; start of function
+ 390                             		; push 16: ax bc de hl r8 r10 r12 r14
+ 391                             		; uses ES register
+ 392 0000 61 CF                   		sel	rb0
+ 393 0002 C1                      		push	ax
+ 394                             	.LCFI18:
+ 395 0003 C3                      		push	bc
+ 396                             	.LCFI19:
+ 397 0004 C5                      		push	de
+ 398                             	.LCFI20:
+ 399 0005 C7                      		push	hl
+ 400                             	.LCFI21:
+ 401 0006 61 DF                   		sel	rb1
+ 402 0008 C1                      		push	ax ; r8
+ 403                             	.LCFI22:
+ 404 0009 C3                      		push	bc ; r10
+ 405                             	.LCFI23:
+ 406 000a C5                      		push	de ; r12
+ 407                             	.LCFI24:
+ 408 000b C7                      		push	hl ; r14
+ 409                             	.LCFI25:
+ 410 000c 61 CF                   		sel	rb0
+ 411 000e 8E FD                   		mov	a, es
+ 412 0010 C1                      		push	ax
+ 413                             	.LCFI26:
+ 203:../src/r_cg_timer_user.c ****     /* Start user code. Do not edit comment generated here */
+ 204:../src/r_cg_timer_user.c **** 	R_TAU0_Channel2_Stop();		// Stop Timer Channel 2
+ 414                             		.loc 1 204 0
+ 415 0011 FC 00 00 00             		call	!!%code(_R_TAU0_Channel2_Stop)
+ 205:../src/r_cg_timer_user.c **** 	M1_PWM = 0;					// Set Trigger Pulse Output
+ 416                             		.loc 1 205 0
+ 417 0015 C9 F0 00 FF             		movw	r8, #-256
+ 418 0019 AD F0                   		movw	ax, r8
+ 419 001b BD F4                   		movw	r12, ax
+ 420 001d FA F4                   		movw	hl, r12
+ 421 001f 8B                      		mov	a, [hl]
+ 422 0020 9D F2                   		mov	r10, a
+ 423 0022 5A F2 BF                		and	r10, #-65
+ 424 0025 AD F0                   		movw	ax, r8
+ 425 0027 EA F4                   		movw	de, r12
+ 426 0029 8D F2                   		mov	a, r10
+ 427 002b 99                      		mov	[de], a
+ 206:../src/r_cg_timer_user.c **** //	R_TAU0_Channel3_Start();	// Start Timer Channel 3 for M1 PWM Pulse width
+ 207:../src/r_cg_timer_user.c ****     /* End user code. Do not edit comment generated here */
+ 208:../src/r_cg_timer_user.c **** }
+ 428                             		.loc 1 208 0
+ 429 002c C0                      		pop	ax
+ 430 002d 9E FD                   		mov	es, a
+ 431 002f 61 DF                   		sel	rb1
+ 432 0031 C6                      		pop	hl ; r14
+ 433 0032 C4                      		pop	de ; r12
+ 434 0033 C2                      		pop	bc ; r10
+ 435 0034 C0                      		pop	ax ; r8
+ 436 0035 61 CF                   		sel	rb0
+ 437 0037 C6                      		pop	hl
+ 438 0038 C4                      		pop	de
+ 439 0039 C2                      		pop	bc
+ 440 003a C0                      		pop	ax
+ 441 003b 61 FC                   		reti
+ 442                             	.LFE2:
+ 444                             		.section	.text.r_tau0_channel3_interrupt,"ax",@progbits
+ 445                             		.global	_r_tau0_channel3_interrupt
+ 447                             	_r_tau0_channel3_interrupt:
+ 448                             	.LFB3:
+ 209:../src/r_cg_timer_user.c **** 
+ 210:../src/r_cg_timer_user.c **** /**************************************************************************************************
+ 211:../src/r_cg_timer_user.c **** * Function Name: r_tau0_channel3_interrupt
+ 212:../src/r_cg_timer_user.c **** * Description  : This function is INTTM03 interrupt service routine.
+ 213:../src/r_cg_timer_user.c **** * Arguments    : None
+ 214:../src/r_cg_timer_user.c **** * Return Value : None
+ 215:../src/r_cg_timer_user.c **** ***************************************************************************************************
+ 216:../src/r_cg_timer_user.c **** void r_tau0_channel3_interrupt(void)
+ 217:../src/r_cg_timer_user.c **** {
+ 449                             		.loc 1 217 0
+ 450                             		; start of function
+ 451                             		; push 8: ax bc de hl
+ 452                             		; uses ES register
+ 453 0000 61 CF                   		sel	rb0
+ 454 0002 C1                      		push	ax
+ 455                             	.LCFI27:
+ 456 0003 C3                      		push	bc
+ 457                             	.LCFI28:
+ 458 0004 C5                      		push	de
+ 459                             	.LCFI29:
+ 460 0005 C7                      		push	hl
+ 461                             	.LCFI30:
+ 462 0006 8E FD                   		mov	a, es
+ 463 0008 C1                      		push	ax
+ 464                             	.LCFI31:
+ 218:../src/r_cg_timer_user.c ****     /* Start user code. Do not edit comment generated here */
+ 219:../src/r_cg_timer_user.c **** //	M1_PWM = 1;					// Clear Trigger Pulse Output
+ 220:../src/r_cg_timer_user.c **** //	R_TAU0_Channel3_Stop();		// Stop Timer Channel 3
+ 221:../src/r_cg_timer_user.c ****    /* End user code. Do not edit comment generated here */
+ 222:../src/r_cg_timer_user.c **** }
+ 465                             		.loc 1 222 0
+ 466 0009 C0                      		pop	ax
+ 467 000a 9E FD                   		mov	es, a
+ 468 000c C6                      		pop	hl
+ 469 000d C4                      		pop	de
+ 470 000e C2                      		pop	bc
+ 471 000f C0                      		pop	ax
+ 472 0010 61 FC                   		reti
+ 473                             	.LFE3:
+ 475                             		.section	.text.r_tau0_channel4_interrupt,"ax",@progbits
+ 476                             		.global	_r_tau0_channel4_interrupt
+ 478                             	_r_tau0_channel4_interrupt:
+ 479                             	.LFB4:
+ 223:../src/r_cg_timer_user.c **** 
+ 224:../src/r_cg_timer_user.c **** /**************************************************************************************************
+ 225:../src/r_cg_timer_user.c **** * Function Name: r_tau0_channel4_interrupt
+ 226:../src/r_cg_timer_user.c **** * Description  : This function is INTTM04 interrupt service routine.
+ 227:../src/r_cg_timer_user.c **** * Arguments    : None
+ 228:../src/r_cg_timer_user.c **** * Return Value : None
+ 229:../src/r_cg_timer_user.c **** ***************************************************************************************************
+ 230:../src/r_cg_timer_user.c **** void r_tau0_channel4_interrupt(void)
+ 231:../src/r_cg_timer_user.c **** {
+ 480                             		.loc 1 231 0
+ 481                             		; start of function
+ 482                             		; push 14: ax bc de hl r8 r10 r12
+ 483                             		; uses ES register
+ 484 0000 61 CF                   		sel	rb0
+ 485 0002 C1                      		push	ax
+ 486                             	.LCFI32:
+ 487 0003 C3                      		push	bc
+ 488                             	.LCFI33:
+ 489 0004 C5                      		push	de
+ 490                             	.LCFI34:
+ 491 0005 C7                      		push	hl
+ 492                             	.LCFI35:
+ 493 0006 61 DF                   		sel	rb1
+ 494 0008 C1                      		push	ax ; r8
+ 495                             	.LCFI36:
+ 496 0009 C3                      		push	bc ; r10
+ 497                             	.LCFI37:
+ 498 000a C5                      		push	de ; r12
+ 499                             	.LCFI38:
+ 500 000b 61 CF                   		sel	rb0
+ 501 000d 8E FD                   		mov	a, es
+ 502 000f C1                      		push	ax
+ 503                             	.LCFI39:
+ 232:../src/r_cg_timer_user.c ****     /* Start user code. Do not edit comment generated here */
+ 233:../src/r_cg_timer_user.c **** 	if (HMI_Flash_Enable == 1)
+ 504                             		.loc 1 233 0
+ 505 0010 8F 00 00                		mov	a, !_HMI_Flash_Enable
+ 506 0013 9D F0                   		mov	r8, a
+ 507 0015 4A F0 01                		cmp	r8, #1
+ 508 0018 61 E8                   		 skz
+ 509 001a EC 37 00 00             		 br	!!.L23
+ 234:../src/r_cg_timer_user.c **** 	{
+ 235:../src/r_cg_timer_user.c **** 		Mask = ~Mask;
+ 510                             		.loc 1 235 0
+ 511 001e 8F 00 00                		mov	a, !_Mask
+ 512 0021 9D F0                   		mov	r8, a
+ 513 0023 7A F0 FF                		xor	r8, #-1
+ 514 0026 8D F0                   		mov	a, r8
+ 515 0028 9F 00 00                		mov	!_Mask, a
+ 236:../src/r_cg_timer_user.c **** 		HMI_Flash_Count += 1;
+ 516                             		.loc 1 236 0
+ 517 002b 8F 00 00                		mov	a, !_HMI_Flash_Count
+ 518 002e 9D F0                   		mov	r8, a
+ 519 0030 A4 F0                   		inc	r8
+ 520 0032 8D F0                   		mov	a, r8
+ 521 0034 9F 00 00                		mov	!_HMI_Flash_Count, a
+ 522                             	.L23:
+ 237:../src/r_cg_timer_user.c **** 	}
+ 238:../src/r_cg_timer_user.c **** 
+ 239:../src/r_cg_timer_user.c **** 	if (Pre_Flash_Type == FLASH_ENABLE_TIMER)
+ 523                             		.loc 1 239 0
+ 524 0037 8F 00 00                		mov	a, !_Pre_Flash_Type
+ 525 003a 9D F0                   		mov	r8, a
+ 526 003c 4A F0 01                		cmp	r8, #1
+ 527 003f 61 E8                   		 skz
+ 528 0041 EC 51 00 00             		 br	!!.L24
+ 240:../src/r_cg_timer_user.c **** 	{
+ 241:../src/r_cg_timer_user.c **** 		Flash_Timer_Counter += 1;
+ 529                             		.loc 1 241 0
+ 530 0045 8F 00 00                		mov	a, !_Flash_Timer_Counter
+ 531 0048 9D F0                   		mov	r8, a
+ 532 004a A4 F0                   		inc	r8
+ 533 004c 8D F0                   		mov	a, r8
+ 534 004e 9F 00 00                		mov	!_Flash_Timer_Counter, a
+ 535                             	.L24:
+ 242:../src/r_cg_timer_user.c **** 	}
+ 243:../src/r_cg_timer_user.c **** 
+ 244:../src/r_cg_timer_user.c **** 	if (Flash_Enable == 1)
+ 536                             		.loc 1 244 0
+ 537 0051 8F 00 00                		mov	a, !_Flash_Enable
+ 538 0054 9D F0                   		mov	r8, a
+ 539 0056 4A F0 01                		cmp	r8, #1
+ 540 0059 61 E8                   		 skz
+ 541 005b EC BB 01 00             		 br	!!.L25
+ 245:../src/r_cg_timer_user.c **** 	{
+ 246:../src/r_cg_timer_user.c **** 		if (Flash_Frequency_Config == FLASH_LIGHT_FREQUENCY_RAPIDLY)
+ 542                             		.loc 1 246 0
+ 543 005f 8F 00 00                		mov	a, !_Flash_Frequency_Config
+ 544 0062 9D F0                   		mov	r8, a
+ 545 0064 4A F0 02                		cmp	r8, #2
+ 546 0067 61 E8                   		 skz
+ 547 0069 EC B1 00 00             		 br	!!.L26
+ 247:../src/r_cg_timer_user.c **** 		{
+ 248:../src/r_cg_timer_user.c **** 			FLASH = ~FLASH;
+ 548                             		.loc 1 248 0
+ 549 006d C9 F2 02 FF             		movw	r10, #-254
+ 550 0071 C9 F0 02 FF             		movw	r8, #-254
+ 551 0075 AD F0                   		movw	ax, r8
+ 552 0077 BD F4                   		movw	r12, ax
+ 553 0079 FA F4                   		movw	hl, r12
+ 554 007b 8B                      		mov	a, [hl]
+ 555 007c 9D F0                   		mov	r8, a
+ 556 007e 31 1A                   		shr	a, 1
+ 557 0080 9D F0                   		mov	r8, a
+ 558 0082 5A F0 01                		and	r8, #1
+ 559 0085 7A F0 FF                		xor	r8, #-1
+ 560 0088 5A F0 01                		and	r8, #1
+ 561 008b 5A F0 01                		and	r8, #1
+ 562 008e 8D F0                   		mov	a, r8
+ 563 0090 61 01                   		add	a, a
+ 564 0092 9D F0                   		mov	r8, a
+ 565 0094 AD F2                   		movw	ax, r10
+ 566 0096 BD F4                   		movw	r12, ax
+ 567 0098 FA F4                   		movw	hl, r12
+ 568 009a 8B                      		mov	a, [hl]
+ 569 009b 9D F1                   		mov	r9, a
+ 570 009d 5A F1 FD                		and	r9, #-3
+ 571 00a0 8D F1                   		mov	a, r9
+ 572 00a2 6B F0                   		or	a, r8
+ 573 00a4 9D F0                   		mov	r8, a
+ 574 00a6 AD F2                   		movw	ax, r10
+ 575 00a8 EA F4                   		movw	de, r12
+ 576 00aa 8D F0                   		mov	a, r8
+ 577 00ac 99                      		mov	[de], a
+ 578 00ad EC BB 01 00             		br	!!.L25
+ 579                             	.L26:
+ 249:../src/r_cg_timer_user.c **** 		}
+ 250:../src/r_cg_timer_user.c **** 		else if (Flash_Frequency_Config == FLASH_LIGHT_FREQUENCY_SLOWLY)
+ 580                             		.loc 1 250 0
+ 581 00b1 8F 00 00                		mov	a, !_Flash_Frequency_Config
+ 582 00b4 9D F0                   		mov	r8, a
+ 583 00b6 4A F0 01                		cmp	r8, #1
+ 584 00b9 61 E8                   		 skz
+ 585 00bb EC 1D 01 00             		 br	!!.L27
+ 251:../src/r_cg_timer_user.c **** 		{
+ 252:../src/r_cg_timer_user.c **** 			if (++Flash_Frequency_Count == 3)
+ 586                             		.loc 1 252 0
+ 587 00bf 8F 00 00                		mov	a, !_Flash_Frequency_Count
+ 588 00c2 9D F0                   		mov	r8, a
+ 589 00c4 A4 F0                   		inc	r8
+ 590 00c6 8D F0                   		mov	a, r8
+ 591 00c8 9F 00 00                		mov	!_Flash_Frequency_Count, a
+ 592 00cb 9D F0                   		mov	r8, a
+ 593 00cd 4A F0 03                		cmp	r8, #3
+ 594 00d0 61 E8                   		 skz
+ 595 00d2 EC BB 01 00             		 br	!!.L25
+ 253:../src/r_cg_timer_user.c **** 			{
+ 254:../src/r_cg_timer_user.c **** 				Flash_Frequency_Count = 0;
+ 596                             		.loc 1 254 0
+ 597 00d6 F5 00 00                		clrb	!_Flash_Frequency_Count
+ 255:../src/r_cg_timer_user.c **** 				FLASH = ~FLASH;
+ 598                             		.loc 1 255 0
+ 599 00d9 C9 F2 02 FF             		movw	r10, #-254
+ 600 00dd C9 F0 02 FF             		movw	r8, #-254
+ 601 00e1 AD F0                   		movw	ax, r8
+ 602 00e3 BD F4                   		movw	r12, ax
+ 603 00e5 FA F4                   		movw	hl, r12
+ 604 00e7 8B                      		mov	a, [hl]
+ 605 00e8 9D F0                   		mov	r8, a
+ 606 00ea 31 1A                   		shr	a, 1
+ 607 00ec 9D F0                   		mov	r8, a
+ 608 00ee 5A F0 01                		and	r8, #1
+ 609 00f1 7A F0 FF                		xor	r8, #-1
+ 610 00f4 5A F0 01                		and	r8, #1
+ 611 00f7 5A F0 01                		and	r8, #1
+ 612 00fa 8D F0                   		mov	a, r8
+ 613 00fc 61 01                   		add	a, a
+ 614 00fe 9D F0                   		mov	r8, a
+ 615 0100 AD F2                   		movw	ax, r10
+ 616 0102 BD F4                   		movw	r12, ax
+ 617 0104 FA F4                   		movw	hl, r12
+ 618 0106 8B                      		mov	a, [hl]
+ 619 0107 9D F1                   		mov	r9, a
+ 620 0109 5A F1 FD                		and	r9, #-3
+ 621 010c 8D F1                   		mov	a, r9
+ 622 010e 6B F0                   		or	a, r8
+ 623 0110 9D F0                   		mov	r8, a
+ 624 0112 AD F2                   		movw	ax, r10
+ 625 0114 EA F4                   		movw	de, r12
+ 626 0116 8D F0                   		mov	a, r8
+ 627 0118 99                      		mov	[de], a
+ 628 0119 EC BB 01 00             		br	!!.L25
+ 629                             	.L27:
+ 256:../src/r_cg_timer_user.c **** 			}
+ 257:../src/r_cg_timer_user.c **** 		}
+ 258:../src/r_cg_timer_user.c **** 		else if (Flash_Frequency_Config == FLASH_LIGHT_FREQUENCY_RECOVERY)	// Recovery Mode
+ 630                             		.loc 1 258 0
+ 631 011d 8F 00 00                		mov	a, !_Flash_Frequency_Config
+ 632 0120 9D F0                   		mov	r8, a
+ 633 0122 4A F0 03                		cmp	r8, #3
+ 634 0125 61 E8                   		 skz
+ 635 0127 EC BB 01 00             		 br	!!.L25
+ 259:../src/r_cg_timer_user.c **** 		{
+ 260:../src/r_cg_timer_user.c **** 			if ((++Flash_Frequency_Count == 3) && (FLASH == 0))
+ 636                             		.loc 1 260 0
+ 637 012b 8F 00 00                		mov	a, !_Flash_Frequency_Count
+ 638 012e 9D F0                   		mov	r8, a
+ 639 0130 A4 F0                   		inc	r8
+ 640 0132 8D F0                   		mov	a, r8
+ 641 0134 9F 00 00                		mov	!_Flash_Frequency_Count, a
+ 642 0137 9D F0                   		mov	r8, a
+ 643 0139 4A F0 03                		cmp	r8, #3
+ 644 013c 61 E8                   		 skz
+ 645 013e EC 76 01 00             		 br	!!.L29
+ 646                             		.loc 1 260 0 is_stmt 0 discriminator 1
+ 647 0142 C9 F0 02 FF             		movw	r8, #-254
+ 648 0146 AD F0                   		movw	ax, r8
+ 649 0148 BD F2                   		movw	r10, ax
+ 650 014a FA F2                   		movw	hl, r10
+ 651 014c 8B                      		mov	a, [hl]
+ 652 014d 9D F0                   		mov	r8, a
+ 653 014f 31 1A                   		shr	a, 1
+ 654 0151 9D F0                   		mov	r8, a
+ 655 0153 5A F0 01                		and	r8, #1
+ 656 0156 61 E8                   		skz
+ 657 0158 EC 76 01 00             		 br	!!.L29
+ 658                             		 # zero-comparison eliminated
+ 261:../src/r_cg_timer_user.c **** 			{
+ 262:../src/r_cg_timer_user.c **** 				Flash_Frequency_Count = 0;
+ 659                             		.loc 1 262 0 is_stmt 1
+ 660 015c F5 00 00                		clrb	!_Flash_Frequency_Count
+ 263:../src/r_cg_timer_user.c **** 				FLASH = 1;
+ 661                             		.loc 1 263 0
+ 662 015f C9 F0 02 FF             		movw	r8, #-254
+ 663 0163 AD F0                   		movw	ax, r8
+ 664 0165 BD F4                   		movw	r12, ax
+ 665 0167 FA F4                   		movw	hl, r12
+ 666 0169 8B                      		mov	a, [hl]
+ 667 016a 9D F2                   		mov	r10, a
+ 668 016c 6A F2 02                		or	r10, #2
+ 669 016f AD F0                   		movw	ax, r8
+ 670 0171 EA F4                   		movw	de, r12
+ 671 0173 8D F2                   		mov	a, r10
+ 672 0175 99                      		mov	[de], a
+ 673                             	.L29:
+ 264:../src/r_cg_timer_user.c **** 			}
+ 265:../src/r_cg_timer_user.c **** 			if ((Flash_Frequency_Count == 6) && (FLASH == 1))
+ 674                             		.loc 1 265 0
+ 675 0176 8F 00 00                		mov	a, !_Flash_Frequency_Count
+ 676 0179 9D F0                   		mov	r8, a
+ 677 017b 4A F0 06                		cmp	r8, #6
+ 678 017e 61 E8                   		 skz
+ 679 0180 EC BB 01 00             		 br	!!.L25
+ 680                             		.loc 1 265 0 is_stmt 0 discriminator 1
+ 681 0184 C9 F0 02 FF             		movw	r8, #-254
+ 682 0188 AD F0                   		movw	ax, r8
+ 683 018a BD F2                   		movw	r10, ax
+ 684 018c FA F2                   		movw	hl, r10
+ 685 018e 8B                      		mov	a, [hl]
+ 686 018f 9D F0                   		mov	r8, a
+ 687 0191 31 1A                   		shr	a, 1
+ 688 0193 9D F0                   		mov	r8, a
+ 689 0195 5A F0 01                		and	r8, #1
+ 690 0198 4A F0 01                		cmp	r8, #1
+ 691 019b 61 E8                   		 skz
+ 692 019d EC BB 01 00             		 br	!!.L25
+ 266:../src/r_cg_timer_user.c **** 			{
+ 267:../src/r_cg_timer_user.c **** 				Flash_Frequency_Count = 0;
+ 693                             		.loc 1 267 0 is_stmt 1
+ 694 01a1 F5 00 00                		clrb	!_Flash_Frequency_Count
+ 268:../src/r_cg_timer_user.c **** 				FLASH = 0;
+ 695                             		.loc 1 268 0
+ 696 01a4 C9 F0 02 FF             		movw	r8, #-254
+ 697 01a8 AD F0                   		movw	ax, r8
+ 698 01aa BD F4                   		movw	r12, ax
+ 699 01ac FA F4                   		movw	hl, r12
+ 700 01ae 8B                      		mov	a, [hl]
+ 701 01af 9D F2                   		mov	r10, a
+ 702 01b1 5A F2 FD                		and	r10, #-3
+ 703 01b4 AD F0                   		movw	ax, r8
+ 704 01b6 EA F4                   		movw	de, r12
+ 705 01b8 8D F2                   		mov	a, r10
+ 706 01ba 99                      		mov	[de], a
+ 707                             	.L25:
+ 269:../src/r_cg_timer_user.c **** 			}
+ 270:../src/r_cg_timer_user.c **** 		}
+ 271:../src/r_cg_timer_user.c **** 	}
+ 272:../src/r_cg_timer_user.c **** 
+ 273:../src/r_cg_timer_user.c **** 	if (Courtesy_Light_Enable == 1)
+ 708                             		.loc 1 273 0
+ 709 01bb 8F 00 00                		mov	a, !_Courtesy_Light_Enable
+ 710 01be 9D F0                   		mov	r8, a
+ 711 01c0 4A F0 01                		cmp	r8, #1
+ 712 01c3 61 E8                   		 skz
+ 713 01c5 EC 00 02 00             		 br	!!.L30
+ 274:../src/r_cg_timer_user.c **** 	{
+ 275:../src/r_cg_timer_user.c **** 		if (++Courtesy_Light_Count == Courtesy_Light_Time)
+ 714                             		.loc 1 275 0
+ 715 01c9 AF 00 00                		movw	ax, !_Courtesy_Light_Count
+ 716 01cc BD F0                   		movw	r8, ax
+ 717 01ce A6 F0                   		incw	r8
+ 718 01d0 AD F0                   		movw	ax, r8
+ 719 01d2 BF 00 00                		movw	!_Courtesy_Light_Count, ax
+ 720 01d5 BD F2                   		movw	r10, ax
+ 721 01d7 AF 00 00                		movw	ax, !_Courtesy_Light_Time
+ 722 01da BD F0                   		movw	r8, ax
+ 723 01dc AD F2                   		movw	ax, r10
+ 724 01de 46 F0                   		cmpw	ax, r8
+ 725 01e0 61 E8                   		 skz
+ 726 01e2 EC 00 02 00             		 br	!!.L30
+ 276:../src/r_cg_timer_user.c **** 		{
+ 277:../src/r_cg_timer_user.c **** 			Courtesy_Light_Enable = 0;
+ 727                             		.loc 1 277 0
+ 728 01e6 F5 00 00                		clrb	!_Courtesy_Light_Enable
+ 278:../src/r_cg_timer_user.c **** 			COURTESY = 0;
+ 729                             		.loc 1 278 0
+ 730 01e9 C9 F0 02 FF             		movw	r8, #-254
+ 731 01ed AD F0                   		movw	ax, r8
+ 732 01ef BD F4                   		movw	r12, ax
+ 733 01f1 FA F4                   		movw	hl, r12
+ 734 01f3 8B                      		mov	a, [hl]
+ 735 01f4 9D F2                   		mov	r10, a
+ 736 01f6 5A F2 FE                		and	r10, #-2
+ 737 01f9 AD F0                   		movw	ax, r8
+ 738 01fb EA F4                   		movw	de, r12
+ 739 01fd 8D F2                   		mov	a, r10
+ 740 01ff 99                      		mov	[de], a
+ 741                             	.L30:
+ 279:../src/r_cg_timer_user.c **** 		}
+ 280:../src/r_cg_timer_user.c **** 	}
+ 281:../src/r_cg_timer_user.c **** 
+ 282:../src/r_cg_timer_user.c **** 	switch (Gate_Open_Indicator_Mode)
+ 742                             		.loc 1 282 0
+ 743 0200 8F 00 00                		mov	a, !_Gate_Open_Indicator_Mode
+ 744 0203 9D F0                   		mov	r8, a
+ 745 0205 F4 F1                   		clrb	r9
+ 746 0207 AD F0                   		movw	ax, r8
+ 747 0209 44 02 00                		cmpw	ax, #2
+ 748 020c 61 F8                   		 sknz
+ 749 020e EC 88 02 00             		 br	!!.L32
+ 750 0212 AD F0                   		movw	ax, r8
+ 751 0214 44 03 00                		cmpw	ax, #3
+ 752 0217 61 F8                   		 sknz
+ 753 0219 EC C6 02 00             		 br	!!.L33
+ 754 021d AD F0                   		movw	ax, r8
+ 755 021f 44 01 00                		cmpw	ax, #1
+ 756 0222 61 F8                   		 sknz
+ 757 0224 EC 2C 02 00             		 br	!!.L34
+ 283:../src/r_cg_timer_user.c **** 	{
+ 284:../src/r_cg_timer_user.c **** 		case GATE_OPEN_INDICATOR_MODE_1:
+ 285:../src/r_cg_timer_user.c **** 		{
+ 286:../src/r_cg_timer_user.c **** 			if (++Gate_Open_Indicator_Flash_Count == 3)
+ 287:../src/r_cg_timer_user.c **** 			{
+ 288:../src/r_cg_timer_user.c **** 				Gate_Open_Indicator_Flash_Count = 0;
+ 289:../src/r_cg_timer_user.c **** 				SC_EN = ~SC_EN;
+ 290:../src/r_cg_timer_user.c **** 			}
+ 291:../src/r_cg_timer_user.c **** 		} break;
+ 292:../src/r_cg_timer_user.c **** 
+ 293:../src/r_cg_timer_user.c **** 		case GATE_OPEN_INDICATOR_MODE_2:
+ 294:../src/r_cg_timer_user.c **** 		{
+ 295:../src/r_cg_timer_user.c **** 			SC_EN = ~SC_EN;
+ 296:../src/r_cg_timer_user.c **** 		} break;
+ 297:../src/r_cg_timer_user.c **** 
+ 298:../src/r_cg_timer_user.c **** 		case GATE_OPEN_INDICATOR_MODE_3:
+ 299:../src/r_cg_timer_user.c **** 		{
+ 300:../src/r_cg_timer_user.c **** 			if (++Gate_Open_Indicator_Flash_Count == 30)
+ 301:../src/r_cg_timer_user.c **** 			{
+ 302:../src/r_cg_timer_user.c **** 				Gate_Open_Indicator_Flash_Count = 0;
+ 303:../src/r_cg_timer_user.c **** 			}
+ 304:../src/r_cg_timer_user.c **** 			if ((Gate_Open_Indicator_Flash_Count == 0) || (Gate_Open_Indicator_Flash_Count == 2))
+ 305:../src/r_cg_timer_user.c **** 			{
+ 306:../src/r_cg_timer_user.c **** 				SC_EN = 1;
+ 307:../src/r_cg_timer_user.c **** 			}
+ 308:../src/r_cg_timer_user.c **** 			else
+ 309:../src/r_cg_timer_user.c **** 			{
+ 310:../src/r_cg_timer_user.c **** 				SC_EN = 0;
+ 311:../src/r_cg_timer_user.c **** 			}
+ 312:../src/r_cg_timer_user.c **** 		} break;
+ 313:../src/r_cg_timer_user.c **** 
+ 314:../src/r_cg_timer_user.c **** 		case GATE_OPEN_INDICATOR_MODE_0:
+ 315:../src/r_cg_timer_user.c **** 		default:
+ 316:../src/r_cg_timer_user.c **** 		{
+ 317:../src/r_cg_timer_user.c **** 			// Do nothing
+ 318:../src/r_cg_timer_user.c **** 		} break;
+ 758                             		.loc 1 318 0
+ 759 0228 EC 2E 03 00             		br	!!.L36
+ 760                             	.L34:
+ 286:../src/r_cg_timer_user.c **** 			{
+ 761                             		.loc 1 286 0
+ 762 022c 8F 00 00                		mov	a, !_Gate_Open_Indicator_Flash_Count
+ 763 022f 9D F0                   		mov	r8, a
+ 764 0231 A4 F0                   		inc	r8
+ 765 0233 8D F0                   		mov	a, r8
+ 766 0235 9F 00 00                		mov	!_Gate_Open_Indicator_Flash_Count, a
+ 767 0238 9D F0                   		mov	r8, a
+ 768 023a 4A F0 03                		cmp	r8, #3
+ 769 023d 61 E8                   		 skz
+ 770 023f EC 84 02 00             		 br	!!.L35
+ 288:../src/r_cg_timer_user.c **** 				SC_EN = ~SC_EN;
+ 771                             		.loc 1 288 0
+ 772 0243 F5 00 00                		clrb	!_Gate_Open_Indicator_Flash_Count
+ 289:../src/r_cg_timer_user.c **** 			}
+ 773                             		.loc 1 289 0
+ 774 0246 C9 F0 02 FF             		movw	r8, #-254
+ 775 024a C9 F2 02 FF             		movw	r10, #-254
+ 776 024e AD F2                   		movw	ax, r10
+ 777 0250 BD F4                   		movw	r12, ax
+ 778 0252 FA F4                   		movw	hl, r12
+ 779 0254 8B                      		mov	a, [hl]
+ 780 0255 9D F2                   		mov	r10, a
+ 781 0257 31 7A                   		shr	a, 7
+ 782 0259 9D F2                   		mov	r10, a
+ 783 025b 7A F2 FF                		xor	r10, #-1
+ 784 025e 5A F2 01                		and	r10, #1
+ 785 0261 8D F2                   		mov	a, r10
+ 786 0263 31 79                   		shl	a, 7
+ 787 0265 9D F2                   		mov	r10, a
+ 788 0267 AD F0                   		movw	ax, r8
+ 789 0269 BD F4                   		movw	r12, ax
+ 790 026b FA F4                   		movw	hl, r12
+ 791 026d 8B                      		mov	a, [hl]
+ 792 026e 9D F3                   		mov	r11, a
+ 793 0270 5A F3 7F                		and	r11, #127
+ 794 0273 8D F3                   		mov	a, r11
+ 795 0275 6B F2                   		or	a, r10
+ 796 0277 9D F2                   		mov	r10, a
+ 797 0279 AD F0                   		movw	ax, r8
+ 798 027b EA F4                   		movw	de, r12
+ 799 027d 8D F2                   		mov	a, r10
+ 800 027f 99                      		mov	[de], a
+ 291:../src/r_cg_timer_user.c **** 
+ 801                             		.loc 1 291 0
+ 802 0280 EC 2E 03 00             		br	!!.L36
+ 803                             	.L35:
+ 804 0284 EC 2E 03 00             		br	!!.L36
+ 805                             	.L32:
+ 295:../src/r_cg_timer_user.c **** 		} break;
+ 806                             		.loc 1 295 0
+ 807 0288 C9 F0 02 FF             		movw	r8, #-254
+ 808 028c C9 F2 02 FF             		movw	r10, #-254
+ 809 0290 AD F2                   		movw	ax, r10
+ 810 0292 BD F4                   		movw	r12, ax
+ 811 0294 FA F4                   		movw	hl, r12
+ 812 0296 8B                      		mov	a, [hl]
+ 813 0297 9D F2                   		mov	r10, a
+ 814 0299 31 7A                   		shr	a, 7
+ 815 029b 9D F2                   		mov	r10, a
+ 816 029d 7A F2 FF                		xor	r10, #-1
+ 817 02a0 5A F2 01                		and	r10, #1
+ 818 02a3 8D F2                   		mov	a, r10
+ 819 02a5 31 79                   		shl	a, 7
+ 820 02a7 9D F2                   		mov	r10, a
+ 821 02a9 AD F0                   		movw	ax, r8
+ 822 02ab BD F4                   		movw	r12, ax
+ 823 02ad FA F4                   		movw	hl, r12
+ 824 02af 8B                      		mov	a, [hl]
+ 825 02b0 9D F3                   		mov	r11, a
+ 826 02b2 5A F3 7F                		and	r11, #127
+ 827 02b5 8D F3                   		mov	a, r11
+ 828 02b7 6B F2                   		or	a, r10
+ 829 02b9 9D F2                   		mov	r10, a
+ 830 02bb AD F0                   		movw	ax, r8
+ 831 02bd EA F4                   		movw	de, r12
+ 832 02bf 8D F2                   		mov	a, r10
+ 833 02c1 99                      		mov	[de], a
+ 296:../src/r_cg_timer_user.c **** 
+ 834                             		.loc 1 296 0
+ 835 02c2 EC 2E 03 00             		br	!!.L36
+ 836                             	.L33:
+ 300:../src/r_cg_timer_user.c **** 			{
+ 837                             		.loc 1 300 0
+ 838 02c6 8F 00 00                		mov	a, !_Gate_Open_Indicator_Flash_Count
+ 839 02c9 9D F0                   		mov	r8, a
+ 840 02cb A4 F0                   		inc	r8
+ 841 02cd 8D F0                   		mov	a, r8
+ 842 02cf 9F 00 00                		mov	!_Gate_Open_Indicator_Flash_Count, a
+ 843 02d2 9D F0                   		mov	r8, a
+ 844 02d4 4A F0 1E                		cmp	r8, #30
+ 845 02d7 61 E8                   		 skz
+ 846 02d9 EC E0 02 00             		 br	!!.L37
+ 302:../src/r_cg_timer_user.c **** 			}
+ 847                             		.loc 1 302 0
+ 848 02dd F5 00 00                		clrb	!_Gate_Open_Indicator_Flash_Count
+ 849                             	.L37:
+ 304:../src/r_cg_timer_user.c **** 			{
+ 850                             		.loc 1 304 0
+ 851 02e0 8F 00 00                		mov	a, !_Gate_Open_Indicator_Flash_Count
+ 852 02e3 9D F0                   		mov	r8, a
+ 853 02e5 D4 F0                   		cmp0	r8
+ 854 02e7 61 F8                   		 sknz
+ 855 02e9 EC FB 02 00             		 br	!!.L38
+ 304:../src/r_cg_timer_user.c **** 			{
+ 856                             		.loc 1 304 0 is_stmt 0 discriminator 1
+ 857 02ed 8F 00 00                		mov	a, !_Gate_Open_Indicator_Flash_Count
+ 858 02f0 9D F0                   		mov	r8, a
+ 859 02f2 4A F0 02                		cmp	r8, #2
+ 860 02f5 61 E8                   		 skz
+ 861 02f7 EC 16 03 00             		 br	!!.L39
+ 862                             	.L38:
+ 306:../src/r_cg_timer_user.c **** 			}
+ 863                             		.loc 1 306 0 is_stmt 1
+ 864 02fb C9 F0 02 FF             		movw	r8, #-254
+ 865 02ff AD F0                   		movw	ax, r8
+ 866 0301 BD F4                   		movw	r12, ax
+ 867 0303 FA F4                   		movw	hl, r12
+ 868 0305 8B                      		mov	a, [hl]
+ 869 0306 9D F2                   		mov	r10, a
+ 870 0308 6A F2 80                		or	r10, #-128
+ 871 030b AD F0                   		movw	ax, r8
+ 872 030d EA F4                   		movw	de, r12
+ 873 030f 8D F2                   		mov	a, r10
+ 874 0311 99                      		mov	[de], a
+ 312:../src/r_cg_timer_user.c **** 
+ 875                             		.loc 1 312 0
+ 876 0312 EC 2D 03 00             		br	!!.L42
+ 877                             	.L39:
+ 310:../src/r_cg_timer_user.c **** 			}
+ 878                             		.loc 1 310 0
+ 879 0316 C9 F0 02 FF             		movw	r8, #-254
+ 880 031a AD F0                   		movw	ax, r8
+ 881 031c BD F4                   		movw	r12, ax
+ 882 031e FA F4                   		movw	hl, r12
+ 883 0320 8B                      		mov	a, [hl]
+ 884 0321 9D F2                   		mov	r10, a
+ 885 0323 5A F2 7F                		and	r10, #127
+ 886 0326 AD F0                   		movw	ax, r8
+ 887 0328 EA F4                   		movw	de, r12
+ 888 032a 8D F2                   		mov	a, r10
+ 889 032c 99                      		mov	[de], a
+ 890                             	.L42:
+ 312:../src/r_cg_timer_user.c **** 
+ 891                             		.loc 1 312 0
+ 892 032d 00                      		nop
+ 893                             	.L36:
+ 319:../src/r_cg_timer_user.c **** 	}
+ 320:../src/r_cg_timer_user.c **** 
+ 321:../src/r_cg_timer_user.c **** 	if (Auto_Close_Gate_Timer_Enable == 1)
+ 894                             		.loc 1 321 0
+ 895 032e 8F 00 00                		mov	a, !_Auto_Close_Gate_Timer_Enable
+ 896 0331 9D F0                   		mov	r8, a
+ 897 0333 4A F0 01                		cmp	r8, #1
+ 898 0336 61 E8                   		 skz
+ 899 0338 EC 5C 03 00             		 br	!!.L22
+ 322:../src/r_cg_timer_user.c **** 	{
+ 323:../src/r_cg_timer_user.c **** 		if (++Auto_Close_Gate_Timer_Counter == CFG_parameter.Automatic_Closing_Time)
+ 900                             		.loc 1 323 0
+ 901 033c AF 00 00                		movw	ax, !_Auto_Close_Gate_Timer_Counter
+ 902 033f BD F0                   		movw	r8, ax
+ 903 0341 A6 F0                   		incw	r8
+ 904 0343 AD F0                   		movw	ax, r8
+ 905 0345 BF 00 00                		movw	!_Auto_Close_Gate_Timer_Counter, ax
+ 906 0348 BD F2                   		movw	r10, ax
+ 907 034a AF 00 00                		movw	ax, !_CFG_parameter+48
+ 908 034d BD F0                   		movw	r8, ax
+ 909 034f AD F2                   		movw	ax, r10
+ 910 0351 46 F0                   		cmpw	ax, r8
+ 911 0353 61 E8                   		 skz
+ 912 0355 EC 5C 03 00             		 br	!!.L22
+ 324:../src/r_cg_timer_user.c **** 		{
+ 325:../src/r_cg_timer_user.c **** 			Auto_Close_Gate_Command = AUTO_CLOSE_GATE_COMMAND_ON;
+ 913                             		.loc 1 325 0
+ 914 0359 E5 00 00                		oneb	!_Auto_Close_Gate_Command
+ 915                             	.L22:
+ 326:../src/r_cg_timer_user.c **** 		}
+ 327:../src/r_cg_timer_user.c **** 	}
+ 328:../src/r_cg_timer_user.c ****     /* End user code. Do not edit comment generated here */
+ 329:../src/r_cg_timer_user.c **** }
+ 916                             		.loc 1 329 0
+ 917 035c C0                      		pop	ax
+ 918 035d 9E FD                   		mov	es, a
+ 919 035f 61 DF                   		sel	rb1
+ 920 0361 C4                      		pop	de ; r12
+ 921 0362 C2                      		pop	bc ; r10
+ 922 0363 C0                      		pop	ax ; r8
+ 923 0364 61 CF                   		sel	rb0
+ 924 0366 C6                      		pop	hl
+ 925 0367 C4                      		pop	de
+ 926 0368 C2                      		pop	bc
+ 927 0369 C0                      		pop	ax
+ 928 036a 61 FC                   		reti
+ 929                             	.LFE4:
+ 931                             		.section	.text.r_tau0_channel6_interrupt,"ax",@progbits
+ 932                             		.global	_r_tau0_channel6_interrupt
+ 934                             	_r_tau0_channel6_interrupt:
+ 935                             	.LFB5:
+ 330:../src/r_cg_timer_user.c **** 
+ 331:../src/r_cg_timer_user.c **** /**************************************************************************************************
+ 332:../src/r_cg_timer_user.c **** * Function Name: r_tau0_channel6_interrupt
+ 333:../src/r_cg_timer_user.c **** * Description  : This function is INTTM06 interrupt service routine.
+ 334:../src/r_cg_timer_user.c **** * Arguments    : None
+ 335:../src/r_cg_timer_user.c **** * Return Value : None
+ 336:../src/r_cg_timer_user.c **** ***************************************************************************************************
+ 337:../src/r_cg_timer_user.c **** void r_tau0_channel6_interrupt(void)
+ 338:../src/r_cg_timer_user.c **** {
+ 936                             		.loc 1 338 0
+ 937                             		; start of function
+ 938                             		; push 16: ax bc de hl r8 r10 r12 r14
+ 939                             		; uses ES register
+ 940 0000 61 CF                   		sel	rb0
+ 941 0002 C1                      		push	ax
+ 942                             	.LCFI40:
+ 943 0003 C3                      		push	bc
+ 944                             	.LCFI41:
+ 945 0004 C5                      		push	de
+ 946                             	.LCFI42:
+ 947 0005 C7                      		push	hl
+ 948                             	.LCFI43:
+ 949 0006 61 DF                   		sel	rb1
+ 950 0008 C1                      		push	ax ; r8
+ 951                             	.LCFI44:
+ 952 0009 C3                      		push	bc ; r10
+ 953                             	.LCFI45:
+ 954 000a C5                      		push	de ; r12
+ 955                             	.LCFI46:
+ 956 000b C7                      		push	hl ; r14
+ 957                             	.LCFI47:
+ 958 000c 61 CF                   		sel	rb0
+ 959 000e 8E FD                   		mov	a, es
+ 960 0010 C1                      		push	ax
+ 961                             	.LCFI48:
+ 339:../src/r_cg_timer_user.c ****     /* Start user code. Do not edit comment generated here */
+ 340:../src/r_cg_timer_user.c **** 	R_TAU0_Channel6_Stop();		// Stop Timer Channel 6
+ 962                             		.loc 1 340 0
+ 963 0011 FC 00 00 00             		call	!!%code(_R_TAU0_Channel6_Stop)
+ 341:../src/r_cg_timer_user.c **** 	M2_PWM = 0;					// Set M2 PWM Pulse Output
+ 964                             		.loc 1 341 0
+ 965 0015 C9 F0 00 FF             		movw	r8, #-256
+ 966 0019 AD F0                   		movw	ax, r8
+ 967 001b BD F4                   		movw	r12, ax
+ 968 001d FA F4                   		movw	hl, r12
+ 969 001f 8B                      		mov	a, [hl]
+ 970 0020 9D F2                   		mov	r10, a
+ 971 0022 5A F2 DF                		and	r10, #-33
+ 972 0025 AD F0                   		movw	ax, r8
+ 973 0027 EA F4                   		movw	de, r12
+ 974 0029 8D F2                   		mov	a, r10
+ 975 002b 99                      		mov	[de], a
+ 342:../src/r_cg_timer_user.c **** //	R_TAU0_Channel7_Start();	// Start Timer Channel 7 for M2 PWM Pulse width
+ 343:../src/r_cg_timer_user.c ****    /* End user code. Do not edit comment generated here */
+ 344:../src/r_cg_timer_user.c **** }
+ 976                             		.loc 1 344 0
+ 977 002c C0                      		pop	ax
+ 978 002d 9E FD                   		mov	es, a
+ 979 002f 61 DF                   		sel	rb1
+ 980 0031 C6                      		pop	hl ; r14
+ 981 0032 C4                      		pop	de ; r12
+ 982 0033 C2                      		pop	bc ; r10
+ 983 0034 C0                      		pop	ax ; r8
+ 984 0035 61 CF                   		sel	rb0
+ 985 0037 C6                      		pop	hl
+ 986 0038 C4                      		pop	de
+ 987 0039 C2                      		pop	bc
+ 988 003a C0                      		pop	ax
+ 989 003b 61 FC                   		reti
+ 990                             	.LFE5:
+ 992                             		.section	.text.r_tau0_channel7_interrupt,"ax",@progbits
+ 993                             		.global	_r_tau0_channel7_interrupt
+ 995                             	_r_tau0_channel7_interrupt:
+ 996                             	.LFB6:
+ 345:../src/r_cg_timer_user.c **** 
+ 346:../src/r_cg_timer_user.c **** /**************************************************************************************************
+ 347:../src/r_cg_timer_user.c **** * Function Name: r_tau0_channel7_interrupt
+ 348:../src/r_cg_timer_user.c **** * Description  : This function is INTTM07 interrupt service routine.
+ 349:../src/r_cg_timer_user.c **** * Arguments    : None
+ 350:../src/r_cg_timer_user.c **** * Return Value : None
+ 351:../src/r_cg_timer_user.c **** ***************************************************************************************************
+ 352:../src/r_cg_timer_user.c **** void r_tau0_channel7_interrupt(void)
+ 353:../src/r_cg_timer_user.c **** {
+ 997                             		.loc 1 353 0
+ 998                             		; start of function
+ 999                             		; push 8: ax bc de hl
+ 1000                             		; uses ES register
+ 1001 0000 61 CF                   		sel	rb0
+ 1002 0002 C1                      		push	ax
+ 1003                             	.LCFI49:
+ 1004 0003 C3                      		push	bc
+ 1005                             	.LCFI50:
+ 1006 0004 C5                      		push	de
+ 1007                             	.LCFI51:
+ 1008 0005 C7                      		push	hl
+ 1009                             	.LCFI52:
+ 1010 0006 8E FD                   		mov	a, es
+ 1011 0008 C1                      		push	ax
+ 1012                             	.LCFI53:
+ 354:../src/r_cg_timer_user.c ****     /* Start user code. Do not edit comment generated here */
+ 355:../src/r_cg_timer_user.c **** //	M2_PWM = 1;					// Clear M2 PWM Pulse Output
+ 356:../src/r_cg_timer_user.c **** //	R_TAU0_Channel7_Stop();		// Stop Timer Channel 3
+ 357:../src/r_cg_timer_user.c ****     /* End user code. Do not edit comment generated here */
+ 358:../src/r_cg_timer_user.c **** }
+ 1013                             		.loc 1 358 0
+ 1014 0009 C0                      		pop	ax
+ 1015 000a 9E FD                   		mov	es, a
+ 1016 000c C6                      		pop	hl
+ 1017 000d C4                      		pop	de
+ 1018 000e C2                      		pop	bc
+ 1019 000f C0                      		pop	ax
+ 1020 0010 61 FC                   		reti
+ 1021                             	.LFE6:
+ 1421                             	.Letext0:
+ 1422                             		.file 2 "E:/AIoT/Code/Rogger/DGC_A230_6_Rev_1_0_Software/generate/iodefine.h"
+ 1423                             		.file 3 "../src/r_cg_macrodriver.h"
+ 1424                             		.file 4 "E:\\AIoT\\Code\\Rogger\\DGC_A230_6_Rev_1_0_Software\\DGC_A230_Functions/DGC_A230_Define.h

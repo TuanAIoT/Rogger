@@ -1,0 +1,1594 @@
+   1                             	r8	=	0xffef0
+   2                             	r16	=	0xffee8
+   3                             	r24	=	0xffee0
+   4                             	r9	=	0xffef1
+   5                             	r17	=	0xffee9
+   6                             	r25	=	0xffee1
+   7                             	r10	=	0xffef2
+   8                             	r18	=	0xffeea
+   9                             	r26	=	0xffee2
+  10                             	r11	=	0xffef3
+  11                             	r19	=	0xffeeb
+  12                             	r27	=	0xffee3
+  13                             	r12	=	0xffef4
+  14                             	r20	=	0xffeec
+  15                             	r28	=	0xffee4
+  16                             	r13	=	0xffef5
+  17                             	r21	=	0xffeed
+  18                             	r29	=	0xffee5
+  19                             	r14	=	0xffef6
+  20                             	r22	=	0xffeee
+  21                             	r30	=	0xffee6
+  22                             	r15	=	0xffef7
+  23                             	r23	=	0xffeef
+  24                             	r31	=	0xffee7
+  25                             	MDUC	=	0xf00e8
+  26                             	MDAL	=	0xffff0
+  27                             	MDAH	=	0xffff2
+  28                             	MDBL	=	0xffff6
+  29                             	MDBH	=	0xffff4
+  30                             	MDCL	=	0xf00e0
+  31                             	MDCH	=	0xf00e2
+  32                             	.text
+  33                             	.Ltext0:
+  34                             		.global	_M1_Timestamp
+  35                             		.section	.bss.M1_Timestamp,"aw",@nobits
+  38                             	_M1_Timestamp:
+  39 0000 00                      		.zero	1
+  40                             		.global	_M2_Timestamp
+  41                             		.section	.bss.M2_Timestamp,"aw",@nobits
+  44                             	_M2_Timestamp:
+  45 0000 00                      		.zero	1
+  46                             		.global	_Torque_Inc
+  47                             		.section	.data.Torque_Inc,"aw",@progbits
+  48                             		.balign 2
+  51                             	_Torque_Inc:
+  52 0000 32 00                   		.short	50
+  53                             		.global	_Torque_Dec
+  54                             		.section	.data.Torque_Dec,"aw",@progbits
+  55                             		.balign 2
+  58                             	_Torque_Dec:
+  59 0000 32 00                   		.short	50
+  60                             		.section	.rodata
+  61                             	.LC0:
+  62 0000 41 55 00                		.string	"AU"
+  63                             	.LC1:
+  64 0003 74 6F 00                		.string	"to"
+  65                             		.section	.text.Travel_Acquisition_Procedure_With_Encoder,"ax",@progbits
+  66                             		.global	_Travel_Acquisition_Procedure_With_Encoder
+  68                             	_Travel_Acquisition_Procedure_With_Encoder:
+  69                             	.LFB0:
+  70                             		.file 1 "../DGC_A230_Functions/DGC_A230_Program_Mode.c"
+   1:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** /*
+   2:../DGC_A230_Functions/DGC_A230_Program_Mode.c ****  * DGC_A230_Program_Mode.c
+   3:../DGC_A230_Functions/DGC_A230_Program_Mode.c ****  *
+   4:../DGC_A230_Functions/DGC_A230_Program_Mode.c ****  *  Created on: Nov 22, 2023
+   5:../DGC_A230_Functions/DGC_A230_Program_Mode.c ****  *      Author: Mr. Han
+   6:../DGC_A230_Functions/DGC_A230_Program_Mode.c ****  */
+   7:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+   8:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** #include "r_cg_macrodriver.h"
+   9:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** #include "r_cg_userdefine.h"
+  10:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  11:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** #include "string.h"
+  12:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  13:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** #include <DGC_A230_Define.h>
+  14:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** #include <Common.h>
+  15:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  16:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern uint8_t 	Display_Mode;
+  17:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern char 	Parameter_Name[2];
+  18:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern char 	Parameter_Value[2];
+  19:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern uint8_t	HMI_Flash_Count;
+  20:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern uint8_t  HMI_Flash_Enable;
+  21:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern uint16_t Tick_Count, M1_Tick_Count, M2_Tick_Count;
+  22:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern uint8_t 	Mask;
+  23:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  24:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern uint8_t Leaf_No1_State, Leaf_No2_State;
+  25:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  26:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern struct Device_Config_Parameters CFG_parameter;
+  27:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern uint8_t    	CFG_Parameters_Value[128];
+  28:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  29:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern uint16_t M1_Torque_Setting, M2_Torque_Setting;
+  30:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** uint8_t	M1_Timestamp = UNDEFINE_TIMESTAMP, M2_Timestamp = UNDEFINE_TIMESTAMP;
+  31:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** uint16_t Torque_Inc = 0x0032, Torque_Dec = 0x0032;
+  32:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  33:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern uint8_t Auto_Close_Retry_Number;
+  34:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern uint8_t Auto_Close_Gate_Retry_Number;
+  35:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern uint8_t Auto_Close_Gate_Timer_Enable;
+  36:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** extern uint16_t Auto_Close_Gate_Timer_Counter;
+  37:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  38:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** /*
+  39:../DGC_A230_Functions/DGC_A230_Program_Mode.c ****  *Acquisition procedure WITH the encoder enabled
+  40:../DGC_A230_Functions/DGC_A230_Program_Mode.c ****  */
+  41:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** void Travel_Acquisition_Procedure_With_Encoder(void)
+  42:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** {
+  71                             		.loc 1 42 0
+  72                             		; start of function
+  73                             		; outgoing: 6 bytes
+  74                             		; uses ES register
+  75 0000 20 06                   		subw	sp, #6
+  76                             	.LCFI0:
+  43:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "AU", 2);
+  77                             		.loc 1 43 0
+  78 0002 C9 F4 00 00             		movw	r12, #_Parameter_Name
+  79 0006 C9 F2 00 00             		movw	r10, #.LC0
+  80 000a C9 F0 02 00             		movw	r8, #2
+  81 000e AD F4                   		movw	ax, r12
+  82 0010 B8 00                   		movw	[sp], ax
+  83 0012 AD F2                   		movw	ax, r10
+  84 0014 B8 02                   		movw	[sp+2], ax
+  85 0016 AD F0                   		movw	ax, r8
+  86 0018 B8 04                   		movw	[sp+4], ax
+  87 001a FC 00 00 00             		call	!!%code(_memcpy)
+  44:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Value, "to", 2);
+  88                             		.loc 1 44 0
+  89 001e C9 F4 00 00             		movw	r12, #_Parameter_Value
+  90 0022 C9 F2 03 00             		movw	r10, #.LC1
+  91 0026 C9 F0 02 00             		movw	r8, #2
+  92 002a AD F4                   		movw	ax, r12
+  93 002c B8 00                   		movw	[sp], ax
+  94 002e AD F2                   		movw	ax, r10
+  95 0030 B8 02                   		movw	[sp+2], ax
+  96 0032 AD F0                   		movw	ax, r8
+  97 0034 B8 04                   		movw	[sp+4], ax
+  98 0036 FC 00 00 00             		call	!!%code(_memcpy)
+  45:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  46:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	while (PROG_KEY);
+  99                             		.loc 1 46 0
+ 100 003a 00                      		nop
+ 101                             	.L2:
+ 102                             		.loc 1 46 0 is_stmt 0 discriminator 1
+ 103 003b C9 F0 01 FF             		movw	r8, #-255
+ 104 003f AD F0                   		movw	ax, r8
+ 105 0041 BD F2                   		movw	r10, ax
+ 106 0043 FA F2                   		movw	hl, r10
+ 107 0045 8B                      		mov	a, [hl]
+ 108 0046 9D F0                   		mov	r8, a
+ 109 0048 31 6A                   		shr	a, 6
+ 110 004a 9D F0                   		mov	r8, a
+ 111 004c 5A F0 01                		and	r8, #1
+ 112 004f 61 E8                   		skz
+ 113 0051 EC 3B 00 00             		 br	!!.L2
+ 114                             		 # zero-comparison eliminated
+  47:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	while (!PROG_KEY);
+ 115                             		.loc 1 47 0 is_stmt 1
+ 116 0055 00                      		nop
+ 117                             	.L3:
+ 118                             		.loc 1 47 0 is_stmt 0 discriminator 1
+ 119 0056 C9 F0 01 FF             		movw	r8, #-255
+ 120 005a AD F0                   		movw	ax, r8
+ 121 005c BD F2                   		movw	r10, ax
+ 122 005e FA F2                   		movw	hl, r10
+ 123 0060 8B                      		mov	a, [hl]
+ 124 0061 9D F0                   		mov	r8, a
+ 125 0063 31 6A                   		shr	a, 6
+ 126 0065 9D F0                   		mov	r8, a
+ 127 0067 5A F0 01                		and	r8, #1
+ 128 006a 61 F8                   		sknz
+ 129 006c EC 56 00 00             		 br	!!.L3
+ 130                             		 # zero-comparison eliminated
+  48:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** }
+ 131                             		.loc 1 48 0 is_stmt 1
+ 132 0070 10 06                   		addw	sp, #6
+ 133 0072 D7                      		ret
+ 134                             	.LFE0:
+ 136                             		.section	.rodata
+ 137                             	.LC2:
+ 138 0006 41 50 00                		.string	"AP"
+ 139                             	.LC3:
+ 140 0009 31 20 00                		.string	"1 "
+ 141                             	.LC4:
+ 142 000c 32 20 00                		.string	"2 "
+ 143                             	.LC5:
+ 144 000f 50 41 00                		.string	"PA"
+ 145                             	.LC6:
+ 146 0012 20 20 00                		.string	"  "
+ 147                             	.LC7:
+ 148 0015 43 48 00                		.string	"CH"
+ 149                             	.LC8:
+ 150 0018 31 37 00                		.string	"17"
+ 151                             	.LC9:
+ 152 001b 31 39 00                		.string	"19"
+ 153                             	.LC10:
+ 154 001e 2D 2D 00                		.string	"--"
+ 155                             		.section	.text.Travel_Acquisition_Procedure_Without_Eencoder,"ax",@progbits
+ 156                             		.global	_Travel_Acquisition_Procedure_Without_Eencoder
+ 158                             	_Travel_Acquisition_Procedure_Without_Eencoder:
+ 159                             	.LFB1:
+  49:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  50:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** /*
+  51:../DGC_A230_Functions/DGC_A230_Program_Mode.c ****  * Acquisition procedure WITHOUT encoder
+  52:../DGC_A230_Functions/DGC_A230_Program_Mode.c ****  */
+  53:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** void Travel_Acquisition_Procedure_Without_Eencoder(void)
+  54:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** {
+ 160                             		.loc 1 54 0
+ 161                             		; start of function
+ 162                             		; push 2: r16
+ 163                             		; locals: 8 bytes
+ 164                             		; outgoing: 6 bytes
+ 165                             		; uses ES register
+ 166 0000 61 EF                   		sel	rb2
+ 167 0002 C1                      		push	ax ; r16
+ 168                             	.LCFI1:
+ 169 0003 61 CF                   		sel	rb0
+ 170 0005 20 0E                   		subw	sp, #14
+ 171                             	.LCFI2:
+  55:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	uint16_t M1_Time_Counter, M2_Time_Counter, Parameter_17, Parameter_19;
+  56:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	uint16_t Temp_Torque;
+  57:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  58:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Auto_Close_Gate_Retry_Number = Auto_Close_Retry_Number;
+ 172                             		.loc 1 58 0
+ 173 0007 8F 00 00                		mov	a, !_Auto_Close_Retry_Number
+ 174 000a 9D F0                   		mov	r8, a
+ 175 000c 9F 00 00                		mov	!_Auto_Close_Gate_Retry_Number, a
+  59:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Auto_Close_Gate_Timer_Counter = 0;
+ 176                             		.loc 1 59 0
+ 177 000f F6                      		clrw	ax
+ 178 0010 BF 00 00                		movw	!_Auto_Close_Gate_Timer_Counter, ax
+  60:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Auto_Close_Gate_Timer_Enable = 0;
+ 179                             		.loc 1 60 0
+ 180 0013 F5 00 00                		clrb	!_Auto_Close_Gate_Timer_Enable
+  61:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	/*
+  62:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	 * Start  opening travel acquisition
+  63:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	 */
+  64:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "AP", 2);								// Display "AP 1"
+ 181                             		.loc 1 64 0
+ 182 0016 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 183 001a C9 F2 06 00             		movw	r10, #.LC2
+ 184 001e C9 F0 02 00             		movw	r8, #2
+ 185 0022 AD F4                   		movw	ax, r12
+ 186 0024 B8 00                   		movw	[sp], ax
+ 187 0026 AD F2                   		movw	ax, r10
+ 188 0028 B8 02                   		movw	[sp+2], ax
+ 189 002a AD F0                   		movw	ax, r8
+ 190 002c B8 04                   		movw	[sp+4], ax
+ 191 002e FC 00 00 00             		call	!!%code(_memcpy)
+  65:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Value, "1 ", 2);
+ 192                             		.loc 1 65 0
+ 193 0032 C9 F4 00 00             		movw	r12, #_Parameter_Value
+ 194 0036 C9 F2 09 00             		movw	r10, #.LC3
+ 195 003a C9 F0 02 00             		movw	r8, #2
+ 196 003e AD F4                   		movw	ax, r12
+ 197 0040 B8 00                   		movw	[sp], ax
+ 198 0042 AD F2                   		movw	ax, r10
+ 199 0044 B8 02                   		movw	[sp+2], ax
+ 200 0046 AD F0                   		movw	ax, r8
+ 201 0048 B8 04                   		movw	[sp+4], ax
+ 202 004a FC 00 00 00             		call	!!%code(_memcpy)
+  66:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  67:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M1_Torque_Setting = CFG_parameter.Motor_Torque_Maneuver;
+ 203                             		.loc 1 67 0
+ 204 004e AF 00 00                		movw	ax, !_CFG_parameter+72
+ 205 0051 BD F0                   		movw	r8, ax
+ 206 0053 BF 00 00                		movw	!_M1_Torque_Setting, ax
+  68:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M2_Torque_Setting = CFG_parameter.Motor_Torque_Maneuver;
+ 207                             		.loc 1 68 0
+ 208 0056 AF 00 00                		movw	ax, !_CFG_parameter+72
+ 209 0059 BD F0                   		movw	r8, ax
+ 210 005b BF 00 00                		movw	!_M2_Torque_Setting, ax
+  69:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  70:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M1_Timestamp = UNDEFINE_TIMESTAMP;
+ 211                             		.loc 1 70 0
+ 212 005e F5 00 00                		clrb	!_M1_Timestamp
+  71:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M2_Timestamp = UNDEFINE_TIMESTAMP;
+ 213                             		.loc 1 71 0
+ 214 0061 F5 00 00                		clrb	!_M2_Timestamp
+  72:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  73:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	TRIG_EN = 1;
+ 215                             		.loc 1 73 0
+ 216 0064 C9 F0 03 FF             		movw	r8, #-253
+ 217 0068 AD F0                   		movw	ax, r8
+ 218 006a BD F4                   		movw	r12, ax
+ 219 006c FA F4                   		movw	hl, r12
+ 220 006e 8B                      		mov	a, [hl]
+ 221 006f 9D F2                   		mov	r10, a
+ 222 0071 6A F2 01                		or	r10, #1
+ 223 0074 AD F0                   		movw	ax, r8
+ 224 0076 BD F6                   		movw	r14, ax
+ 225 0078 EA F6                   		movw	de, r14
+ 226 007a 8D F2                   		mov	a, r10
+ 227 007c 99                      		mov	[de], a
+  74:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	R_INTC0_Start();												// Enable Sync to control, Motor 1 start opening
+ 228                             		.loc 1 74 0
+ 229 007d FC 00 00 00             		call	!!%code(_R_INTC0_Start)
+  75:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Motor1_Open_Enable();											// Enable Motor #1 Open
+ 230                             		.loc 1 75 0
+ 231 0081 FC 00 00 00             		call	!!%code(_Motor1_Open_Enable)
+  76:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  77:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Tick_Count = 0;													// Reset Tick count
+ 232                             		.loc 1 77 0
+ 233 0085 F6                      		clrw	ax
+ 234 0086 BF 00 00                		movw	!_Tick_Count, ax
+  78:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M1_Tick_Count = 0;
+ 235                             		.loc 1 78 0
+ 236 0089 F6                      		clrw	ax
+ 237 008a BF 00 00                		movw	!_M1_Tick_Count, ax
+  79:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Leaf_No1_State = GATE_STATE_OPENING;
+ 238                             		.loc 1 79 0
+ 239 008d 51 02                   		mov	a, #2
+ 240 008f 9F 00 00                		mov	!_Leaf_No1_State, a
+  80:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  81:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	R_TAU0_Channel1_Start();										// Start Timer channel 1
+ 241                             		.loc 1 81 0
+ 242 0092 FC 00 00 00             		call	!!%code(_R_TAU0_Channel1_Start)
+  82:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  83:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	while(Tick_Count < CFG_parameter.Motor_No2_Open_Delay_Time);	// Delay time to enable Motor 2 Openi
+ 243                             		.loc 1 83 0
+ 244 0096 00                      		nop
+ 245                             	.L5:
+ 246                             		.loc 1 83 0 is_stmt 0 discriminator 1
+ 247 0097 AF 00 00                		movw	ax, !_CFG_parameter+40
+ 248 009a BD F2                   		movw	r10, ax
+ 249 009c AF 00 00                		movw	ax, !_Tick_Count
+ 250 009f BD F0                   		movw	r8, ax
+ 251 00a1 AD F2                   		movw	ax, r10
+ 252 00a3 46 F0                   		cmpw	ax, r8
+ 253 00a5 61 F3                   		 sknh
+ 254 00a7 EC 97 00 00             		 br	!!.L5
+  84:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Motor2_Open_Enable();											// Enable Motor #2 Open
+ 255                             		.loc 1 84 0 is_stmt 1
+ 256 00ab FC 00 00 00             		call	!!%code(_Motor2_Open_Enable)
+  85:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M2_Tick_Count = 0;												// Start counter to M2
+ 257                             		.loc 1 85 0
+ 258 00af F6                      		clrw	ax
+ 259 00b0 BF 00 00                		movw	!_M2_Tick_Count, ax
+  86:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Leaf_No2_State = GATE_STATE_OPENING;
+ 260                             		.loc 1 86 0
+ 261 00b3 51 02                   		mov	a, #2
+ 262 00b5 9F 00 00                		mov	!_Leaf_No2_State, a
+  87:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  88:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "AP", 2);								// Display "AP 2"
+ 263                             		.loc 1 88 0
+ 264 00b8 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 265 00bc C9 F2 06 00             		movw	r10, #.LC2
+ 266 00c0 C9 F0 02 00             		movw	r8, #2
+ 267 00c4 AD F4                   		movw	ax, r12
+ 268 00c6 B8 00                   		movw	[sp], ax
+ 269 00c8 AD F2                   		movw	ax, r10
+ 270 00ca B8 02                   		movw	[sp+2], ax
+ 271 00cc AD F0                   		movw	ax, r8
+ 272 00ce B8 04                   		movw	[sp+4], ax
+ 273 00d0 FC 00 00 00             		call	!!%code(_memcpy)
+  89:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Value, "2 ", 2);
+ 274                             		.loc 1 89 0
+ 275 00d4 C9 F4 00 00             		movw	r12, #_Parameter_Value
+ 276 00d8 C9 F2 0C 00             		movw	r10, #.LC4
+ 277 00dc C9 F0 02 00             		movw	r8, #2
+ 278 00e0 AD F4                   		movw	ax, r12
+ 279 00e2 B8 00                   		movw	[sp], ax
+ 280 00e4 AD F2                   		movw	ax, r10
+ 281 00e6 B8 02                   		movw	[sp+2], ax
+ 282 00e8 AD F0                   		movw	ax, r8
+ 283 00ea B8 04                   		movw	[sp+4], ax
+ 284 00ec FC 00 00 00             		call	!!%code(_memcpy)
+  90:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  91:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Tick_Count = 0;													// Reset Tick count
+ 285                             		.loc 1 91 0
+ 286 00f0 F6                      		clrw	ax
+ 287 00f1 BF 00 00                		movw	!_Tick_Count, ax
+  92:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	while (Tick_Count < 200);										// Display 2 seconds "AP 2"
+ 288                             		.loc 1 92 0
+ 289 00f4 00                      		nop
+ 290                             	.L6:
+ 291                             		.loc 1 92 0 is_stmt 0 discriminator 1
+ 292 00f5 AF 00 00                		movw	ax, !_Tick_Count
+ 293 00f8 BD F0                   		movw	r8, ax
+ 294 00fa 44 C7 00                		cmpw	ax, #199
+ 295 00fd 61 E3                   		 skh
+ 296 00ff EC F5 00 00             		 br	!!.L6
+  93:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  94:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "AP", 2);								// Display "AP 1"
+ 297                             		.loc 1 94 0 is_stmt 1
+ 298 0103 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 299 0107 C9 F2 06 00             		movw	r10, #.LC2
+ 300 010b C9 F0 02 00             		movw	r8, #2
+ 301 010f AD F4                   		movw	ax, r12
+ 302 0111 B8 00                   		movw	[sp], ax
+ 303 0113 AD F2                   		movw	ax, r10
+ 304 0115 B8 02                   		movw	[sp+2], ax
+ 305 0117 AD F0                   		movw	ax, r8
+ 306 0119 B8 04                   		movw	[sp+4], ax
+ 307 011b FC 00 00 00             		call	!!%code(_memcpy)
+  95:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Value, "1 ", 2);
+ 308                             		.loc 1 95 0
+ 309 011f C9 F4 00 00             		movw	r12, #_Parameter_Value
+ 310 0123 C9 F2 09 00             		movw	r10, #.LC3
+ 311 0127 C9 F0 02 00             		movw	r8, #2
+ 312 012b AD F4                   		movw	ax, r12
+ 313 012d B8 00                   		movw	[sp], ax
+ 314 012f AD F2                   		movw	ax, r10
+ 315 0131 B8 02                   		movw	[sp+2], ax
+ 316 0133 AD F0                   		movw	ax, r8
+ 317 0135 B8 04                   		movw	[sp+4], ax
+ 318 0137 FC 00 00 00             		call	!!%code(_memcpy)
+  96:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+  97:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	if (CFG_parameter.Limit_Switch_Config == 0x00)					// wait for Gate 1 reach to Opened position
+ 319                             		.loc 1 97 0
+ 320 013b 8F 00 00                		mov	a, !_CFG_parameter+96
+ 321 013e 9D F0                   		mov	r8, a
+ 322 0140 D4 F0                   		cmp0	r8
+ 323 0142 61 E8                   		 skz
+ 324 0144 EC 82 01 00             		 br	!!.L7
+  98:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+  99:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		while (PROG_KEY);
+ 325                             		.loc 1 99 0
+ 326 0148 00                      		nop
+ 327                             	.L8:
+ 328                             		.loc 1 99 0 is_stmt 0 discriminator 1
+ 329 0149 C9 F0 01 FF             		movw	r8, #-255
+ 330 014d AD F0                   		movw	ax, r8
+ 331 014f BD E8                   		movw	r16, ax
+ 332 0151 FA E8                   		movw	hl, r16
+ 333 0153 8B                      		mov	a, [hl]
+ 334 0154 9D F0                   		mov	r8, a
+ 335 0156 31 6A                   		shr	a, 6
+ 336 0158 9D F0                   		mov	r8, a
+ 337 015a 5A F0 01                		and	r8, #1
+ 338 015d 61 E8                   		skz
+ 339 015f EC 49 01 00             		 br	!!.L8
+ 340                             		 # zero-comparison eliminated
+ 100:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		while (!PROG_KEY);
+ 341                             		.loc 1 100 0 is_stmt 1
+ 342 0163 00                      		nop
+ 343                             	.L9:
+ 344                             		.loc 1 100 0 is_stmt 0 discriminator 1
+ 345 0164 C9 F0 01 FF             		movw	r8, #-255
+ 346 0168 AD F0                   		movw	ax, r8
+ 347 016a BD F2                   		movw	r10, ax
+ 348 016c FA F2                   		movw	hl, r10
+ 349 016e 8B                      		mov	a, [hl]
+ 350 016f 9D F0                   		mov	r8, a
+ 351 0171 31 6A                   		shr	a, 6
+ 352 0173 9D F0                   		mov	r8, a
+ 353 0175 5A F0 01                		and	r8, #1
+ 354 0178 61 F8                   		sknz
+ 355 017a EC 64 01 00             		 br	!!.L9
+ 356                             		 # zero-comparison eliminated
+ 357 017e EC 9D 01 00             		br	!!.L10
+ 358                             	.L7:
+ 101:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	}
+ 102:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	else
+ 103:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 104:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		while (!FCA1_IN);
+ 359                             		.loc 1 104 0 is_stmt 1
+ 360 0182 00                      		nop
+ 361                             	.L11:
+ 362                             		.loc 1 104 0 is_stmt 0 discriminator 1
+ 363 0183 C9 F0 04 FF             		movw	r8, #-252
+ 364 0187 AD F0                   		movw	ax, r8
+ 365 0189 BD F4                   		movw	r12, ax
+ 366 018b FA F4                   		movw	hl, r12
+ 367 018d 8B                      		mov	a, [hl]
+ 368 018e 9D F0                   		mov	r8, a
+ 369 0190 31 1A                   		shr	a, 1
+ 370 0192 9D F0                   		mov	r8, a
+ 371 0194 5A F0 01                		and	r8, #1
+ 372 0197 61 F8                   		sknz
+ 373 0199 EC 83 01 00             		 br	!!.L11
+ 374                             		 # zero-comparison eliminated
+ 375                             	.L10:
+ 105:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	}
+ 106:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 107:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Leaf_No1_State = GATE_STATE_OPENED;
+ 376                             		.loc 1 107 0 is_stmt 1
+ 377 019d 51 03                   		mov	a, #3
+ 378 019f 9F 00 00                		mov	!_Leaf_No1_State, a
+ 108:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 109:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Motor1_Disable();												// Stop Motor 1
+ 379                             		.loc 1 109 0
+ 380 01a2 FC 00 00 00             		call	!!%code(_Motor1_Disable)
+ 110:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M1_Time_Counter = M1_Tick_Count;								// Motor 1 counter value
+ 381                             		.loc 1 110 0
+ 382 01a6 AF 00 00                		movw	ax, !_M1_Tick_Count
+ 383 01a9 BD F0                   		movw	r8, ax
+ 384 01ab B8 08                   		movw	[sp+8], ax
+ 111:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 112:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "AP", 2);								// Display "AP 2"
+ 385                             		.loc 1 112 0
+ 386 01ad C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 387 01b1 C9 F2 06 00             		movw	r10, #.LC2
+ 388 01b5 C9 F0 02 00             		movw	r8, #2
+ 389 01b9 AD F4                   		movw	ax, r12
+ 390 01bb B8 00                   		movw	[sp], ax
+ 391 01bd AD F2                   		movw	ax, r10
+ 392 01bf B8 02                   		movw	[sp+2], ax
+ 393 01c1 AD F0                   		movw	ax, r8
+ 394 01c3 B8 04                   		movw	[sp+4], ax
+ 395 01c5 FC 00 00 00             		call	!!%code(_memcpy)
+ 113:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Value, "2 ", 2);
+ 396                             		.loc 1 113 0
+ 397 01c9 C9 F4 00 00             		movw	r12, #_Parameter_Value
+ 398 01cd C9 F2 0C 00             		movw	r10, #.LC4
+ 399 01d1 C9 F0 02 00             		movw	r8, #2
+ 400 01d5 AD F4                   		movw	ax, r12
+ 401 01d7 B8 00                   		movw	[sp], ax
+ 402 01d9 AD F2                   		movw	ax, r10
+ 403 01db B8 02                   		movw	[sp+2], ax
+ 404 01dd AD F0                   		movw	ax, r8
+ 405 01df B8 04                   		movw	[sp+4], ax
+ 406 01e1 FC 00 00 00             		call	!!%code(_memcpy)
+ 114:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 115:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	if (CFG_parameter.Limit_Switch_Config == 0x00)					// wait for Gate 2 reach to Opened position
+ 407                             		.loc 1 115 0
+ 408 01e5 8F 00 00                		mov	a, !_CFG_parameter+96
+ 409 01e8 9D F0                   		mov	r8, a
+ 410 01ea D4 F0                   		cmp0	r8
+ 411 01ec 61 E8                   		 skz
+ 412 01ee EC 2C 02 00             		 br	!!.L12
+ 116:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 117:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		while (PROG_KEY);
+ 413                             		.loc 1 117 0
+ 414 01f2 00                      		nop
+ 415                             	.L13:
+ 416                             		.loc 1 117 0 is_stmt 0 discriminator 1
+ 417 01f3 C9 F0 01 FF             		movw	r8, #-255
+ 418 01f7 AD F0                   		movw	ax, r8
+ 419 01f9 BD F6                   		movw	r14, ax
+ 420 01fb FA F6                   		movw	hl, r14
+ 421 01fd 8B                      		mov	a, [hl]
+ 422 01fe 9D F0                   		mov	r8, a
+ 423 0200 31 6A                   		shr	a, 6
+ 424 0202 9D F0                   		mov	r8, a
+ 425 0204 5A F0 01                		and	r8, #1
+ 426 0207 61 E8                   		skz
+ 427 0209 EC F3 01 00             		 br	!!.L13
+ 428                             		 # zero-comparison eliminated
+ 118:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		while (!PROG_KEY);
+ 429                             		.loc 1 118 0 is_stmt 1
+ 430 020d 00                      		nop
+ 431                             	.L14:
+ 432                             		.loc 1 118 0 is_stmt 0 discriminator 1
+ 433 020e C9 F0 01 FF             		movw	r8, #-255
+ 434 0212 AD F0                   		movw	ax, r8
+ 435 0214 BD E8                   		movw	r16, ax
+ 436 0216 FA E8                   		movw	hl, r16
+ 437 0218 8B                      		mov	a, [hl]
+ 438 0219 9D F0                   		mov	r8, a
+ 439 021b 31 6A                   		shr	a, 6
+ 440 021d 9D F0                   		mov	r8, a
+ 441 021f 5A F0 01                		and	r8, #1
+ 442 0222 61 F8                   		sknz
+ 443 0224 EC 0E 02 00             		 br	!!.L14
+ 444                             		 # zero-comparison eliminated
+ 445 0228 EC 47 02 00             		br	!!.L15
+ 446                             	.L12:
+ 119:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	}
+ 120:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	else
+ 121:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 122:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		while (!FCA1_IN);
+ 447                             		.loc 1 122 0 is_stmt 1
+ 448 022c 00                      		nop
+ 449                             	.L16:
+ 450                             		.loc 1 122 0 is_stmt 0 discriminator 1
+ 451 022d C9 F0 04 FF             		movw	r8, #-252
+ 452 0231 AD F0                   		movw	ax, r8
+ 453 0233 BD F2                   		movw	r10, ax
+ 454 0235 FA F2                   		movw	hl, r10
+ 455 0237 8B                      		mov	a, [hl]
+ 456 0238 9D F0                   		mov	r8, a
+ 457 023a 31 1A                   		shr	a, 1
+ 458 023c 9D F0                   		mov	r8, a
+ 459 023e 5A F0 01                		and	r8, #1
+ 460 0241 61 F8                   		sknz
+ 461 0243 EC 2D 02 00             		 br	!!.L16
+ 462                             		 # zero-comparison eliminated
+ 463                             	.L15:
+ 123:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	}
+ 124:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 125:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Leaf_No2_State = GATE_STATE_OPENED;
+ 464                             		.loc 1 125 0 is_stmt 1
+ 465 0247 51 03                   		mov	a, #3
+ 466 0249 9F 00 00                		mov	!_Leaf_No2_State, a
+ 126:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Motor2_Disable();												// Stop Motor 1
+ 467                             		.loc 1 126 0
+ 468 024c FC 00 00 00             		call	!!%code(_Motor2_Disable)
+ 127:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M2_Time_Counter = M2_Tick_Count;								// Motor 2 counter value
+ 469                             		.loc 1 127 0
+ 470 0250 AF 00 00                		movw	ax, !_M2_Tick_Count
+ 471 0253 BD F0                   		movw	r8, ax
+ 472 0255 B8 06                   		movw	[sp+6], ax
+ 128:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 129:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	R_TAU0_Channel1_Stop();											// Stop Timer channel 1
+ 473                             		.loc 1 129 0
+ 474 0257 FC 00 00 00             		call	!!%code(_R_TAU0_Channel1_Stop)
+ 130:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	R_INTC0_Stop();													// Disable Sync
+ 475                             		.loc 1 130 0
+ 476 025b FC 00 00 00             		call	!!%code(_R_INTC0_Stop)
+ 131:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M1_PWM = M2_PWM = 1;
+ 477                             		.loc 1 131 0
+ 478 025f C9 F0 00 FF             		movw	r8, #-256
+ 479 0263 C9 F2 00 FF             		movw	r10, #-256
+ 480 0267 E4 F4                   		oneb	r12
+ 481 0269 8D F4                   		mov	a, r12
+ 482 026b 5C 01                   		and	a, #1
+ 483 026d 9D F5                   		mov	r13, a
+ 484 026f 31 59                   		shl	a, 5
+ 485 0271 9D F5                   		mov	r13, a
+ 486 0273 AD F2                   		movw	ax, r10
+ 487 0275 BD E8                   		movw	r16, ax
+ 488 0277 FA E8                   		movw	hl, r16
+ 489 0279 8B                      		mov	a, [hl]
+ 490 027a 9D F6                   		mov	r14, a
+ 491 027c 5A F6 DF                		and	r14, #-33
+ 492 027f 8D F6                   		mov	a, r14
+ 493 0281 6B F5                   		or	a, r13
+ 494 0283 9D F5                   		mov	r13, a
+ 495 0285 AD F2                   		movw	ax, r10
+ 496 0287 BD F6                   		movw	r14, ax
+ 497 0289 EA F6                   		movw	de, r14
+ 498 028b 8D F5                   		mov	a, r13
+ 499 028d 99                      		mov	[de], a
+ 500 028e 8D F4                   		mov	a, r12
+ 501 0290 5C 01                   		and	a, #1
+ 502 0292 9D F2                   		mov	r10, a
+ 503 0294 31 69                   		shl	a, 6
+ 504 0296 9D F2                   		mov	r10, a
+ 505 0298 AD F0                   		movw	ax, r8
+ 506 029a BD E8                   		movw	r16, ax
+ 507 029c FA E8                   		movw	hl, r16
+ 508 029e 8B                      		mov	a, [hl]
+ 509 029f 9D F3                   		mov	r11, a
+ 510 02a1 5A F3 BF                		and	r11, #-65
+ 511 02a4 8D F3                   		mov	a, r11
+ 512 02a6 6B F2                   		or	a, r10
+ 513 02a8 9D F2                   		mov	r10, a
+ 514 02aa AD F0                   		movw	ax, r8
+ 515 02ac BD F4                   		movw	r12, ax
+ 516 02ae EA F4                   		movw	de, r12
+ 517 02b0 8D F2                   		mov	a, r10
+ 518 02b2 99                      		mov	[de], a
+ 132:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	TRIG_EN = 0;
+ 519                             		.loc 1 132 0
+ 520 02b3 C9 F0 03 FF             		movw	r8, #-253
+ 521 02b7 AD F0                   		movw	ax, r8
+ 522 02b9 BD F6                   		movw	r14, ax
+ 523 02bb FA F6                   		movw	hl, r14
+ 524 02bd 8B                      		mov	a, [hl]
+ 525 02be 9D F2                   		mov	r10, a
+ 526 02c0 5A F2 FE                		and	r10, #-2
+ 527 02c3 AD F0                   		movw	ax, r8
+ 528 02c5 BD E8                   		movw	r16, ax
+ 529 02c7 EA E8                   		movw	de, r16
+ 530 02c9 8D F2                   		mov	a, r10
+ 531 02cb 99                      		mov	[de], a
+ 133:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 134:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "PA", 2);								// Display "PA  "
+ 532                             		.loc 1 134 0
+ 533 02cc C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 534 02d0 C9 F2 0F 00             		movw	r10, #.LC5
+ 535 02d4 C9 F0 02 00             		movw	r8, #2
+ 536 02d8 AD F4                   		movw	ax, r12
+ 537 02da B8 00                   		movw	[sp], ax
+ 538 02dc AD F2                   		movw	ax, r10
+ 539 02de B8 02                   		movw	[sp+2], ax
+ 540 02e0 AD F0                   		movw	ax, r8
+ 541 02e2 B8 04                   		movw	[sp+4], ax
+ 542 02e4 FC 00 00 00             		call	!!%code(_memcpy)
+ 135:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Value, "  ", 2);
+ 543                             		.loc 1 135 0
+ 544 02e8 C9 F4 00 00             		movw	r12, #_Parameter_Value
+ 545 02ec C9 F2 12 00             		movw	r10, #.LC6
+ 546 02f0 C9 F0 02 00             		movw	r8, #2
+ 547 02f4 AD F4                   		movw	ax, r12
+ 548 02f6 B8 00                   		movw	[sp], ax
+ 549 02f8 AD F2                   		movw	ax, r10
+ 550 02fa B8 02                   		movw	[sp+2], ax
+ 551 02fc AD F0                   		movw	ax, r8
+ 552 02fe B8 04                   		movw	[sp+4], ax
+ 553 0300 FC 00 00 00             		call	!!%code(_memcpy)
+ 136:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 137:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	HMI_Flash_Enable = 1;
+ 554                             		.loc 1 137 0
+ 555 0304 E5 00 00                		oneb	!_HMI_Flash_Enable
+ 138:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	HMI_Flash_Count = 0;
+ 556                             		.loc 1 138 0
+ 557 0307 F5 00 00                		clrb	!_HMI_Flash_Count
+ 139:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	while (HMI_Flash_Count <6);										// 3 second
+ 558                             		.loc 1 139 0
+ 559 030a 00                      		nop
+ 560                             	.L17:
+ 561                             		.loc 1 139 0 is_stmt 0 discriminator 1
+ 562 030b 8F 00 00                		mov	a, !_HMI_Flash_Count
+ 563 030e 9D F0                   		mov	r8, a
+ 564 0310 4A F0 05                		cmp	r8, #5
+ 565 0313 61 E3                   		 skh
+ 566 0315 EC 0B 03 00             		 br	!!.L17
+ 140:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	HMI_Flash_Enable = 0;
+ 567                             		.loc 1 140 0 is_stmt 1
+ 568 0319 F5 00 00                		clrb	!_HMI_Flash_Enable
+ 141:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Mask = 0xff;
+ 569                             		.loc 1 141 0
+ 570 031c 51 FF                   		mov	a, #-1
+ 571 031e 9F 00 00                		mov	!_Mask, a
+ 142:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 143:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	/*
+ 144:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	 * Start  Closing travel acquisition
+ 145:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	 */
+ 146:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "CH", 2);								// Display "CH 2"
+ 572                             		.loc 1 146 0
+ 573 0321 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 574 0325 C9 F2 15 00             		movw	r10, #.LC7
+ 575 0329 C9 F0 02 00             		movw	r8, #2
+ 576 032d AD F4                   		movw	ax, r12
+ 577 032f B8 00                   		movw	[sp], ax
+ 578 0331 AD F2                   		movw	ax, r10
+ 579 0333 B8 02                   		movw	[sp+2], ax
+ 580 0335 AD F0                   		movw	ax, r8
+ 581 0337 B8 04                   		movw	[sp+4], ax
+ 582 0339 FC 00 00 00             		call	!!%code(_memcpy)
+ 147:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Value, "2 ", 2);
+ 583                             		.loc 1 147 0
+ 584 033d C9 F4 00 00             		movw	r12, #_Parameter_Value
+ 585 0341 C9 F2 0C 00             		movw	r10, #.LC4
+ 586 0345 C9 F0 02 00             		movw	r8, #2
+ 587 0349 AD F4                   		movw	ax, r12
+ 588 034b B8 00                   		movw	[sp], ax
+ 589 034d AD F2                   		movw	ax, r10
+ 590 034f B8 02                   		movw	[sp+2], ax
+ 591 0351 AD F0                   		movw	ax, r8
+ 592 0353 B8 04                   		movw	[sp+4], ax
+ 593 0355 FC 00 00 00             		call	!!%code(_memcpy)
+ 148:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 149:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	TRIG_EN = 1;
+ 594                             		.loc 1 149 0
+ 595 0359 C9 F0 03 FF             		movw	r8, #-253
+ 596 035d AD F0                   		movw	ax, r8
+ 597 035f BD F4                   		movw	r12, ax
+ 598 0361 FA F4                   		movw	hl, r12
+ 599 0363 8B                      		mov	a, [hl]
+ 600 0364 9D F2                   		mov	r10, a
+ 601 0366 6A F2 01                		or	r10, #1
+ 602 0369 AD F0                   		movw	ax, r8
+ 603 036b BD F6                   		movw	r14, ax
+ 604 036d EA F6                   		movw	de, r14
+ 605 036f 8D F2                   		mov	a, r10
+ 606 0371 99                      		mov	[de], a
+ 150:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	R_INTC0_Start();												// Enable Sync to control, Motor 1 start opening
+ 607                             		.loc 1 150 0
+ 608 0372 FC 00 00 00             		call	!!%code(_R_INTC0_Start)
+ 151:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Motor2_Close_Enable();											// Enable Motor #2 to close
+ 609                             		.loc 1 151 0
+ 610 0376 FC 00 00 00             		call	!!%code(_Motor2_Close_Enable)
+ 152:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 153:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Tick_Count = 0;													// Reset Tick count
+ 611                             		.loc 1 153 0
+ 612 037a F6                      		clrw	ax
+ 613 037b BF 00 00                		movw	!_Tick_Count, ax
+ 154:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M2_Tick_Count = 0;
+ 614                             		.loc 1 154 0
+ 615 037e F6                      		clrw	ax
+ 616 037f BF 00 00                		movw	!_M2_Tick_Count, ax
+ 155:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 156:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Leaf_No2_State = GATE_STATE_CLOSING;
+ 617                             		.loc 1 156 0
+ 618 0382 51 04                   		mov	a, #4
+ 619 0384 9F 00 00                		mov	!_Leaf_No2_State, a
+ 157:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 158:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	R_TAU0_Channel1_Start();										// Start Timer channel 1
+ 620                             		.loc 1 158 0
+ 621 0387 FC 00 00 00             		call	!!%code(_R_TAU0_Channel1_Start)
+ 159:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 160:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	while(Tick_Count < CFG_parameter.Motor_No1_Close_Delay_Time);	// Delay time to enable Motor 1 Clos
+ 622                             		.loc 1 160 0
+ 623 038b 00                      		nop
+ 624                             	.L18:
+ 625                             		.loc 1 160 0 is_stmt 0 discriminator 1
+ 626 038c AF 00 00                		movw	ax, !_CFG_parameter+42
+ 627 038f BD F2                   		movw	r10, ax
+ 628 0391 AF 00 00                		movw	ax, !_Tick_Count
+ 629 0394 BD F0                   		movw	r8, ax
+ 630 0396 AD F2                   		movw	ax, r10
+ 631 0398 46 F0                   		cmpw	ax, r8
+ 632 039a 61 F3                   		 sknh
+ 633 039c EC 8C 03 00             		 br	!!.L18
+ 161:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Motor1_Close_Enable();											// Enable Motor #1 to close
+ 634                             		.loc 1 161 0 is_stmt 1
+ 635 03a0 FC 00 00 00             		call	!!%code(_Motor1_Close_Enable)
+ 162:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M1_Tick_Count = 0;												// Start counter to M1
+ 636                             		.loc 1 162 0
+ 637 03a4 F6                      		clrw	ax
+ 638 03a5 BF 00 00                		movw	!_M1_Tick_Count, ax
+ 163:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Leaf_No1_State = GATE_STATE_CLOSING;
+ 639                             		.loc 1 163 0
+ 640 03a8 51 04                   		mov	a, #4
+ 641 03aa 9F 00 00                		mov	!_Leaf_No1_State, a
+ 164:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 165:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "CH", 2);								// Display "CH 1"
+ 642                             		.loc 1 165 0
+ 643 03ad C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 644 03b1 C9 F2 15 00             		movw	r10, #.LC7
+ 645 03b5 C9 F0 02 00             		movw	r8, #2
+ 646 03b9 AD F4                   		movw	ax, r12
+ 647 03bb B8 00                   		movw	[sp], ax
+ 648 03bd AD F2                   		movw	ax, r10
+ 649 03bf B8 02                   		movw	[sp+2], ax
+ 650 03c1 AD F0                   		movw	ax, r8
+ 651 03c3 B8 04                   		movw	[sp+4], ax
+ 652 03c5 FC 00 00 00             		call	!!%code(_memcpy)
+ 166:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Value, "1 ", 2);
+ 653                             		.loc 1 166 0
+ 654 03c9 C9 F4 00 00             		movw	r12, #_Parameter_Value
+ 655 03cd C9 F2 09 00             		movw	r10, #.LC3
+ 656 03d1 C9 F0 02 00             		movw	r8, #2
+ 657 03d5 AD F4                   		movw	ax, r12
+ 658 03d7 B8 00                   		movw	[sp], ax
+ 659 03d9 AD F2                   		movw	ax, r10
+ 660 03db B8 02                   		movw	[sp+2], ax
+ 661 03dd AD F0                   		movw	ax, r8
+ 662 03df B8 04                   		movw	[sp+4], ax
+ 663 03e1 FC 00 00 00             		call	!!%code(_memcpy)
+ 167:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 168:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Tick_Count = 0;													// Reset Tick count
+ 664                             		.loc 1 168 0
+ 665 03e5 F6                      		clrw	ax
+ 666 03e6 BF 00 00                		movw	!_Tick_Count, ax
+ 169:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	while (Tick_Count < 200);										// Display 2 seconds "CH 1"
+ 667                             		.loc 1 169 0
+ 668 03e9 00                      		nop
+ 669                             	.L19:
+ 670                             		.loc 1 169 0 is_stmt 0 discriminator 1
+ 671 03ea AF 00 00                		movw	ax, !_Tick_Count
+ 672 03ed BD F0                   		movw	r8, ax
+ 673 03ef 44 C7 00                		cmpw	ax, #199
+ 674 03f2 61 E3                   		 skh
+ 675 03f4 EC EA 03 00             		 br	!!.L19
+ 170:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 171:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "CH", 2);								// Display "CH 2"
+ 676                             		.loc 1 171 0 is_stmt 1
+ 677 03f8 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 678 03fc C9 F2 15 00             		movw	r10, #.LC7
+ 679 0400 C9 F0 02 00             		movw	r8, #2
+ 680 0404 AD F4                   		movw	ax, r12
+ 681 0406 B8 00                   		movw	[sp], ax
+ 682 0408 AD F2                   		movw	ax, r10
+ 683 040a B8 02                   		movw	[sp+2], ax
+ 684 040c AD F0                   		movw	ax, r8
+ 685 040e B8 04                   		movw	[sp+4], ax
+ 686 0410 FC 00 00 00             		call	!!%code(_memcpy)
+ 172:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Value, "2 ", 2);
+ 687                             		.loc 1 172 0
+ 688 0414 C9 F4 00 00             		movw	r12, #_Parameter_Value
+ 689 0418 C9 F2 0C 00             		movw	r10, #.LC4
+ 690 041c C9 F0 02 00             		movw	r8, #2
+ 691 0420 AD F4                   		movw	ax, r12
+ 692 0422 B8 00                   		movw	[sp], ax
+ 693 0424 AD F2                   		movw	ax, r10
+ 694 0426 B8 02                   		movw	[sp+2], ax
+ 695 0428 AD F0                   		movw	ax, r8
+ 696 042a B8 04                   		movw	[sp+4], ax
+ 697 042c FC 00 00 00             		call	!!%code(_memcpy)
+ 173:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 174:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	if (CFG_parameter.Limit_Switch_Config == 0x01)					// wait for Gate 2 reach to Closed position
+ 698                             		.loc 1 174 0
+ 699 0430 8F 00 00                		mov	a, !_CFG_parameter+96
+ 700 0433 9D F0                   		mov	r8, a
+ 701 0435 4A F0 01                		cmp	r8, #1
+ 702 0438 61 E8                   		 skz
+ 703 043a EC 5A 04 00             		 br	!!.L20
+ 175:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 176:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		while (!FCC2_IN);
+ 704                             		.loc 1 176 0
+ 705 043e 00                      		nop
+ 706                             	.L21:
+ 707                             		.loc 1 176 0 is_stmt 0 discriminator 1
+ 708 043f C9 F0 0C FF             		movw	r8, #-244
+ 709 0443 AD F0                   		movw	ax, r8
+ 710 0445 BD E8                   		movw	r16, ax
+ 711 0447 EA E8                   		movw	de, r16
+ 712 0449 89                      		mov	a, [de]
+ 713 044a 5C 01                   		and	a, #1
+ 714 044c 9D F0                   		mov	r8, a
+ 715 044e D4 F0                   		cmp0	r8
+ 716 0450 61 F8                   		 sknz
+ 717 0452 EC 3F 04 00             		 br	!!.L21
+ 718 0456 EC 90 04 00             		br	!!.L22
+ 719                             	.L20:
+ 177:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	}
+ 178:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	else
+ 179:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 180:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		while (PROG_KEY);
+ 720                             		.loc 1 180 0 is_stmt 1
+ 721 045a 00                      		nop
+ 722                             	.L23:
+ 723                             		.loc 1 180 0 is_stmt 0 discriminator 1
+ 724 045b C9 F0 01 FF             		movw	r8, #-255
+ 725 045f AD F0                   		movw	ax, r8
+ 726 0461 BD F2                   		movw	r10, ax
+ 727 0463 FA F2                   		movw	hl, r10
+ 728 0465 8B                      		mov	a, [hl]
+ 729 0466 9D F0                   		mov	r8, a
+ 730 0468 31 6A                   		shr	a, 6
+ 731 046a 9D F0                   		mov	r8, a
+ 732 046c 5A F0 01                		and	r8, #1
+ 733 046f 61 E8                   		skz
+ 734 0471 EC 5B 04 00             		 br	!!.L23
+ 735                             		 # zero-comparison eliminated
+ 181:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		while (!PROG_KEY);
+ 736                             		.loc 1 181 0 is_stmt 1
+ 737 0475 00                      		nop
+ 738                             	.L24:
+ 739                             		.loc 1 181 0 is_stmt 0 discriminator 1
+ 740 0476 C9 F0 01 FF             		movw	r8, #-255
+ 741 047a AD F0                   		movw	ax, r8
+ 742 047c BD F4                   		movw	r12, ax
+ 743 047e FA F4                   		movw	hl, r12
+ 744 0480 8B                      		mov	a, [hl]
+ 745 0481 9D F0                   		mov	r8, a
+ 746 0483 31 6A                   		shr	a, 6
+ 747 0485 9D F0                   		mov	r8, a
+ 748 0487 5A F0 01                		and	r8, #1
+ 749 048a 61 F8                   		sknz
+ 750 048c EC 76 04 00             		 br	!!.L24
+ 751                             		 # zero-comparison eliminated
+ 752                             	.L22:
+ 182:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	}
+ 183:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 184:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Leaf_No2_State = GATE_STATE_CLOSED;
+ 753                             		.loc 1 184 0 is_stmt 1
+ 754 0490 E5 00 00                		oneb	!_Leaf_No2_State
+ 185:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Motor2_Disable();												// Stop Motor #2
+ 755                             		.loc 1 185 0
+ 756 0493 FC 00 00 00             		call	!!%code(_Motor2_Disable)
+ 186:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M2_Time_Counter += M2_Tick_Count;								// Motor 2 counter value
+ 757                             		.loc 1 186 0
+ 758 0497 AF 00 00                		movw	ax, !_M2_Tick_Count
+ 759 049a BD F0                   		movw	r8, ax
+ 760 049c A8 06                   		movw	ax, [sp+6]
+ 761 049e 06 F0                   		addw	ax, r8
+ 762 04a0 B8 06                   		movw	[sp+6], ax
+ 187:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 188:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "CH", 2);								// Display "CH 1"
+ 763                             		.loc 1 188 0
+ 764 04a2 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 765 04a6 C9 F2 15 00             		movw	r10, #.LC7
+ 766 04aa C9 F0 02 00             		movw	r8, #2
+ 767 04ae AD F4                   		movw	ax, r12
+ 768 04b0 B8 00                   		movw	[sp], ax
+ 769 04b2 AD F2                   		movw	ax, r10
+ 770 04b4 B8 02                   		movw	[sp+2], ax
+ 771 04b6 AD F0                   		movw	ax, r8
+ 772 04b8 B8 04                   		movw	[sp+4], ax
+ 773 04ba FC 00 00 00             		call	!!%code(_memcpy)
+ 189:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Value, "1 ", 2);
+ 774                             		.loc 1 189 0
+ 775 04be C9 F4 00 00             		movw	r12, #_Parameter_Value
+ 776 04c2 C9 F2 09 00             		movw	r10, #.LC3
+ 777 04c6 C9 F0 02 00             		movw	r8, #2
+ 778 04ca AD F4                   		movw	ax, r12
+ 779 04cc B8 00                   		movw	[sp], ax
+ 780 04ce AD F2                   		movw	ax, r10
+ 781 04d0 B8 02                   		movw	[sp+2], ax
+ 782 04d2 AD F0                   		movw	ax, r8
+ 783 04d4 B8 04                   		movw	[sp+4], ax
+ 784 04d6 FC 00 00 00             		call	!!%code(_memcpy)
+ 190:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 191:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	if (CFG_parameter.Limit_Switch_Config == 0x01)					// wait for Gate 1 reach to Closed position
+ 785                             		.loc 1 191 0
+ 786 04da 8F 00 00                		mov	a, !_CFG_parameter+96
+ 787 04dd 9D F0                   		mov	r8, a
+ 788 04df 4A F0 01                		cmp	r8, #1
+ 789 04e2 61 E8                   		 skz
+ 790 04e4 EC 07 05 00             		 br	!!.L25
+ 192:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 193:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		while (!FCC1_IN);
+ 791                             		.loc 1 193 0
+ 792 04e8 00                      		nop
+ 793                             	.L26:
+ 794                             		.loc 1 193 0 is_stmt 0 discriminator 1
+ 795 04e9 C9 F0 04 FF             		movw	r8, #-252
+ 796 04ed AD F0                   		movw	ax, r8
+ 797 04ef BD F6                   		movw	r14, ax
+ 798 04f1 FA F6                   		movw	hl, r14
+ 799 04f3 8B                      		mov	a, [hl]
+ 800 04f4 9D F0                   		mov	r8, a
+ 801 04f6 31 2A                   		shr	a, 2
+ 802 04f8 9D F0                   		mov	r8, a
+ 803 04fa 5A F0 01                		and	r8, #1
+ 804 04fd 61 F8                   		sknz
+ 805 04ff EC E9 04 00             		 br	!!.L26
+ 806                             		 # zero-comparison eliminated
+ 807 0503 EC 3D 05 00             		br	!!.L27
+ 808                             	.L25:
+ 194:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	}
+ 195:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	else
+ 196:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 197:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		while (PROG_KEY);
+ 809                             		.loc 1 197 0 is_stmt 1
+ 810 0507 00                      		nop
+ 811                             	.L28:
+ 812                             		.loc 1 197 0 is_stmt 0 discriminator 1
+ 813 0508 C9 F0 01 FF             		movw	r8, #-255
+ 814 050c AD F0                   		movw	ax, r8
+ 815 050e BD E8                   		movw	r16, ax
+ 816 0510 FA E8                   		movw	hl, r16
+ 817 0512 8B                      		mov	a, [hl]
+ 818 0513 9D F0                   		mov	r8, a
+ 819 0515 31 6A                   		shr	a, 6
+ 820 0517 9D F0                   		mov	r8, a
+ 821 0519 5A F0 01                		and	r8, #1
+ 822 051c 61 E8                   		skz
+ 823 051e EC 08 05 00             		 br	!!.L28
+ 824                             		 # zero-comparison eliminated
+ 198:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		while (!PROG_KEY);
+ 825                             		.loc 1 198 0 is_stmt 1
+ 826 0522 00                      		nop
+ 827                             	.L29:
+ 828                             		.loc 1 198 0 is_stmt 0 discriminator 1
+ 829 0523 C9 F0 01 FF             		movw	r8, #-255
+ 830 0527 AD F0                   		movw	ax, r8
+ 831 0529 BD F2                   		movw	r10, ax
+ 832 052b FA F2                   		movw	hl, r10
+ 833 052d 8B                      		mov	a, [hl]
+ 834 052e 9D F0                   		mov	r8, a
+ 835 0530 31 6A                   		shr	a, 6
+ 836 0532 9D F0                   		mov	r8, a
+ 837 0534 5A F0 01                		and	r8, #1
+ 838 0537 61 F8                   		sknz
+ 839 0539 EC 23 05 00             		 br	!!.L29
+ 840                             		 # zero-comparison eliminated
+ 841                             	.L27:
+ 199:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	}
+ 200:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 201:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Leaf_No1_State = GATE_STATE_CLOSED;
+ 842                             		.loc 1 201 0 is_stmt 1
+ 843 053d E5 00 00                		oneb	!_Leaf_No1_State
+ 202:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Motor1_Disable();												// Stop Motor 1
+ 844                             		.loc 1 202 0
+ 845 0540 FC 00 00 00             		call	!!%code(_Motor1_Disable)
+ 203:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	M1_Time_Counter += M1_Tick_Count;								// Motor 1 counter value
+ 846                             		.loc 1 203 0
+ 847 0544 AF 00 00                		movw	ax, !_M1_Tick_Count
+ 848 0547 BD F0                   		movw	r8, ax
+ 849 0549 A8 08                   		movw	ax, [sp+8]
+ 850 054b 06 F0                   		addw	ax, r8
+ 851 054d B8 08                   		movw	[sp+8], ax
+ 204:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 205:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	R_TAU0_Channel1_Stop();											// Stop Timer channel 1
+ 852                             		.loc 1 205 0
+ 853 054f FC 00 00 00             		call	!!%code(_R_TAU0_Channel1_Stop)
+ 206:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	R_INTC0_Stop();													// Disable Sync
+ 854                             		.loc 1 206 0
+ 855 0553 FC 00 00 00             		call	!!%code(_R_INTC0_Stop)
+ 207:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	TRIG_EN = 0;
+ 856                             		.loc 1 207 0
+ 857 0557 C9 F0 03 FF             		movw	r8, #-253
+ 858 055b AD F0                   		movw	ax, r8
+ 859 055d BD F4                   		movw	r12, ax
+ 860 055f FA F4                   		movw	hl, r12
+ 861 0561 8B                      		mov	a, [hl]
+ 862 0562 9D F2                   		mov	r10, a
+ 863 0564 5A F2 FE                		and	r10, #-2
+ 864 0567 AD F0                   		movw	ax, r8
+ 865 0569 BD F6                   		movw	r14, ax
+ 866 056b EA F6                   		movw	de, r14
+ 867 056d 8D F2                   		mov	a, r10
+ 868 056f 99                      		mov	[de], a
+ 208:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 209:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Parameter_17 = M1_Time_Counter/200;							// Calculate Parameter 17
+ 869                             		.loc 1 209 0
+ 870 0570 A8 08                   		movw	ax, [sp+8]
+ 871 0572 BD F0                   		movw	r8, ax
+ 872 0574 31 3E                   		shrw	ax, 3
+ 873 0576 BD F0                   		movw	r8, ax
+ 874 0578 30 7B 14                		movw	ax, #5243
+ 875 057b 12                      		movw	bc, ax
+ 876 057c AD F0                   		movw	ax, r8
+ 877 057e 61 DD                   		push	psw
+ 878 0580 71 7B FA                		di
+ 879 0583 CF E8 00 00             		mov	!MDUC, #0
+ 880 0587 BE F0                   		movw	MDAL, ax
+ 881 0589 13                      		movw	ax, bc
+ 882 058a BE F2                   		movw	MDAH, ax
+ 883 058c 00                      		nop
+ 884 058d AE F4                   		movw	ax, MDBH
+ 885 058f 61 CD                   		pop	psw ;umulhi3_highpart_g13 ax,r8,#5243
+ 886 0591 BD F0                   		movw	r8, ax
+ 887 0593 31 1E                   		shrw	ax, 1
+ 888 0595 BD F0                   		movw	r8, ax
+ 889 0597 B8 0C                   		movw	[sp+12], ax
+ 210:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Parameter_19 = M2_Time_Counter/200;							// Calculate Parameter 19
+ 890                             		.loc 1 210 0
+ 891 0599 A8 06                   		movw	ax, [sp+6]
+ 892 059b BD F0                   		movw	r8, ax
+ 893 059d 31 3E                   		shrw	ax, 3
+ 894 059f BD F0                   		movw	r8, ax
+ 895 05a1 30 7B 14                		movw	ax, #5243
+ 896 05a4 12                      		movw	bc, ax
+ 897 05a5 AD F0                   		movw	ax, r8
+ 898 05a7 61 DD                   		push	psw
+ 899 05a9 71 7B FA                		di
+ 900 05ac CF E8 00 00             		mov	!MDUC, #0
+ 901 05b0 BE F0                   		movw	MDAL, ax
+ 902 05b2 13                      		movw	ax, bc
+ 903 05b3 BE F2                   		movw	MDAH, ax
+ 904 05b5 00                      		nop
+ 905 05b6 AE F4                   		movw	ax, MDBH
+ 906 05b8 61 CD                   		pop	psw ;umulhi3_highpart_g13 ax,r8,#5243
+ 907 05ba BD F0                   		movw	r8, ax
+ 908 05bc 31 1E                   		shrw	ax, 1
+ 909 05be BD F0                   		movw	r8, ax
+ 910 05c0 B8 0A                   		movw	[sp+10], ax
+ 211:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 212:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	if (((Parameter_17 > 99) || (Parameter_19 > 99)) && (CFG_parameter.Double_Time_Enable == 0x00))
+ 911                             		.loc 1 212 0
+ 912 05c2 A8 0C                   		movw	ax, [sp+12]
+ 913 05c4 44 63 00                		cmpw	ax, #99
+ 914 05c7 61 F3                   		 sknh
+ 915 05c9 EC D8 05 00             		 br	!!.L30
+ 916                             		.loc 1 212 0 is_stmt 0 discriminator 2
+ 917 05cd A8 0A                   		movw	ax, [sp+10]
+ 918 05cf 44 63 00                		cmpw	ax, #99
+ 919 05d2 61 E3                   		 skh
+ 920 05d4 EC EB 05 00             		 br	!!.L31
+ 921                             	.L30:
+ 922                             		.loc 1 212 0 discriminator 3
+ 923 05d8 8F 00 00                		mov	a, !_CFG_parameter+2
+ 924 05db 9D F0                   		mov	r8, a
+ 925 05dd D4 F0                   		cmp0	r8
+ 926 05df 61 E8                   		 skz
+ 927 05e1 EC EB 05 00             		 br	!!.L31
+ 213:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 214:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		CFG_parameter.Double_Time_Enable = 0x01;
+ 928                             		.loc 1 214 0 is_stmt 1
+ 929 05e5 E5 00 00                		oneb	!_CFG_parameter+2
+ 215:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		CFG_Parameters_Value[24] = 0x01;
+ 930                             		.loc 1 215 0
+ 931 05e8 E5 00 00                		oneb	!_CFG_Parameters_Value+24
+ 932                             	.L31:
+ 216:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	}
+ 217:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 218:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	if (CFG_parameter.Double_Time_Enable == 0x01)
+ 933                             		.loc 1 218 0
+ 934 05eb 8F 00 00                		mov	a, !_CFG_parameter+2
+ 935 05ee 9D F0                   		mov	r8, a
+ 936 05f0 4A F0 01                		cmp	r8, #1
+ 937 05f3 61 E8                   		 skz
+ 938 05f5 EC 05 06 00             		 br	!!.L32
+ 219:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 220:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		Parameter_17 >>= 1;
+ 939                             		.loc 1 220 0
+ 940 05f9 A8 0C                   		movw	ax, [sp+12]
+ 941 05fb 31 1E                   		shrw	ax, 1
+ 942 05fd B8 0C                   		movw	[sp+12], ax
+ 221:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		Parameter_19 >>= 1;
+ 943                             		.loc 1 221 0
+ 944 05ff A8 0A                   		movw	ax, [sp+10]
+ 945 0601 31 1E                   		shrw	ax, 1
+ 946 0603 B8 0A                   		movw	[sp+10], ax
+ 947                             	.L32:
+ 222:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	}
+ 223:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 224:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 225:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Parameter_17 += 1;
+ 948                             		.loc 1 225 0
+ 949 0605 A8 0C                   		movw	ax, [sp+12]
+ 950 0607 A1                      		incw	ax
+ 951 0608 B8 0C                   		movw	[sp+12], ax
+ 226:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Parameter_19 += 1;
+ 952                             		.loc 1 226 0
+ 953 060a A8 0A                   		movw	ax, [sp+10]
+ 954 060c A1                      		incw	ax
+ 955 060d B8 0A                   		movw	[sp+10], ax
+ 227:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 228:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	CFG_Parameters_Value[17] = convert_binary_to_BCD(Parameter_17);
+ 956                             		.loc 1 228 0
+ 957 060f A8 0C                   		movw	ax, [sp+12]
+ 958 0611 BD F0                   		movw	r8, ax
+ 959 0613 B8 00                   		movw	[sp], ax
+ 960 0615 FC 00 00 00             		call	!!%code(_convert_binary_to_BCD)
+ 961 0619 8D F0                   		mov	a, r8
+ 962 061b 9F 00 00                		mov	!_CFG_Parameters_Value+17, a
+ 229:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	CFG_Parameters_Value[19] = convert_binary_to_BCD(Parameter_19);
+ 963                             		.loc 1 229 0
+ 964 061e A8 0A                   		movw	ax, [sp+10]
+ 965 0620 BD F0                   		movw	r8, ax
+ 966 0622 B8 00                   		movw	[sp], ax
+ 967 0624 FC 00 00 00             		call	!!%code(_convert_binary_to_BCD)
+ 968 0628 8D F0                   		mov	a, r8
+ 969 062a 9F 00 00                		mov	!_CFG_Parameters_Value+19, a
+ 230:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 231:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "17", 2);								// Display "CH  "
+ 970                             		.loc 1 231 0
+ 971 062d C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 972 0631 C9 F2 18 00             		movw	r10, #.LC8
+ 973 0635 C9 F0 02 00             		movw	r8, #2
+ 974 0639 AD F4                   		movw	ax, r12
+ 975 063b B8 00                   		movw	[sp], ax
+ 976 063d AD F2                   		movw	ax, r10
+ 977 063f B8 02                   		movw	[sp+2], ax
+ 978 0641 AD F0                   		movw	ax, r8
+ 979 0643 B8 04                   		movw	[sp+4], ax
+ 980 0645 FC 00 00 00             		call	!!%code(_memcpy)
+ 232:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	convert_binary_to_ascii(CFG_Parameters_Value[17], &Parameter_Value[0], &Parameter_Value[1]);
+ 981                             		.loc 1 232 0
+ 982 0649 8F 00 00                		mov	a, !_CFG_Parameters_Value+17
+ 983 064c 9D F0                   		mov	r8, a
+ 984 064e F4 F1                   		clrb	r9
+ 985 0650 AD F0                   		movw	ax, r8
+ 986 0652 B8 00                   		movw	[sp], ax
+ 987 0654 30 00 00                		movw	ax, #_Parameter_Value
+ 988 0657 B8 02                   		movw	[sp+2], ax
+ 989 0659 30 00 00                		movw	ax, #_Parameter_Value+1
+ 990 065c B8 04                   		movw	[sp+4], ax
+ 991 065e FC 00 00 00             		call	!!%code(_convert_binary_to_ascii)
+ 233:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 234:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	HMI_Flash_Enable = 1;
+ 992                             		.loc 1 234 0
+ 993 0662 E5 00 00                		oneb	!_HMI_Flash_Enable
+ 235:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	HMI_Flash_Count = 0;
+ 994                             		.loc 1 235 0
+ 995 0665 F5 00 00                		clrb	!_HMI_Flash_Count
+ 236:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	while (HMI_Flash_Count <4);										// 3 second
+ 996                             		.loc 1 236 0
+ 997 0668 00                      		nop
+ 998                             	.L33:
+ 999                             		.loc 1 236 0 is_stmt 0 discriminator 1
+ 1000 0669 8F 00 00                		mov	a, !_HMI_Flash_Count
+ 1001 066c 9D F0                   		mov	r8, a
+ 1002 066e 4A F0 03                		cmp	r8, #3
+ 1003 0671 61 E3                   		 skh
+ 1004 0673 EC 69 06 00             		 br	!!.L33
+ 237:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	HMI_Flash_Enable = 0;
+ 1005                             		.loc 1 237 0 is_stmt 1
+ 1006 0677 F5 00 00                		clrb	!_HMI_Flash_Enable
+ 238:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Mask = 0xff;
+ 1007                             		.loc 1 238 0
+ 1008 067a 51 FF                   		mov	a, #-1
+ 1009 067c 9F 00 00                		mov	!_Mask, a
+ 239:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 240:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "19", 2);								// Display "CH  "
+ 1010                             		.loc 1 240 0
+ 1011 067f C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 1012 0683 C9 F2 1B 00             		movw	r10, #.LC9
+ 1013 0687 C9 F0 02 00             		movw	r8, #2
+ 1014 068b AD F4                   		movw	ax, r12
+ 1015 068d B8 00                   		movw	[sp], ax
+ 1016 068f AD F2                   		movw	ax, r10
+ 1017 0691 B8 02                   		movw	[sp+2], ax
+ 1018 0693 AD F0                   		movw	ax, r8
+ 1019 0695 B8 04                   		movw	[sp+4], ax
+ 1020 0697 FC 00 00 00             		call	!!%code(_memcpy)
+ 241:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	convert_binary_to_ascii(CFG_Parameters_Value[19], &Parameter_Value[0], &Parameter_Value[1]);
+ 1021                             		.loc 1 241 0
+ 1022 069b 8F 00 00                		mov	a, !_CFG_Parameters_Value+19
+ 1023 069e 9D F0                   		mov	r8, a
+ 1024 06a0 F4 F1                   		clrb	r9
+ 1025 06a2 AD F0                   		movw	ax, r8
+ 1026 06a4 B8 00                   		movw	[sp], ax
+ 1027 06a6 30 00 00                		movw	ax, #_Parameter_Value
+ 1028 06a9 B8 02                   		movw	[sp+2], ax
+ 1029 06ab 30 00 00                		movw	ax, #_Parameter_Value+1
+ 1030 06ae B8 04                   		movw	[sp+4], ax
+ 1031 06b0 FC 00 00 00             		call	!!%code(_convert_binary_to_ascii)
+ 242:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 243:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	HMI_Flash_Enable = 1;
+ 1032                             		.loc 1 243 0
+ 1033 06b4 E5 00 00                		oneb	!_HMI_Flash_Enable
+ 244:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	HMI_Flash_Count = 0;
+ 1034                             		.loc 1 244 0
+ 1035 06b7 F5 00 00                		clrb	!_HMI_Flash_Count
+ 245:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	while (HMI_Flash_Count <4);										// 3 second
+ 1036                             		.loc 1 245 0
+ 1037 06ba 00                      		nop
+ 1038                             	.L34:
+ 1039                             		.loc 1 245 0 is_stmt 0 discriminator 1
+ 1040 06bb 8F 00 00                		mov	a, !_HMI_Flash_Count
+ 1041 06be 9D F0                   		mov	r8, a
+ 1042 06c0 4A F0 03                		cmp	r8, #3
+ 1043 06c3 61 E3                   		 skh
+ 1044 06c5 EC BB 06 00             		 br	!!.L34
+ 246:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	HMI_Flash_Enable = 0;
+ 1045                             		.loc 1 246 0 is_stmt 1
+ 1046 06c9 F5 00 00                		clrb	!_HMI_Flash_Enable
+ 247:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Mask = 0xff;
+ 1047                             		.loc 1 247 0
+ 1048 06cc 51 FF                   		mov	a, #-1
+ 1049 06ce 9F 00 00                		mov	!_Mask, a
+ 248:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 249:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "--", 2);								// Display "----"  Travel acquisition is OK
+ 1050                             		.loc 1 249 0
+ 1051 06d1 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 1052 06d5 C9 F2 1E 00             		movw	r10, #.LC10
+ 1053 06d9 C9 F0 02 00             		movw	r8, #2
+ 1054 06dd AD F4                   		movw	ax, r12
+ 1055 06df B8 00                   		movw	[sp], ax
+ 1056 06e1 AD F2                   		movw	ax, r10
+ 1057 06e3 B8 02                   		movw	[sp+2], ax
+ 1058 06e5 AD F0                   		movw	ax, r8
+ 1059 06e7 B8 04                   		movw	[sp+4], ax
+ 1060 06e9 FC 00 00 00             		call	!!%code(_memcpy)
+ 250:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Value, "--", 2);
+ 1061                             		.loc 1 250 0
+ 1062 06ed C9 F4 00 00             		movw	r12, #_Parameter_Value
+ 1063 06f1 C9 F2 1E 00             		movw	r10, #.LC10
+ 1064 06f5 C9 F0 02 00             		movw	r8, #2
+ 1065 06f9 AD F4                   		movw	ax, r12
+ 1066 06fb B8 00                   		movw	[sp], ax
+ 1067 06fd AD F2                   		movw	ax, r10
+ 1068 06ff B8 02                   		movw	[sp+2], ax
+ 1069 0701 AD F0                   		movw	ax, r8
+ 1070 0703 B8 04                   		movw	[sp+4], ax
+ 1071 0705 FC 00 00 00             		call	!!%code(_memcpy)
+ 251:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 252:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Write_Parameters_To_Flash_Memory();				// Store parameters
+ 1072                             		.loc 1 252 0
+ 1073 0709 FC 00 00 00             		call	!!%code(_Write_Parameters_To_Flash_Memory)
+ 253:../DGC_A230_Functions/DGC_A230_Program_Mode.c ****     Calculate_CFG_Parameters();						// Re Calculate Working parameters
+ 1074                             		.loc 1 253 0
+ 1075 070d FC 00 00 00             		call	!!%code(_Calculate_CFG_Parameters)
+ 254:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** }
+ 1076                             		.loc 1 254 0
+ 1077 0711 10 0E                   		addw	sp, #14
+ 1078 0713 61 EF                   		sel	rb2
+ 1079 0715 C0                      		pop	ax ; r16
+ 1080 0716 61 CF                   		sel	rb0
+ 1081 0718 D7                      		ret
+ 1082                             	.LFE1:
+ 1084                             		.section	.rodata
+ 1085                             	.LC11:
+ 1086 0021 50 2D 00                		.string	"P-"
+ 1087                             	.LC12:
+ 1088 0024 50 45 00                		.string	"PE"
+ 1089                             		.section	.text.Program_Command_Process,"ax",@progbits
+ 1090                             		.global	_Program_Command_Process
+ 1092                             	_Program_Command_Process:
+ 1093                             	.LFB2:
+ 255:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 256:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** void Program_Command_Process (void)
+ 257:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** {
+ 1094                             		.loc 1 257 0
+ 1095                             		; start of function
+ 1096                             		; locals: 2 bytes
+ 1097                             		; outgoing: 6 bytes
+ 1098                             		; uses ES register
+ 1099 0000 20 08                   		subw	sp, #8
+ 1100                             	.LCFI3:
+ 258:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	uint8_t working_done = 0;
+ 1101                             		.loc 1 258 0
+ 1102 0002 F1                      		clrb	a
+ 1103 0003 98 07                   		mov	[sp+7], a
+ 259:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	uint8_t Alarm_And_Limit_Error_Code = 0x00;
+ 1104                             		.loc 1 259 0
+ 1105 0005 F1                      		clrb	a
+ 1106 0006 98 06                   		mov	[sp+6], a
+ 260:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 261:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Display_Mode = PROG_MODE;
+ 1107                             		.loc 1 261 0
+ 1108 0008 51 02                   		mov	a, #2
+ 1109 000a 9F 00 00                		mov	!_Display_Mode, a
+ 262:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 263:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Name, "AP", 2);
+ 1110                             		.loc 1 263 0
+ 1111 000d C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 1112 0011 C9 F2 06 00             		movw	r10, #.LC2
+ 1113 0015 C9 F0 02 00             		movw	r8, #2
+ 1114 0019 AD F4                   		movw	ax, r12
+ 1115 001b B8 00                   		movw	[sp], ax
+ 1116 001d AD F2                   		movw	ax, r10
+ 1117 001f B8 02                   		movw	[sp+2], ax
+ 1118 0021 AD F0                   		movw	ax, r8
+ 1119 0023 B8 04                   		movw	[sp+4], ax
+ 1120 0025 FC 00 00 00             		call	!!%code(_memcpy)
+ 264:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	memcpy(&Parameter_Value, "P-", 2);
+ 1121                             		.loc 1 264 0
+ 1122 0029 C9 F4 00 00             		movw	r12, #_Parameter_Value
+ 1123 002d C9 F2 21 00             		movw	r10, #.LC11
+ 1124 0031 C9 F0 02 00             		movw	r8, #2
+ 1125 0035 AD F4                   		movw	ax, r12
+ 1126 0037 B8 00                   		movw	[sp], ax
+ 1127 0039 AD F2                   		movw	ax, r10
+ 1128 003b B8 02                   		movw	[sp+2], ax
+ 1129 003d AD F0                   		movw	ax, r8
+ 1130 003f B8 04                   		movw	[sp+4], ax
+ 1131 0041 FC 00 00 00             		call	!!%code(_memcpy)
+ 265:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 266:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	while (!PROG_KEY);
+ 1132                             		.loc 1 266 0
+ 1133 0045 00                      		nop
+ 1134                             	.L36:
+ 1135                             		.loc 1 266 0 is_stmt 0 discriminator 1
+ 1136 0046 C9 F0 01 FF             		movw	r8, #-255
+ 1137 004a AD F0                   		movw	ax, r8
+ 1138 004c BD F2                   		movw	r10, ax
+ 1139 004e FA F2                   		movw	hl, r10
+ 1140 0050 8B                      		mov	a, [hl]
+ 1141 0051 9D F0                   		mov	r8, a
+ 1142 0053 31 6A                   		shr	a, 6
+ 1143 0055 9D F0                   		mov	r8, a
+ 1144 0057 5A F0 01                		and	r8, #1
+ 1145 005a 61 F8                   		sknz
+ 1146 005c EC 46 00 00             		 br	!!.L36
+ 1147                             		 # zero-comparison eliminated
+ 267:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 268:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Tick_Count = 0;									// Reset Tick count
+ 1148                             		.loc 1 268 0 is_stmt 1
+ 1149 0060 F6                      		clrw	ax
+ 1150 0061 BF 00 00                		movw	!_Tick_Count, ax
+ 269:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	R_TAU0_Channel1_Start();						// Start Timer channel 1
+ 1151                             		.loc 1 269 0
+ 1152 0064 FC 00 00 00             		call	!!%code(_R_TAU0_Channel1_Start)
+ 270:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 271:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	while ((Tick_Count <1000) && (working_done == 0))
+ 1153                             		.loc 1 271 0
+ 1154 0068 EC A4 00 00             		br	!!.L37
+ 1155                             	.L40:
+ 272:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 273:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		if (!PROG_KEY)
+ 1156                             		.loc 1 273 0
+ 1157 006c C9 F0 01 FF             		movw	r8, #-255
+ 1158 0070 AD F0                   		movw	ax, r8
+ 1159 0072 BD F2                   		movw	r10, ax
+ 1160 0074 FA F2                   		movw	hl, r10
+ 1161 0076 8B                      		mov	a, [hl]
+ 1162 0077 9D F0                   		mov	r8, a
+ 1163 0079 31 6A                   		shr	a, 6
+ 1164 007b 9D F0                   		mov	r8, a
+ 1165 007d 5A F0 01                		and	r8, #1
+ 1166 0080 61 E8                   		skz
+ 1167 0082 EC A4 00 00             		 br	!!.L37
+ 1168                             		 # zero-comparison eliminated
+ 274:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		{
+ 275:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			while (!PROG_KEY);
+ 1169                             		.loc 1 275 0
+ 1170 0086 00                      		nop
+ 1171                             	.L38:
+ 1172                             		.loc 1 275 0 is_stmt 0 discriminator 1
+ 1173 0087 C9 F0 01 FF             		movw	r8, #-255
+ 1174 008b AD F0                   		movw	ax, r8
+ 1175 008d BD F2                   		movw	r10, ax
+ 1176 008f FA F2                   		movw	hl, r10
+ 1177 0091 8B                      		mov	a, [hl]
+ 1178 0092 9D F0                   		mov	r8, a
+ 1179 0094 31 6A                   		shr	a, 6
+ 1180 0096 9D F0                   		mov	r8, a
+ 1181 0098 5A F0 01                		and	r8, #1
+ 1182 009b 61 F8                   		sknz
+ 1183 009d EC 87 00 00             		 br	!!.L38
+ 1184                             		 # zero-comparison eliminated
+ 276:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			working_done = 1;
+ 1185                             		.loc 1 276 0 is_stmt 1
+ 1186 00a1 E1                      		oneb	a
+ 1187 00a2 98 07                   		mov	[sp+7], a
+ 1188                             	.L37:
+ 271:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 1189                             		.loc 1 271 0
+ 1190 00a4 AF 00 00                		movw	ax, !_Tick_Count
+ 1191 00a7 BD F0                   		movw	r8, ax
+ 1192 00a9 44 E7 03                		cmpw	ax, #999
+ 1193 00ac 61 F3                   		 sknh
+ 1194 00ae EC BB 00 00             		 br	!!.L39
+ 271:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 1195                             		.loc 1 271 0 is_stmt 0 discriminator 1
+ 1196 00b2 88 07                   		mov	a, [sp+7]
+ 1197 00b4 D1                      		cmp0	a
+ 1198 00b5 61 F8                   		 sknz
+ 1199 00b7 EC 6C 00 00             		 br	!!.L40
+ 1200                             	.L39:
+ 277:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		}
+ 278:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	}
+ 279:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	R_TAU0_Channel1_Stop();							// Stop Timer channel 1
+ 1201                             		.loc 1 279 0 is_stmt 1
+ 1202 00bb FC 00 00 00             		call	!!%code(_R_TAU0_Channel1_Stop)
+ 280:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 281:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	if (Tick_Count <1000)
+ 1203                             		.loc 1 281 0
+ 1204 00bf AF 00 00                		movw	ax, !_Tick_Count
+ 1205 00c2 BD F0                   		movw	r8, ax
+ 1206 00c4 44 E7 03                		cmpw	ax, #999
+ 1207 00c7 61 F3                   		 sknh
+ 1208 00c9 EC 5A 01 00             		 br	!!.L41
+ 1209                             	.LBB2:
+ 282:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	{
+ 283:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		Alarm_And_Limit_Error_Code = Check_Safety_and_Limit_Switch();
+ 1210                             		.loc 1 283 0
+ 1211 00cd FC 00 00 00             		call	!!%code(_Check_Safety_and_Limit_Switch)
+ 1212 00d1 8D F0                   		mov	a, r8
+ 1213 00d3 98 06                   		mov	[sp+6], a
+ 284:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		if ((Alarm_And_Limit_Error_Code == NO_ALARM_AND_NO_LIMIT_IS_ACTIVATED)
+ 1214                             		.loc 1 284 0
+ 1215 00d5 D1                      		cmp0	a
+ 1216 00d6 61 F8                   		 sknz
+ 1217 00d8 EC E6 00 00             		 br	!!.L42
+ 285:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 				|| (Alarm_And_Limit_Error_Code == GATE_CLOSED_LIMIT_SWITCH_IS_ACTIVATED))
+ 1218                             		.loc 1 285 0
+ 1219 00dc 88 06                   		mov	a, [sp+6]
+ 1220 00de 4C FC                   		cmp	a, #-4
+ 1221 00e0 61 E8                   		 skz
+ 1222 00e2 EC 03 01 00             		 br	!!.L43
+ 1223                             	.L42:
+ 286:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		{
+ 287:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			if (CFG_parameter.Encoder_Config != 0x00)		// With Encoder is Enable
+ 1224                             		.loc 1 287 0
+ 1225 00e6 8F 00 00                		mov	a, !_CFG_parameter+97
+ 1226 00e9 9D F0                   		mov	r8, a
+ 1227 00eb D4 F0                   		cmp0	r8
+ 1228 00ed 61 F8                   		 sknz
+ 1229 00ef EC FB 00 00             		 br	!!.L44
+ 288:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			{
+ 289:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 				Travel_Acquisition_Procedure_With_Encoder();
+ 1230                             		.loc 1 289 0
+ 1231 00f3 FC 00 00 00             		call	!!%code(_Travel_Acquisition_Procedure_With_Encoder)
+ 287:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			{
+ 1232                             		.loc 1 287 0
+ 1233 00f7 EC 5A 01 00             		br	!!.L41
+ 1234                             	.L44:
+ 290:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			}
+ 291:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			else											// Without Encoder
+ 292:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			{
+ 293:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 				Travel_Acquisition_Procedure_Without_Eencoder();
+ 1235                             		.loc 1 293 0
+ 1236 00fb FC 00 00 00             		call	!!%code(_Travel_Acquisition_Procedure_Without_Eencoder)
+ 287:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			{
+ 1237                             		.loc 1 287 0
+ 1238 00ff EC 5A 01 00             		br	!!.L41
+ 1239                             	.L43:
+ 1240                             	.LBB3:
+ 294:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			}
+ 295:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		}
+ 296:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		else
+ 297:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		{
+ 298:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			memcpy(&Parameter_Name, "AP", 2);
+ 1241                             		.loc 1 298 0
+ 1242 0103 C9 F4 00 00             		movw	r12, #_Parameter_Name
+ 1243 0107 C9 F2 06 00             		movw	r10, #.LC2
+ 1244 010b C9 F0 02 00             		movw	r8, #2
+ 1245 010f AD F4                   		movw	ax, r12
+ 1246 0111 B8 00                   		movw	[sp], ax
+ 1247 0113 AD F2                   		movw	ax, r10
+ 1248 0115 B8 02                   		movw	[sp+2], ax
+ 1249 0117 AD F0                   		movw	ax, r8
+ 1250 0119 B8 04                   		movw	[sp+4], ax
+ 1251 011b FC 00 00 00             		call	!!%code(_memcpy)
+ 299:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			memcpy(&Parameter_Value, "PE", 2);
+ 1252                             		.loc 1 299 0
+ 1253 011f C9 F4 00 00             		movw	r12, #_Parameter_Value
+ 1254 0123 C9 F2 24 00             		movw	r10, #.LC12
+ 1255 0127 C9 F0 02 00             		movw	r8, #2
+ 1256 012b AD F4                   		movw	ax, r12
+ 1257 012d B8 00                   		movw	[sp], ax
+ 1258 012f AD F2                   		movw	ax, r10
+ 1259 0131 B8 02                   		movw	[sp+2], ax
+ 1260 0133 AD F0                   		movw	ax, r8
+ 1261 0135 B8 04                   		movw	[sp+4], ax
+ 1262 0137 FC 00 00 00             		call	!!%code(_memcpy)
+ 300:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 301:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			HMI_Flash_Count = 0;
+ 1263                             		.loc 1 301 0
+ 1264 013b F5 00 00                		clrb	!_HMI_Flash_Count
+ 302:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			R_TAU0_Channel4_Start();
+ 1265                             		.loc 1 302 0
+ 1266 013e FC 00 00 00             		call	!!%code(_R_TAU0_Channel4_Start)
+ 303:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			while (HMI_Flash_Count < 4);
+ 1267                             		.loc 1 303 0
+ 1268 0142 00                      		nop
+ 1269                             	.L46:
+ 1270                             		.loc 1 303 0 is_stmt 0 discriminator 1
+ 1271 0143 8F 00 00                		mov	a, !_HMI_Flash_Count
+ 1272 0146 9D F0                   		mov	r8, a
+ 1273 0148 4A F0 03                		cmp	r8, #3
+ 1274 014b 61 E3                   		 skh
+ 1275 014d EC 43 01 00             		 br	!!.L46
+ 304:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			R_TAU0_Channel4_Stop();
+ 1276                             		.loc 1 304 0 is_stmt 1
+ 1277 0151 FC 00 00 00             		call	!!%code(_R_TAU0_Channel4_Stop)
+ 305:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 			Mask = 0xff;
+ 1278                             		.loc 1 305 0
+ 1279 0155 51 FF                   		mov	a, #-1
+ 1280 0157 9F 00 00                		mov	!_Mask, a
+ 1281                             	.L41:
+ 1282                             	.LBE3:
+ 1283                             	.LBE2:
+ 306:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 		}
+ 307:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	}
+ 308:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 
+ 309:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** 	Display_Mode = NORMAL_MODE;
+ 1284                             		.loc 1 309 0
+ 1285 015a F5 00 00                		clrb	!_Display_Mode
+ 310:../DGC_A230_Functions/DGC_A230_Program_Mode.c **** }
+ 1286                             		.loc 1 310 0
+ 1287 015d 10 08                   		addw	sp, #8
+ 1288 015f D7                      		ret
+ 1289                             	.LFE2:
+ 1351                             	.Letext0:
+ 1352                             		.file 2 "E:/AIoT/Code/Rogger/DGC_A230_6_Rev_1_0_Software/generate/iodefine.h"
+ 1353                             		.file 3 "E:\\AIoT\\Code\\Rogger\\DGC_A230_6_Rev_1_0_Software\\src/r_cg_macrodriver.h"
+ 1354                             		.file 4 "E:\\AIoT\\Code\\Rogger\\DGC_A230_6_Rev_1_0_Software\\DGC_A230_Functions/DGC_A230_Define.h
