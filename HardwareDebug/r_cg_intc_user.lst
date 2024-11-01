@@ -1,0 +1,370 @@
+   1                             	r8	=	0xffef0
+   2                             	r16	=	0xffee8
+   3                             	r24	=	0xffee0
+   4                             	r9	=	0xffef1
+   5                             	r17	=	0xffee9
+   6                             	r25	=	0xffee1
+   7                             	r10	=	0xffef2
+   8                             	r18	=	0xffeea
+   9                             	r26	=	0xffee2
+  10                             	r11	=	0xffef3
+  11                             	r19	=	0xffeeb
+  12                             	r27	=	0xffee3
+  13                             	r12	=	0xffef4
+  14                             	r20	=	0xffeec
+  15                             	r28	=	0xffee4
+  16                             	r13	=	0xffef5
+  17                             	r21	=	0xffeed
+  18                             	r29	=	0xffee5
+  19                             	r14	=	0xffef6
+  20                             	r22	=	0xffeee
+  21                             	r30	=	0xffee6
+  22                             	r15	=	0xffef7
+  23                             	r23	=	0xffeef
+  24                             	r31	=	0xffee7
+  25                             	MDUC	=	0xf00e8
+  26                             	MDAL	=	0xffff0
+  27                             	MDAH	=	0xffff2
+  28                             	MDBL	=	0xffff6
+  29                             	MDBH	=	0xffff4
+  30                             	MDCL	=	0xf00e0
+  31                             	MDCH	=	0xf00e2
+  32                             	.text
+  33                             	.Ltext0:
+  34                             		.global	_M1_Torque_Setting
+  35                             		.section	.data.M1_Torque_Setting,"aw",@progbits
+  36                             		.balign 2
+  39                             	_M1_Torque_Setting:
+  40 0000 DB 05                   		.short	1499
+  41                             		.global	_M2_Torque_Setting
+  42                             		.section	.data.M2_Torque_Setting,"aw",@progbits
+  43                             		.balign 2
+  46                             	_M2_Torque_Setting:
+  47 0000 DB 05                   		.short	1499
+  48                             		.global	_M1_Period_Count
+  49                             		.section	.bss.M1_Period_Count,"aw",@nobits
+  52                             	_M1_Period_Count:
+  53 0000 00                      		.zero	1
+  54                             		.global	_M2_Period_Count
+  55                             		.section	.bss.M2_Period_Count,"aw",@nobits
+  58                             	_M2_Period_Count:
+  59 0000 00                      		.zero	1
+  60                             		.section	.text.r_intc0_interrupt,"ax",@progbits
+  61                             		.global	_r_intc0_interrupt
+  63                             	_r_intc0_interrupt:
+  64                             	.LFB0:
+  65                             		.file 1 "../src/r_cg_intc_user.c"
+   1:../src/r_cg_intc_user.c **** /**************************************************************************************************
+   2:../src/r_cg_intc_user.c **** * DISCLAIMER
+   3:../src/r_cg_intc_user.c **** * This software is supplied by Renesas Electronics Corporation and is only intended for use with Re
+   4:../src/r_cg_intc_user.c **** * No other uses are authorized. This software is owned by Renesas Electronics Corporation and is pr
+   5:../src/r_cg_intc_user.c **** * applicable laws, including copyright laws. 
+   6:../src/r_cg_intc_user.c **** * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING THIS SOFTWARE, WHETHE
+   7:../src/r_cg_intc_user.c **** * OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULA
+   8:../src/r_cg_intc_user.c **** * NON-INFRINGEMENT.  ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.TO THE MAXIMUM EXTENT PERMITTED N
+   9:../src/r_cg_intc_user.c **** * LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE 
+  10:../src/r_cg_intc_user.c **** * INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS SOFTWARE, E
+  11:../src/r_cg_intc_user.c **** * ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  12:../src/r_cg_intc_user.c **** * Renesas reserves the right, without notice, to make changes to this software and to discontinue t
+  13:../src/r_cg_intc_user.c **** * of this software. By using this software, you agree to the additional terms and conditions found 
+  14:../src/r_cg_intc_user.c **** * following link:
+  15:../src/r_cg_intc_user.c **** * http://www.renesas.com/disclaimer
+  16:../src/r_cg_intc_user.c **** *
+  17:../src/r_cg_intc_user.c **** * Copyright (C) 2011, 2023 Renesas Electronics Corporation. All rights reserved.
+  18:../src/r_cg_intc_user.c **** ***************************************************************************************************
+  19:../src/r_cg_intc_user.c **** 
+  20:../src/r_cg_intc_user.c **** /**************************************************************************************************
+  21:../src/r_cg_intc_user.c **** * File Name    : r_cg_intc_user.c
+  22:../src/r_cg_intc_user.c **** * Version      : CodeGenerator for RL78/G13 V2.05.07.02 [17 Nov 2023]
+  23:../src/r_cg_intc_user.c **** * Device(s)    : R5F100LF
+  24:../src/r_cg_intc_user.c **** * Tool-Chain   : GCCRL78
+  25:../src/r_cg_intc_user.c **** * Description  : This file implements device driver for INTC module.
+  26:../src/r_cg_intc_user.c **** * Creation Date: 30/09/2024
+  27:../src/r_cg_intc_user.c **** ***************************************************************************************************
+  28:../src/r_cg_intc_user.c **** 
+  29:../src/r_cg_intc_user.c **** /**************************************************************************************************
+  30:../src/r_cg_intc_user.c **** Includes
+  31:../src/r_cg_intc_user.c **** ***************************************************************************************************
+  32:../src/r_cg_intc_user.c **** #include "r_cg_macrodriver.h"
+  33:../src/r_cg_intc_user.c **** #include "r_cg_intc.h"
+  34:../src/r_cg_intc_user.c **** /* Start user code for include. Do not edit comment generated here */
+  35:../src/r_cg_intc_user.c **** #include <DGC_A230_Define.h>
+  36:../src/r_cg_intc_user.c **** /* End user code. Do not edit comment generated here */
+  37:../src/r_cg_intc_user.c **** #include "r_cg_userdefine.h"
+  38:../src/r_cg_intc_user.c **** 
+  39:../src/r_cg_intc_user.c **** /**************************************************************************************************
+  40:../src/r_cg_intc_user.c **** Global variables and functions
+  41:../src/r_cg_intc_user.c **** ***************************************************************************************************
+  42:../src/r_cg_intc_user.c **** /* Start user code for global. Do not edit comment generated here */
+  43:../src/r_cg_intc_user.c **** uint16_t M1_Torque_Setting = TORQUE_LEVEL_8, M2_Torque_Setting = TORQUE_LEVEL_8;
+  44:../src/r_cg_intc_user.c **** uint8_t M1_Period_Count = 0, M2_Period_Count = 0;
+  45:../src/r_cg_intc_user.c **** extern uint8_t	M1_Timestamp, M2_Timestamp;
+  46:../src/r_cg_intc_user.c **** 
+  47:../src/r_cg_intc_user.c **** /* End user code. Do not edit comment generated here */
+  48:../src/r_cg_intc_user.c **** 
+  49:../src/r_cg_intc_user.c **** /**************************************************************************************************
+  50:../src/r_cg_intc_user.c **** * Function Name: r_intc0_interrupt
+  51:../src/r_cg_intc_user.c **** * Description  : This function is INTP0 interrupt service routine.
+  52:../src/r_cg_intc_user.c **** * Arguments    : None
+  53:../src/r_cg_intc_user.c **** * Return Value : None
+  54:../src/r_cg_intc_user.c **** ***************************************************************************************************
+  55:../src/r_cg_intc_user.c **** void r_intc0_interrupt(void)
+  56:../src/r_cg_intc_user.c **** {
+  66                             		.loc 1 56 0
+  67                             		; start of function
+  68                             		; push 16: ax bc de hl r8 r10 r12 r14
+  69                             		; uses ES register
+  70 0000 61 CF                   		sel	rb0
+  71 0002 C1                      		push	ax
+  72                             	.LCFI0:
+  73 0003 C3                      		push	bc
+  74                             	.LCFI1:
+  75 0004 C5                      		push	de
+  76                             	.LCFI2:
+  77 0005 C7                      		push	hl
+  78                             	.LCFI3:
+  79 0006 61 DF                   		sel	rb1
+  80 0008 C1                      		push	ax ; r8
+  81                             	.LCFI4:
+  82 0009 C3                      		push	bc ; r10
+  83                             	.LCFI5:
+  84 000a C5                      		push	de ; r12
+  85                             	.LCFI6:
+  86 000b C7                      		push	hl ; r14
+  87                             	.LCFI7:
+  88 000c 61 CF                   		sel	rb0
+  89 000e 8E FD                   		mov	a, es
+  90 0010 C1                      		push	ax
+  91                             	.LCFI8:
+  57:../src/r_cg_intc_user.c ****     /* Start user code. Do not edit comment generated here */
+  58:../src/r_cg_intc_user.c **** 	if (P13_bit.no7 == 1)
+  92                             		.loc 1 58 0
+  93 0011 C9 F0 0D FF             		movw	r8, #-243
+  94 0015 AD F0                   		movw	ax, r8
+  95 0017 BD F2                   		movw	r10, ax
+  96 0019 FA F2                   		movw	hl, r10
+  97 001b 8B                      		mov	a, [hl]
+  98 001c 9D F0                   		mov	r8, a
+  99 001e 31 7A                   		shr	a, 7
+ 100 0020 9D F0                   		mov	r8, a
+ 101 0022 4A F0 01                		cmp	r8, #1
+ 102 0025 61 E8                   		 skz
+ 103 0027 EC 5D 00 00             		 br	!!.L2
+  59:../src/r_cg_intc_user.c **** 	{
+  60:../src/r_cg_intc_user.c **** 		M1_PWM = 1;					// Clear Trigger Pulse Output
+ 104                             		.loc 1 60 0
+ 105 002b C9 F0 00 FF             		movw	r8, #-256
+ 106 002f AD F0                   		movw	ax, r8
+ 107 0031 BD F4                   		movw	r12, ax
+ 108 0033 FA F4                   		movw	hl, r12
+ 109 0035 8B                      		mov	a, [hl]
+ 110 0036 9D F2                   		mov	r10, a
+ 111 0038 6A F2 40                		or	r10, #64
+ 112 003b AD F0                   		movw	ax, r8
+ 113 003d EA F4                   		movw	de, r12
+ 114 003f 8D F2                   		mov	a, r10
+ 115 0041 99                      		mov	[de], a
+  61:../src/r_cg_intc_user.c **** 		M2_PWM = 1;					// Clear M2 PWM Pulse Output
+ 116                             		.loc 1 61 0
+ 117 0042 C9 F0 00 FF             		movw	r8, #-256
+ 118 0046 AD F0                   		movw	ax, r8
+ 119 0048 BD F4                   		movw	r12, ax
+ 120 004a FA F4                   		movw	hl, r12
+ 121 004c 8B                      		mov	a, [hl]
+ 122 004d 9D F2                   		mov	r10, a
+ 123 004f 6A F2 20                		or	r10, #32
+ 124 0052 AD F0                   		movw	ax, r8
+ 125 0054 EA F4                   		movw	de, r12
+ 126 0056 8D F2                   		mov	a, r10
+ 127 0058 99                      		mov	[de], a
+ 128 0059 EC 0D 01 00             		br	!!.L1
+ 129                             	.L2:
+  62:../src/r_cg_intc_user.c **** 	}
+  63:../src/r_cg_intc_user.c **** 	else
+  64:../src/r_cg_intc_user.c **** 	{
+  65:../src/r_cg_intc_user.c **** 		TDR02 = M1_Torque_Setting;			// Set Torque for Motor 1
+ 130                             		.loc 1 65 0
+ 131 005d C9 F2 64 FF             		movw	r10, #-156
+ 132 0061 AF 00 00                		movw	ax, !_M1_Torque_Setting
+ 133 0064 BD F0                   		movw	r8, ax
+ 134 0066 AD F2                   		movw	ax, r10
+ 135 0068 BD F4                   		movw	r12, ax
+ 136 006a EA F4                   		movw	de, r12
+ 137 006c AD F0                   		movw	ax, r8
+ 138 006e B9                      		movw	[de], ax
+  66:../src/r_cg_intc_user.c **** 		TDR06 = M2_Torque_Setting;			// Set Torque for Motor 1
+ 139                             		.loc 1 66 0
+ 140 006f C9 F2 6C FF             		movw	r10, #-148
+ 141 0073 AF 00 00                		movw	ax, !_M2_Torque_Setting
+ 142 0076 BD F0                   		movw	r8, ax
+ 143 0078 AD F2                   		movw	ax, r10
+ 144 007a BD F4                   		movw	r12, ax
+ 145 007c EA F4                   		movw	de, r12
+ 146 007e AD F0                   		movw	ax, r8
+ 147 0080 B9                      		movw	[de], ax
+  67:../src/r_cg_intc_user.c **** 
+  68:../src/r_cg_intc_user.c **** 		if (M1_Timestamp == DECELERATION_TIMESTAMP)
+ 148                             		.loc 1 68 0
+ 149 0081 8F 00 00                		mov	a, !_M1_Timestamp
+ 150 0084 9D F0                   		mov	r8, a
+ 151 0086 4A F0 04                		cmp	r8, #4
+ 152 0089 61 E8                   		 skz
+ 153 008b EC C3 00 00             		 br	!!.L4
+ 154                             	.LBB2:
+  69:../src/r_cg_intc_user.c **** 		{
+  70:../src/r_cg_intc_user.c **** 			if (++M1_Period_Count == 6)
+ 155                             		.loc 1 70 0
+ 156 008f 8F 00 00                		mov	a, !_M1_Period_Count
+ 157 0092 9D F0                   		mov	r8, a
+ 158 0094 A4 F0                   		inc	r8
+ 159 0096 8D F0                   		mov	a, r8
+ 160 0098 9F 00 00                		mov	!_M1_Period_Count, a
+ 161 009b 9D F0                   		mov	r8, a
+ 162 009d 4A F0 06                		cmp	r8, #6
+ 163 00a0 61 E8                   		 skz
+ 164 00a2 EC A9 00 00             		 br	!!.L5
+  71:../src/r_cg_intc_user.c **** 			{
+  72:../src/r_cg_intc_user.c **** 				M1_Period_Count = 0;
+ 165                             		.loc 1 72 0
+ 166 00a6 F5 00 00                		clrb	!_M1_Period_Count
+ 167                             	.L5:
+  73:../src/r_cg_intc_user.c **** 			}
+  74:../src/r_cg_intc_user.c **** 			if (M1_Period_Count < 2)
+ 168                             		.loc 1 74 0
+ 169 00a9 8F 00 00                		mov	a, !_M1_Period_Count
+ 170 00ac 9D F0                   		mov	r8, a
+ 171 00ae 4A F0 01                		cmp	r8, #1
+ 172 00b1 61 F3                   		 sknh
+ 173 00b3 EC BF 00 00             		 br	!!.L6
+  75:../src/r_cg_intc_user.c **** 				R_TAU0_Channel2_Start();			// Start Timer Channel 2
+ 174                             		.loc 1 75 0
+ 175 00b7 FC 00 00 00             		call	!!%code(_R_TAU0_Channel2_Start)
+ 176                             	.LBE2:
+ 177 00bb EC C7 00 00             		br	!!.L7
+ 178                             	.L6:
+ 179 00bf EC C7 00 00             		br	!!.L7
+ 180                             	.L4:
+ 181                             	.LBB3:
+  76:../src/r_cg_intc_user.c **** 		}
+  77:../src/r_cg_intc_user.c **** 		else
+  78:../src/r_cg_intc_user.c **** 		{
+  79:../src/r_cg_intc_user.c **** 			R_TAU0_Channel2_Start();			// Start Timer Channel 2
+ 182                             		.loc 1 79 0
+ 183 00c3 FC 00 00 00             		call	!!%code(_R_TAU0_Channel2_Start)
+ 184                             	.L7:
+ 185                             	.LBE3:
+  80:../src/r_cg_intc_user.c **** 		}
+  81:../src/r_cg_intc_user.c **** 
+  82:../src/r_cg_intc_user.c **** 		if (M2_Timestamp == DECELERATION_TIMESTAMP)
+ 186                             		.loc 1 82 0
+ 187 00c7 8F 00 00                		mov	a, !_M2_Timestamp
+ 188 00ca 9D F0                   		mov	r8, a
+ 189 00cc 4A F0 04                		cmp	r8, #4
+ 190 00cf 61 E8                   		 skz
+ 191 00d1 EC 09 01 00             		 br	!!.L8
+ 192                             	.LBB4:
+  83:../src/r_cg_intc_user.c **** 		{
+  84:../src/r_cg_intc_user.c **** 			if (++M2_Period_Count == 6)
+ 193                             		.loc 1 84 0
+ 194 00d5 8F 00 00                		mov	a, !_M2_Period_Count
+ 195 00d8 9D F0                   		mov	r8, a
+ 196 00da A4 F0                   		inc	r8
+ 197 00dc 8D F0                   		mov	a, r8
+ 198 00de 9F 00 00                		mov	!_M2_Period_Count, a
+ 199 00e1 9D F0                   		mov	r8, a
+ 200 00e3 4A F0 06                		cmp	r8, #6
+ 201 00e6 61 E8                   		 skz
+ 202 00e8 EC EF 00 00             		 br	!!.L9
+  85:../src/r_cg_intc_user.c **** 			{
+  86:../src/r_cg_intc_user.c **** 				M2_Period_Count = 0;
+ 203                             		.loc 1 86 0
+ 204 00ec F5 00 00                		clrb	!_M2_Period_Count
+ 205                             	.L9:
+  87:../src/r_cg_intc_user.c **** 			}
+  88:../src/r_cg_intc_user.c **** 			if (M2_Period_Count < 2)
+ 206                             		.loc 1 88 0
+ 207 00ef 8F 00 00                		mov	a, !_M2_Period_Count
+ 208 00f2 9D F0                   		mov	r8, a
+ 209 00f4 4A F0 01                		cmp	r8, #1
+ 210 00f7 61 F3                   		 sknh
+ 211 00f9 EC 05 01 00             		 br	!!.L10
+  89:../src/r_cg_intc_user.c **** 				R_TAU0_Channel6_Start();			// Start Timer Channel 2
+ 212                             		.loc 1 89 0
+ 213 00fd FC 00 00 00             		call	!!%code(_R_TAU0_Channel6_Start)
+ 214                             	.LBE4:
+ 215 0101 EC 0D 01 00             		br	!!.L1
+ 216                             	.L10:
+ 217 0105 EC 0D 01 00             		br	!!.L1
+ 218                             	.L8:
+ 219                             	.LBB5:
+  90:../src/r_cg_intc_user.c **** 		}
+  91:../src/r_cg_intc_user.c **** 		else
+  92:../src/r_cg_intc_user.c **** 		{
+  93:../src/r_cg_intc_user.c **** 			R_TAU0_Channel6_Start();			// Start Timer Channel 6
+ 220                             		.loc 1 93 0
+ 221 0109 FC 00 00 00             		call	!!%code(_R_TAU0_Channel6_Start)
+ 222                             	.L1:
+ 223                             	.LBE5:
+  94:../src/r_cg_intc_user.c **** 		}
+  95:../src/r_cg_intc_user.c **** 	}
+  96:../src/r_cg_intc_user.c ****     /* End user code. Do not edit comment generated here */
+  97:../src/r_cg_intc_user.c **** }
+ 224                             		.loc 1 97 0
+ 225 010d C0                      		pop	ax
+ 226 010e 9E FD                   		mov	es, a
+ 227 0110 61 DF                   		sel	rb1
+ 228 0112 C6                      		pop	hl ; r14
+ 229 0113 C4                      		pop	de ; r12
+ 230 0114 C2                      		pop	bc ; r10
+ 231 0115 C0                      		pop	ax ; r8
+ 232 0116 61 CF                   		sel	rb0
+ 233 0118 C6                      		pop	hl
+ 234 0119 C4                      		pop	de
+ 235 011a C2                      		pop	bc
+ 236 011b C0                      		pop	ax
+ 237 011c 61 FC                   		reti
+ 238                             	.LFE0:
+ 240                             		.section	.text.r_intc10_interrupt,"ax",@progbits
+ 241                             		.global	_r_intc10_interrupt
+ 243                             	_r_intc10_interrupt:
+ 244                             	.LFB1:
+  98:../src/r_cg_intc_user.c **** 
+  99:../src/r_cg_intc_user.c **** /**************************************************************************************************
+ 100:../src/r_cg_intc_user.c **** * Function Name: r_intc10_interrupt
+ 101:../src/r_cg_intc_user.c **** * Description  : This function is INTP10 interrupt service routine.
+ 102:../src/r_cg_intc_user.c **** * Arguments    : None
+ 103:../src/r_cg_intc_user.c **** * Return Value : None
+ 104:../src/r_cg_intc_user.c **** ***************************************************************************************************
+ 105:../src/r_cg_intc_user.c **** void r_intc10_interrupt(void)
+ 106:../src/r_cg_intc_user.c **** {
+ 245                             		.loc 1 106 0
+ 246                             		; start of function
+ 247                             		; push 8: ax bc de hl
+ 248                             		; uses ES register
+ 249 0000 61 CF                   		sel	rb0
+ 250 0002 C1                      		push	ax
+ 251                             	.LCFI9:
+ 252 0003 C3                      		push	bc
+ 253                             	.LCFI10:
+ 254 0004 C5                      		push	de
+ 255                             	.LCFI11:
+ 256 0005 C7                      		push	hl
+ 257                             	.LCFI12:
+ 258 0006 8E FD                   		mov	a, es
+ 259 0008 C1                      		push	ax
+ 260                             	.LCFI13:
+ 107:../src/r_cg_intc_user.c ****     /* Start user code. Do not edit comment generated here */
+ 108:../src/r_cg_intc_user.c ****     /* End user code. Do not edit comment generated here */
+ 109:../src/r_cg_intc_user.c **** }
+ 261                             		.loc 1 109 0
+ 262 0009 C0                      		pop	ax
+ 263 000a 9E FD                   		mov	es, a
+ 264 000c C6                      		pop	hl
+ 265 000d C4                      		pop	de
+ 266 000e C2                      		pop	bc
+ 267 000f C0                      		pop	ax
+ 268 0010 61 FC                   		reti
+ 269                             	.LFE1:
+ 389                             	.Letext0:
+ 390                             		.file 2 "E:/AIoT/Code/Rogger/Test_new/DGC_A230_6_Rev_1_0_Software/generate/iodefine.h"
+ 391                             		.file 3 "../src/r_cg_macrodriver.h"

@@ -1,0 +1,1 @@
+-O0 -ffunction-sections -fdata-sections -Wstack-usage=256 -g2 -mcpu=s2 -x assembler-with-cpp -Wa,--gdwarf2 -I"E:/AIoT/Code/Rogger/Test_new/DGC_A230_6_Rev_1_0_Software/src" -Wa,-adlhn="r_reset_program.lst" -MMD -MP -MF"src/r_reset_program.d" -MT"src/r_reset_program.o" -c "../src/r_reset_program.asm" -o "src/r_reset_program.o"

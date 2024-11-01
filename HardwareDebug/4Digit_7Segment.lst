@@ -1,0 +1,1338 @@
+   1                             	r8	=	0xffef0
+   2                             	r16	=	0xffee8
+   3                             	r24	=	0xffee0
+   4                             	r9	=	0xffef1
+   5                             	r17	=	0xffee9
+   6                             	r25	=	0xffee1
+   7                             	r10	=	0xffef2
+   8                             	r18	=	0xffeea
+   9                             	r26	=	0xffee2
+  10                             	r11	=	0xffef3
+  11                             	r19	=	0xffeeb
+  12                             	r27	=	0xffee3
+  13                             	r12	=	0xffef4
+  14                             	r20	=	0xffeec
+  15                             	r28	=	0xffee4
+  16                             	r13	=	0xffef5
+  17                             	r21	=	0xffeed
+  18                             	r29	=	0xffee5
+  19                             	r14	=	0xffef6
+  20                             	r22	=	0xffeee
+  21                             	r30	=	0xffee6
+  22                             	r15	=	0xffef7
+  23                             	r23	=	0xffeef
+  24                             	r31	=	0xffee7
+  25                             	MDUC	=	0xf00e8
+  26                             	MDAL	=	0xffff0
+  27                             	MDAH	=	0xffff2
+  28                             	MDBL	=	0xffff6
+  29                             	MDBH	=	0xffff4
+  30                             	MDCL	=	0xf00e0
+  31                             	MDCH	=	0xf00e2
+  32                             	.text
+  33                             	.Ltext0:
+  34                             		.global	_Parameters_Display_Data
+  35                             		.section	.data.Parameters_Display_Data,"aw",@progbits
+  38                             	_Parameters_Display_Data:
+  39 0000 41                      		.byte	65
+  40 0001 31                      		.byte	49
+  41 0002 30                      		.byte	48
+  42 0003 30                      		.byte	48
+  43                             		.global	_Parameter_Name
+  44                             		.section	.data.Parameter_Name,"aw",@progbits
+  47                             	_Parameter_Name:
+  48 0000 41 30                   		.ascii	"A0"
+  49                             		.global	_Parameter_Value
+  50                             		.section	.data.Parameter_Value,"aw",@progbits
+  53                             	_Parameter_Value:
+  54 0000 72 2D                   		.ascii	"r-"
+  55                             		.global	_Mask
+  56                             		.section	.data.Mask,"aw",@progbits
+  59                             	_Mask:
+  60 0000 FF                      		.byte	-1
+  61                             		.global	_Command_Status_No1
+  62                             		.section	.data.Command_Status_No1,"aw",@progbits
+  65                             	_Command_Status_No1:
+  66 0000 01                      		.byte	1
+  67                             		.comm	_Command_Status_No2,1,1
+  68                             		.comm	_Safety_Status_No1,1,1
+  69                             		.comm	_Safety_Status_No2,1,1
+  70                             		.comm	_Digit_Count,1,1
+  71                             		.section	.rodata
+  72                             	.LC0:
+  73 0000 FC                      		.byte	-4
+  74 0001 60                      		.byte	96
+  75 0002 DA                      		.byte	-38
+  76 0003 F2                      		.byte	-14
+  77 0004 66                      		.byte	102
+  78 0005 B6                      		.byte	-74
+  79 0006 BE                      		.byte	-66
+  80 0007 E0                      		.byte	-32
+  81 0008 FE                      		.byte	-2
+  82 0009 F6                      		.byte	-10
+  83                             		.section	.text.convert_ascii_to_seven_segment,"ax",@progbits
+  84                             		.global	_convert_ascii_to_seven_segment
+  86                             	_convert_ascii_to_seven_segment:
+  87                             	.LFB0:
+  88                             		.file 1 "../HMI/4Digit_7Segment.c"
+   1:../HMI/4Digit_7Segment.c **** /*
+   2:../HMI/4Digit_7Segment.c ****  * 4Digit_7Segment.c
+   3:../HMI/4Digit_7Segment.c ****  *
+   4:../HMI/4Digit_7Segment.c ****  *  Created on: Nov 21, 2023
+   5:../HMI/4Digit_7Segment.c ****  *      Author: Mr. Han
+   6:../HMI/4Digit_7Segment.c ****  */
+   7:../HMI/4Digit_7Segment.c **** 
+   8:../HMI/4Digit_7Segment.c **** #include "r_cg_macrodriver.h"
+   9:../HMI/4Digit_7Segment.c **** #include "r_cg_userdefine.h"
+  10:../HMI/4Digit_7Segment.c **** 
+  11:../HMI/4Digit_7Segment.c **** /**************************************************************************************************
+  12:../HMI/4Digit_7Segment.c **** Global variables and functions
+  13:../HMI/4Digit_7Segment.c **** ***************************************************************************************************
+  14:../HMI/4Digit_7Segment.c **** 
+  15:../HMI/4Digit_7Segment.c **** char Parameters_Display_Data[4] = {'A', '1', '0', '0'};
+  16:../HMI/4Digit_7Segment.c **** char Parameter_Name[2] = "A0";
+  17:../HMI/4Digit_7Segment.c **** char Parameter_Value[2] = "r-";
+  18:../HMI/4Digit_7Segment.c **** 
+  19:../HMI/4Digit_7Segment.c **** uint8_t Mask = 0xff;
+  20:../HMI/4Digit_7Segment.c **** //unsigned char Status_Display_Data[4] = {0b00000001, 0b00000000, 0b00000000, 0b00000000};
+  21:../HMI/4Digit_7Segment.c **** uint8_t Command_Status_No1 = 0x01, Command_Status_No2, Safety_Status_No1, Safety_Status_No2;
+  22:../HMI/4Digit_7Segment.c **** uint8_t Digit_Count;
+  23:../HMI/4Digit_7Segment.c **** 
+  24:../HMI/4Digit_7Segment.c **** uint8_t convert_ascii_to_seven_segment(uint8_t ascii_character)
+  25:../HMI/4Digit_7Segment.c **** {
+  89                             		.loc 1 25 0
+  90                             		; start of function
+  91                             		; locals: 12 bytes
+  92                             		; outgoing: 6 bytes
+  93                             		; uses ES register
+  94 0000 20 12                   		subw	sp, #18
+  95                             	.LCFI0:
+  26:../HMI/4Digit_7Segment.c **** 	uint8_t ascii_number_table[] = {0b11111100, 0b01100000, 0b11011010, 0b11110010, 0b01100110,
+  96                             		.loc 1 26 0
+  97 0002 AE F8                   		movw	ax, sp
+  98 0004 BD F2                   		movw	r10, ax
+  99 0006 04 07 00                		addw	ax, #7
+ 100 0009 BD F0                   		movw	r8, ax
+ 101 000b C9 F4 00 00             		movw	r12, #.LC0
+ 102 000f C9 F2 0A 00             		movw	r10, #10
+ 103 0013 B8 00                   		movw	[sp], ax
+ 104 0015 AD F4                   		movw	ax, r12
+ 105 0017 B8 02                   		movw	[sp+2], ax
+ 106 0019 AD F2                   		movw	ax, r10
+ 107 001b B8 04                   		movw	[sp+4], ax
+ 108 001d FC 00 00 00             		call	!!%code(_memcpy)
+  27:../HMI/4Digit_7Segment.c **** 									0b10110110, 0b10111110,	0b11100000, 0b11111110, 0b11110110,};
+  28:../HMI/4Digit_7Segment.c ****     uint8_t Ret_Value;
+  29:../HMI/4Digit_7Segment.c ****     switch (ascii_character)
+ 109                             		.loc 1 29 0
+ 110 0021 88 16                   		mov	a, [sp+22]
+ 111 0023 31 8E                   		shrw	ax, 8
+ 112 0025 BD F0                   		movw	r8, ax
+ 113 0027 44 4F 00                		cmpw	ax, #79
+ 114 002a 61 F8                   		 sknz
+ 115 002c EC D6 01 00             		 br	!!.L3
+ 116 0030 AD F0                   		movw	ax, r8
+ 117 0032 44 4F 00                		cmpw	ax, #79
+ 118 0035 71 FF                   		 xor1	CY, a.7
+ 119 0037 61 F3                   		 sknh
+ 120 0039 EC DC 00 00             		 br	!!.L4
+ 121 003d AD F0                   		movw	ax, r8
+ 122 003f 44 41 00                		cmpw	ax, #65
+ 123 0042 61 F8                   		 sknz
+ 124 0044 EC A6 01 00             		 br	!!.L5
+ 125 0048 AD F0                   		movw	ax, r8
+ 126 004a 44 41 00                		cmpw	ax, #65
+ 127 004d 71 FF                   		 xor1	CY, a.7
+ 128 004f 61 F3                   		 sknh
+ 129 0051 EC 90 00 00             		 br	!!.L6
+ 130 0055 AD F0                   		movw	ax, r8
+ 131 0057 44 2D 00                		cmpw	ax, #45
+ 132 005a 61 F8                   		 sknz
+ 133 005c EC 2E 02 00             		 br	!!.L7
+ 134 0060 AD F0                   		movw	ax, r8
+ 135 0062 44 2D 00                		cmpw	ax, #45
+ 136 0065 71 FF                   		 xor1	CY, a.7
+ 137 0067 61 F3                   		 sknh
+ 138 0069 EC 7C 00 00             		 br	!!.L8
+ 139 006d AD F0                   		movw	ax, r8
+ 140 006f 44 20 00                		cmpw	ax, #32
+ 141 0072 61 F8                   		 sknz
+ 142 0074 EC 36 02 00             		 br	!!.L9
+ 143 0078 EC 3D 02 00             		br	!!.L2
+ 144                             	.L8:
+ 145 007c AD F0                   		movw	ax, r8
+ 146 007e 04 D0 FF                		addw	ax, #-48
+ 147 0081 BD F0                   		movw	r8, ax
+ 148 0083 44 09 00                		cmpw	ax, #9
+ 149 0086 61 F3                   		 sknh
+ 150 0088 EC 3D 02 00             		 br	!!.L2
+ 151 008c EC 81 01 00             		br	!!.L32
+ 152                             	.L6:
+ 153 0090 AD F0                   		movw	ax, r8
+ 154 0092 44 46 00                		cmpw	ax, #70
+ 155 0095 61 F8                   		 sknz
+ 156 0097 EC BE 01 00             		 br	!!.L11
+ 157 009b AD F0                   		movw	ax, r8
+ 158 009d 44 46 00                		cmpw	ax, #70
+ 159 00a0 71 FF                   		 xor1	CY, a.7
+ 160 00a2 61 F3                   		 sknh
+ 161 00a4 EC C2 00 00             		 br	!!.L12
+ 162 00a8 AD F0                   		movw	ax, r8
+ 163 00aa 44 43 00                		cmpw	ax, #67
+ 164 00ad 61 F8                   		 sknz
+ 165 00af EC AE 01 00             		 br	!!.L13
+ 166 00b3 AD F0                   		movw	ax, r8
+ 167 00b5 44 45 00                		cmpw	ax, #69
+ 168 00b8 61 F8                   		 sknz
+ 169 00ba EC B6 01 00             		 br	!!.L14
+ 170 00be EC 3D 02 00             		br	!!.L2
+ 171                             	.L12:
+ 172 00c2 AD F0                   		movw	ax, r8
+ 173 00c4 44 48 00                		cmpw	ax, #72
+ 174 00c7 61 F8                   		 sknz
+ 175 00c9 EC C6 01 00             		 br	!!.L15
+ 176 00cd AD F0                   		movw	ax, r8
+ 177 00cf 44 4A 00                		cmpw	ax, #74
+ 178 00d2 61 F8                   		 sknz
+ 179 00d4 EC CE 01 00             		 br	!!.L16
+ 180 00d8 EC 3D 02 00             		br	!!.L2
+ 181                             	.L4:
+ 182 00dc AD F0                   		movw	ax, r8
+ 183 00de 44 68 00                		cmpw	ax, #104
+ 184 00e1 61 F8                   		 sknz
+ 185 00e3 EC FE 01 00             		 br	!!.L17
+ 186 00e7 AD F0                   		movw	ax, r8
+ 187 00e9 44 68 00                		cmpw	ax, #104
+ 188 00ec 71 FF                   		 xor1	CY, a.7
+ 189 00ee 61 F3                   		 sknh
+ 190 00f0 EC 35 01 00             		 br	!!.L18
+ 191 00f4 AD F0                   		movw	ax, r8
+ 192 00f6 44 53 00                		cmpw	ax, #83
+ 193 00f9 61 F8                   		 sknz
+ 194 00fb EC E6 01 00             		 br	!!.L19
+ 195 00ff AD F0                   		movw	ax, r8
+ 196 0101 44 53 00                		cmpw	ax, #83
+ 197 0104 71 FF                   		 xor1	CY, a.7
+ 198 0106 61 F3                   		 sknh
+ 199 0108 EC 1B 01 00             		 br	!!.L20
+ 200 010c AD F0                   		movw	ax, r8
+ 201 010e 44 50 00                		cmpw	ax, #80
+ 202 0111 61 F8                   		 sknz
+ 203 0113 EC DE 01 00             		 br	!!.L21
+ 204 0117 EC 3D 02 00             		br	!!.L2
+ 205                             	.L20:
+ 206 011b AD F0                   		movw	ax, r8
+ 207 011d 44 55 00                		cmpw	ax, #85
+ 208 0120 61 F8                   		 sknz
+ 209 0122 EC EE 01 00             		 br	!!.L22
+ 210 0126 AD F0                   		movw	ax, r8
+ 211 0128 44 64 00                		cmpw	ax, #100
+ 212 012b 61 F8                   		 sknz
+ 213 012d EC F6 01 00             		 br	!!.L23
+ 214 0131 EC 3D 02 00             		br	!!.L2
+ 215                             	.L18:
+ 216 0135 AD F0                   		movw	ax, r8
+ 217 0137 44 6F 00                		cmpw	ax, #111
+ 218 013a 61 F8                   		 sknz
+ 219 013c EC 16 02 00             		 br	!!.L24
+ 220 0140 AD F0                   		movw	ax, r8
+ 221 0142 44 6F 00                		cmpw	ax, #111
+ 222 0145 71 FF                   		 xor1	CY, a.7
+ 223 0147 61 F3                   		 sknh
+ 224 0149 EC 67 01 00             		 br	!!.L25
+ 225 014d AD F0                   		movw	ax, r8
+ 226 014f 44 69 00                		cmpw	ax, #105
+ 227 0152 61 F8                   		 sknz
+ 228 0154 EC 06 02 00             		 br	!!.L26
+ 229 0158 AD F0                   		movw	ax, r8
+ 230 015a 44 6E 00                		cmpw	ax, #110
+ 231 015d 61 F8                   		 sknz
+ 232 015f EC 0E 02 00             		 br	!!.L27
+ 233 0163 EC 3D 02 00             		br	!!.L2
+ 234                             	.L25:
+ 235 0167 AD F0                   		movw	ax, r8
+ 236 0169 44 72 00                		cmpw	ax, #114
+ 237 016c 61 F8                   		 sknz
+ 238 016e EC 1E 02 00             		 br	!!.L28
+ 239 0172 AD F0                   		movw	ax, r8
+ 240 0174 44 74 00                		cmpw	ax, #116
+ 241 0177 61 F8                   		 sknz
+ 242 0179 EC 26 02 00             		 br	!!.L29
+ 243 017d EC 3D 02 00             		br	!!.L2
+ 244                             	.L32:
+  30:../HMI/4Digit_7Segment.c ****     {
+  31:../HMI/4Digit_7Segment.c ****     case '0':
+  32:../HMI/4Digit_7Segment.c ****     case '1':
+  33:../HMI/4Digit_7Segment.c ****     case '2':
+  34:../HMI/4Digit_7Segment.c ****     case '3':
+  35:../HMI/4Digit_7Segment.c ****     case '4':
+  36:../HMI/4Digit_7Segment.c ****     case '5':
+  37:../HMI/4Digit_7Segment.c ****     case '6':
+  38:../HMI/4Digit_7Segment.c ****     case '7':
+  39:../HMI/4Digit_7Segment.c ****     case '8':
+  40:../HMI/4Digit_7Segment.c ****     case '9':
+  41:../HMI/4Digit_7Segment.c ****     	{
+  42:../HMI/4Digit_7Segment.c **** 		Ret_Value = ascii_number_table[ascii_character-'0'];
+ 245                             		.loc 1 42 0
+ 246 0181 88 16                   		mov	a, [sp+22]
+ 247 0183 31 8E                   		shrw	ax, 8
+ 248 0185 BD F0                   		movw	r8, ax
+ 249 0187 04 D0 FF                		addw	ax, #-48
+ 250 018a BD F0                   		movw	r8, ax
+ 251 018c AE F8                   		movw	ax, sp
+ 252 018e BD F4                   		movw	r12, ax
+ 253 0190 04 07 00                		addw	ax, #7
+ 254 0193 BD F2                   		movw	r10, ax
+ 255 0195 06 F0                   		addw	ax, r8
+ 256 0197 BD F0                   		movw	r8, ax
+ 257 0199 BD F2                   		movw	r10, ax
+ 258 019b FA F2                   		movw	hl, r10
+ 259 019d 8B                      		mov	a, [hl]
+ 260 019e 9D F0                   		mov	r8, a
+ 261 01a0 98 11                   		mov	[sp+17], a
+  43:../HMI/4Digit_7Segment.c ****     	} break;
+ 262                             		.loc 1 43 0
+ 263 01a2 EC 42 02 00             		br	!!.L30
+ 264                             	.L5:
+  44:../HMI/4Digit_7Segment.c ****     case 'A':
+  45:../HMI/4Digit_7Segment.c ****     	{
+  46:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b11101110;
+ 265                             		.loc 1 46 0
+ 266 01a6 51 EE                   		mov	a, #-18
+ 267 01a8 98 11                   		mov	[sp+17], a
+  47:../HMI/4Digit_7Segment.c ****     	} break;
+ 268                             		.loc 1 47 0
+ 269 01aa EC 42 02 00             		br	!!.L30
+ 270                             	.L13:
+  48:../HMI/4Digit_7Segment.c ****     case 'C':
+  49:../HMI/4Digit_7Segment.c ****     	{
+  50:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b10011100;
+ 271                             		.loc 1 50 0
+ 272 01ae 51 9C                   		mov	a, #-100
+ 273 01b0 98 11                   		mov	[sp+17], a
+  51:../HMI/4Digit_7Segment.c ****     	} break;
+ 274                             		.loc 1 51 0
+ 275 01b2 EC 42 02 00             		br	!!.L30
+ 276                             	.L14:
+  52:../HMI/4Digit_7Segment.c ****     case 'E':
+  53:../HMI/4Digit_7Segment.c ****     	{
+  54:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b10011110;
+ 277                             		.loc 1 54 0
+ 278 01b6 51 9E                   		mov	a, #-98
+ 279 01b8 98 11                   		mov	[sp+17], a
+  55:../HMI/4Digit_7Segment.c ****     	} break;
+ 280                             		.loc 1 55 0
+ 281 01ba EC 42 02 00             		br	!!.L30
+ 282                             	.L11:
+  56:../HMI/4Digit_7Segment.c ****     case 'F':
+  57:../HMI/4Digit_7Segment.c ****     	{
+  58:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b10001110;
+ 283                             		.loc 1 58 0
+ 284 01be 51 8E                   		mov	a, #-114
+ 285 01c0 98 11                   		mov	[sp+17], a
+  59:../HMI/4Digit_7Segment.c ****     	} break;
+ 286                             		.loc 1 59 0
+ 287 01c2 EC 42 02 00             		br	!!.L30
+ 288                             	.L15:
+  60:../HMI/4Digit_7Segment.c ****     case 'H':
+  61:../HMI/4Digit_7Segment.c ****     	{
+  62:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b01101110;
+ 289                             		.loc 1 62 0
+ 290 01c6 51 6E                   		mov	a, #110
+ 291 01c8 98 11                   		mov	[sp+17], a
+  63:../HMI/4Digit_7Segment.c ****     	} break;
+ 292                             		.loc 1 63 0
+ 293 01ca EC 42 02 00             		br	!!.L30
+ 294                             	.L16:
+  64:../HMI/4Digit_7Segment.c ****     case 'J':
+  65:../HMI/4Digit_7Segment.c ****     	{
+  66:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b01110000;
+ 295                             		.loc 1 66 0
+ 296 01ce 51 70                   		mov	a, #112
+ 297 01d0 98 11                   		mov	[sp+17], a
+  67:../HMI/4Digit_7Segment.c ****     	} break;
+ 298                             		.loc 1 67 0
+ 299 01d2 EC 42 02 00             		br	!!.L30
+ 300                             	.L3:
+  68:../HMI/4Digit_7Segment.c ****     case 'O':
+  69:../HMI/4Digit_7Segment.c ****     	{
+  70:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b11111100;
+ 301                             		.loc 1 70 0
+ 302 01d6 51 FC                   		mov	a, #-4
+ 303 01d8 98 11                   		mov	[sp+17], a
+  71:../HMI/4Digit_7Segment.c ****     	} break;
+ 304                             		.loc 1 71 0
+ 305 01da EC 42 02 00             		br	!!.L30
+ 306                             	.L21:
+  72:../HMI/4Digit_7Segment.c ****     case 'P':
+  73:../HMI/4Digit_7Segment.c ****     	{
+  74:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b11001110;
+ 307                             		.loc 1 74 0
+ 308 01de 51 CE                   		mov	a, #-50
+ 309 01e0 98 11                   		mov	[sp+17], a
+  75:../HMI/4Digit_7Segment.c ****     	} break;
+ 310                             		.loc 1 75 0
+ 311 01e2 EC 42 02 00             		br	!!.L30
+ 312                             	.L19:
+  76:../HMI/4Digit_7Segment.c ****     case 'S':
+  77:../HMI/4Digit_7Segment.c ****     	{
+  78:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b10110110;
+ 313                             		.loc 1 78 0
+ 314 01e6 51 B6                   		mov	a, #-74
+ 315 01e8 98 11                   		mov	[sp+17], a
+  79:../HMI/4Digit_7Segment.c ****     	} break;
+ 316                             		.loc 1 79 0
+ 317 01ea EC 42 02 00             		br	!!.L30
+ 318                             	.L22:
+  80:../HMI/4Digit_7Segment.c ****     case 'U':
+  81:../HMI/4Digit_7Segment.c ****     	{
+  82:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b01111100;
+ 319                             		.loc 1 82 0
+ 320 01ee 51 7C                   		mov	a, #124
+ 321 01f0 98 11                   		mov	[sp+17], a
+  83:../HMI/4Digit_7Segment.c ****     	} break;
+ 322                             		.loc 1 83 0
+ 323 01f2 EC 42 02 00             		br	!!.L30
+ 324                             	.L23:
+  84:../HMI/4Digit_7Segment.c ****     case 'd':
+  85:../HMI/4Digit_7Segment.c ****     	{
+  86:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b01111010;
+ 325                             		.loc 1 86 0
+ 326 01f6 51 7A                   		mov	a, #122
+ 327 01f8 98 11                   		mov	[sp+17], a
+  87:../HMI/4Digit_7Segment.c ****     	} break;
+ 328                             		.loc 1 87 0
+ 329 01fa EC 42 02 00             		br	!!.L30
+ 330                             	.L17:
+  88:../HMI/4Digit_7Segment.c ****     case 'h':
+  89:../HMI/4Digit_7Segment.c ****     	{
+  90:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b00101110;
+ 331                             		.loc 1 90 0
+ 332 01fe 51 2E                   		mov	a, #46
+ 333 0200 98 11                   		mov	[sp+17], a
+  91:../HMI/4Digit_7Segment.c ****     	} break;
+ 334                             		.loc 1 91 0
+ 335 0202 EC 42 02 00             		br	!!.L30
+ 336                             	.L26:
+  92:../HMI/4Digit_7Segment.c ****     case 'i':
+  93:../HMI/4Digit_7Segment.c ****     	{
+  94:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b00011000;
+ 337                             		.loc 1 94 0
+ 338 0206 51 18                   		mov	a, #24
+ 339 0208 98 11                   		mov	[sp+17], a
+  95:../HMI/4Digit_7Segment.c ****     	} break;
+ 340                             		.loc 1 95 0
+ 341 020a EC 42 02 00             		br	!!.L30
+ 342                             	.L27:
+  96:../HMI/4Digit_7Segment.c ****     case 'n':
+  97:../HMI/4Digit_7Segment.c ****     	{
+  98:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b00101010;
+ 343                             		.loc 1 98 0
+ 344 020e 51 2A                   		mov	a, #42
+ 345 0210 98 11                   		mov	[sp+17], a
+  99:../HMI/4Digit_7Segment.c ****     	} break;
+ 346                             		.loc 1 99 0
+ 347 0212 EC 42 02 00             		br	!!.L30
+ 348                             	.L24:
+ 100:../HMI/4Digit_7Segment.c ****     case 'o':
+ 101:../HMI/4Digit_7Segment.c ****     	{
+ 102:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b00111010;
+ 349                             		.loc 1 102 0
+ 350 0216 51 3A                   		mov	a, #58
+ 351 0218 98 11                   		mov	[sp+17], a
+ 103:../HMI/4Digit_7Segment.c ****     	} break;
+ 352                             		.loc 1 103 0
+ 353 021a EC 42 02 00             		br	!!.L30
+ 354                             	.L28:
+ 104:../HMI/4Digit_7Segment.c ****     case 'r':
+ 105:../HMI/4Digit_7Segment.c ****     	{
+ 106:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b00001010;
+ 355                             		.loc 1 106 0
+ 356 021e 51 0A                   		mov	a, #10
+ 357 0220 98 11                   		mov	[sp+17], a
+ 107:../HMI/4Digit_7Segment.c ****     	} break;
+ 358                             		.loc 1 107 0
+ 359 0222 EC 42 02 00             		br	!!.L30
+ 360                             	.L29:
+ 108:../HMI/4Digit_7Segment.c ****     case 't':
+ 109:../HMI/4Digit_7Segment.c ****     	{
+ 110:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b00011110;
+ 361                             		.loc 1 110 0
+ 362 0226 51 1E                   		mov	a, #30
+ 363 0228 98 11                   		mov	[sp+17], a
+ 111:../HMI/4Digit_7Segment.c ****     	} break;
+ 364                             		.loc 1 111 0
+ 365 022a EC 42 02 00             		br	!!.L30
+ 366                             	.L7:
+ 112:../HMI/4Digit_7Segment.c ****     case '-':
+ 113:../HMI/4Digit_7Segment.c ****     	{
+ 114:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b00000010;
+ 367                             		.loc 1 114 0
+ 368 022e 51 02                   		mov	a, #2
+ 369 0230 98 11                   		mov	[sp+17], a
+ 115:../HMI/4Digit_7Segment.c ****     	} break;
+ 370                             		.loc 1 115 0
+ 371 0232 EC 42 02 00             		br	!!.L30
+ 372                             	.L9:
+ 116:../HMI/4Digit_7Segment.c ****     case ' ':
+ 117:../HMI/4Digit_7Segment.c ****     	{
+ 118:../HMI/4Digit_7Segment.c ****     	Ret_Value = 0b00000000;
+ 373                             		.loc 1 118 0
+ 374 0236 F1                      		clrb	a
+ 375 0237 98 11                   		mov	[sp+17], a
+ 119:../HMI/4Digit_7Segment.c ****     	} break;
+ 376                             		.loc 1 119 0
+ 377 0239 EC 42 02 00             		br	!!.L30
+ 378                             	.L2:
+ 120:../HMI/4Digit_7Segment.c ****     default: Ret_Value = 0b01101100; break;
+ 379                             		.loc 1 120 0
+ 380 023d 51 6C                   		mov	a, #108
+ 381 023f 98 11                   		mov	[sp+17], a
+ 382 0241 00                      		nop
+ 383                             	.L30:
+ 121:../HMI/4Digit_7Segment.c ****     }
+ 122:../HMI/4Digit_7Segment.c ****     return Ret_Value;
+ 384                             		.loc 1 122 0
+ 385 0242 88 11                   		mov	a, [sp+17]
+ 386 0244 9D F0                   		mov	r8, a
+ 123:../HMI/4Digit_7Segment.c **** }
+ 387                             		.loc 1 123 0
+ 388 0246 10 12                   		addw	sp, #18
+ 389 0248 D7                      		ret
+ 390                             	.LFE0:
+ 392                             		.section	.rodata
+ 393                             	.LC1:
+ 394 000a FC                      		.byte	-4
+ 395 000b 60                      		.byte	96
+ 396 000c DA                      		.byte	-38
+ 397 000d F2                      		.byte	-14
+ 398 000e 66                      		.byte	102
+ 399 000f B6                      		.byte	-74
+ 400 0010 BE                      		.byte	-66
+ 401 0011 E0                      		.byte	-32
+ 402 0012 FE                      		.byte	-2
+ 403 0013 F6                      		.byte	-10
+ 404 0014 EE                      		.byte	-18
+ 405 0015 3E                      		.byte	62
+ 406 0016 9C                      		.byte	-100
+ 407 0017 7A                      		.byte	122
+ 408 0018 9E                      		.byte	-98
+ 409 0019 8E                      		.byte	-114
+ 410                             		.section	.text.convert_number_to_seven_segment,"ax",@progbits
+ 411                             		.global	_convert_number_to_seven_segment
+ 413                             	_convert_number_to_seven_segment:
+ 414                             	.LFB1:
+ 124:../HMI/4Digit_7Segment.c **** 
+ 125:../HMI/4Digit_7Segment.c **** uint8_t convert_number_to_seven_segment(uint8_t _number)
+ 126:../HMI/4Digit_7Segment.c **** {
+ 415                             		.loc 1 126 0
+ 416                             		; start of function
+ 417                             		; locals: 18 bytes
+ 418                             		; outgoing: 6 bytes
+ 419                             		; uses ES register
+ 420 0000 20 18                   		subw	sp, #24
+ 421                             	.LCFI1:
+ 127:../HMI/4Digit_7Segment.c **** 	uint8_t ascii_number_table[] = {0b11111100, 0b01100000, 0b11011010, 0b11110010,
+ 422                             		.loc 1 127 0
+ 423 0002 AE F8                   		movw	ax, sp
+ 424 0004 BD F2                   		movw	r10, ax
+ 425 0006 04 07 00                		addw	ax, #7
+ 426 0009 BD F0                   		movw	r8, ax
+ 427 000b C9 F4 0A 00             		movw	r12, #.LC1
+ 428 000f C9 F2 10 00             		movw	r10, #16
+ 429 0013 B8 00                   		movw	[sp], ax
+ 430 0015 AD F4                   		movw	ax, r12
+ 431 0017 B8 02                   		movw	[sp+2], ax
+ 432 0019 AD F2                   		movw	ax, r10
+ 433 001b B8 04                   		movw	[sp+4], ax
+ 434 001d FC 00 00 00             		call	!!%code(_memcpy)
+ 128:../HMI/4Digit_7Segment.c **** 									0b01100110,	0b10110110, 0b10111110,	0b11100000,
+ 129:../HMI/4Digit_7Segment.c **** 									0b11111110, 0b11110110, 0b11101110, 0b00111110,
+ 130:../HMI/4Digit_7Segment.c **** 									0b10011100, 0b01111010, 0b10011110, 0b10001110};
+ 131:../HMI/4Digit_7Segment.c ****     uint8_t Ret_Value;
+ 132:../HMI/4Digit_7Segment.c **** 	if (_number < 16)
+ 435                             		.loc 1 132 0
+ 436 0021 88 1C                   		mov	a, [sp+28]
+ 437 0023 4C 0F                   		cmp	a, #15
+ 438 0025 61 F3                   		 sknh
+ 439 0027 EC 4B 00 00             		 br	!!.L34
+ 133:../HMI/4Digit_7Segment.c ****     {
+ 134:../HMI/4Digit_7Segment.c **** 		Ret_Value = ascii_number_table[_number];
+ 440                             		.loc 1 134 0
+ 441 002b 88 1C                   		mov	a, [sp+28]
+ 442 002d 31 8E                   		shrw	ax, 8
+ 443 002f BD F0                   		movw	r8, ax
+ 444 0031 AE F8                   		movw	ax, sp
+ 445 0033 BD F4                   		movw	r12, ax
+ 446 0035 04 07 00                		addw	ax, #7
+ 447 0038 BD F2                   		movw	r10, ax
+ 448 003a 06 F0                   		addw	ax, r8
+ 449 003c BD F0                   		movw	r8, ax
+ 450 003e BD F2                   		movw	r10, ax
+ 451 0040 FA F2                   		movw	hl, r10
+ 452 0042 8B                      		mov	a, [hl]
+ 453 0043 9D F0                   		mov	r8, a
+ 454 0045 98 17                   		mov	[sp+23], a
+ 455 0047 EC 4F 00 00             		br	!!.L35
+ 456                             	.L34:
+ 135:../HMI/4Digit_7Segment.c ****     }
+ 136:../HMI/4Digit_7Segment.c ****     else
+ 137:../HMI/4Digit_7Segment.c ****     {
+ 138:../HMI/4Digit_7Segment.c **** 		Ret_Value = 0b01101100;
+ 457                             		.loc 1 138 0
+ 458 004b 51 6C                   		mov	a, #108
+ 459 004d 98 17                   		mov	[sp+23], a
+ 460                             	.L35:
+ 139:../HMI/4Digit_7Segment.c ****     }
+ 140:../HMI/4Digit_7Segment.c **** 	return Ret_Value;
+ 461                             		.loc 1 140 0
+ 462 004f 88 17                   		mov	a, [sp+23]
+ 463 0051 9D F0                   		mov	r8, a
+ 141:../HMI/4Digit_7Segment.c **** }
+ 464                             		.loc 1 141 0
+ 465 0053 10 18                   		addw	sp, #24
+ 466 0055 D7                      		ret
+ 467                             	.LFE1:
+ 469                             		.section	.text.Output_Anode_Seven_Segment,"ax",@progbits
+ 470                             		.global	_Output_Anode_Seven_Segment
+ 472                             	_Output_Anode_Seven_Segment:
+ 473                             	.LFB2:
+ 142:../HMI/4Digit_7Segment.c **** 
+ 143:../HMI/4Digit_7Segment.c **** void Output_Anode_Seven_Segment (uint8_t Digit_Val)
+ 144:../HMI/4Digit_7Segment.c **** {
+ 474                             		.loc 1 144 0
+ 145:../HMI/4Digit_7Segment.c **** 	SEG_A =	 (Digit_Val & (1<<7))? 1: 0;
+ 475                             		.loc 1 145 0
+ 476 0000 C9 F0 0E FF             		movw	r8, #-242
+ 477 0004 88 04                   		mov	a, [sp+4]
+ 478 0006 9D F2                   		mov	r10, a
+ 479 0008 31 7A                   		shr	a, 7
+ 480 000a 9D F2                   		mov	r10, a
+ 481 000c 5A F2 01                		and	r10, #1
+ 482 000f 8D F2                   		mov	a, r10
+ 483 0011 31 69                   		shl	a, 6
+ 484 0013 9D F2                   		mov	r10, a
+ 485 0015 AD F0                   		movw	ax, r8
+ 486 0017 BD F4                   		movw	r12, ax
+ 487 0019 FA F4                   		movw	hl, r12
+ 488 001b 8B                      		mov	a, [hl]
+ 489 001c 9D F3                   		mov	r11, a
+ 490 001e 5A F3 BF                		and	r11, #-65
+ 491 0021 8D F3                   		mov	a, r11
+ 492 0023 6B F2                   		or	a, r10
+ 493 0025 9D F2                   		mov	r10, a
+ 494 0027 AD F0                   		movw	ax, r8
+ 495 0029 EA F4                   		movw	de, r12
+ 496 002b 8D F2                   		mov	a, r10
+ 497 002d 99                      		mov	[de], a
+ 146:../HMI/4Digit_7Segment.c **** 	SEG_B =  (Digit_Val & (1<<6))? 1: 0;
+ 498                             		.loc 1 146 0
+ 499 002e C9 F2 01 FF             		movw	r10, #-255
+ 500 0032 88 04                   		mov	a, [sp+4]
+ 501 0034 31 8E                   		shrw	ax, 8
+ 502 0036 BD F0                   		movw	r8, ax
+ 503 0038 5A F0 40                		and	r8, #64
+ 504 003b F4 F1                   		clrb	r9 ;andhi3 r8,r8,#64
+ 505 003d AD F0                   		movw	ax, r8
+ 506 003f 44 00 00                		cmpw	ax, #0
+ 507 0042 C9 F0 00 00             		movw	r8, #0
+ 508 0046 61 E8                   		skz
+ 509 0048 E4 F0                   		oneb	r8 ; cstorehi4 r8,nz,ax,#0
+ 510 004a 5A F0 01                		and	r8, #1
+ 511 004d AD F2                   		movw	ax, r10
+ 512 004f BD F4                   		movw	r12, ax
+ 513 0051 FA F4                   		movw	hl, r12
+ 514 0053 8B                      		mov	a, [hl]
+ 515 0054 9D F1                   		mov	r9, a
+ 516 0056 5A F1 FE                		and	r9, #-2
+ 517 0059 8D F1                   		mov	a, r9
+ 518 005b 6B F0                   		or	a, r8
+ 519 005d 9D F0                   		mov	r8, a
+ 520 005f AD F2                   		movw	ax, r10
+ 521 0061 EA F4                   		movw	de, r12
+ 522 0063 8D F0                   		mov	a, r8
+ 523 0065 99                      		mov	[de], a
+ 147:../HMI/4Digit_7Segment.c **** 	SEG_C =  (Digit_Val & (1<<5))? 1: 0;
+ 524                             		.loc 1 147 0
+ 525 0066 C9 F2 01 FF             		movw	r10, #-255
+ 526 006a 88 04                   		mov	a, [sp+4]
+ 527 006c 31 8E                   		shrw	ax, 8
+ 528 006e BD F0                   		movw	r8, ax
+ 529 0070 5A F0 20                		and	r8, #32
+ 530 0073 F4 F1                   		clrb	r9 ;andhi3 r8,r8,#32
+ 531 0075 AD F0                   		movw	ax, r8
+ 532 0077 44 00 00                		cmpw	ax, #0
+ 533 007a C9 F0 00 00             		movw	r8, #0
+ 534 007e 61 E8                   		skz
+ 535 0080 E4 F0                   		oneb	r8 ; cstorehi4 r8,nz,ax,#0
+ 536 0082 5A F0 01                		and	r8, #1
+ 537 0085 8D F0                   		mov	a, r8
+ 538 0087 61 01                   		add	a, a
+ 539 0089 9D F0                   		mov	r8, a
+ 540 008b AD F2                   		movw	ax, r10
+ 541 008d BD F4                   		movw	r12, ax
+ 542 008f FA F4                   		movw	hl, r12
+ 543 0091 8B                      		mov	a, [hl]
+ 544 0092 9D F1                   		mov	r9, a
+ 545 0094 5A F1 FD                		and	r9, #-3
+ 546 0097 8D F1                   		mov	a, r9
+ 547 0099 6B F0                   		or	a, r8
+ 548 009b 9D F0                   		mov	r8, a
+ 549 009d AD F2                   		movw	ax, r10
+ 550 009f EA F4                   		movw	de, r12
+ 551 00a1 8D F0                   		mov	a, r8
+ 552 00a3 99                      		mov	[de], a
+ 148:../HMI/4Digit_7Segment.c **** 	SEG_D =  (Digit_Val & (1<<4))? 1: 0;
+ 553                             		.loc 1 148 0
+ 554 00a4 C9 F2 01 FF             		movw	r10, #-255
+ 555 00a8 88 04                   		mov	a, [sp+4]
+ 556 00aa 31 8E                   		shrw	ax, 8
+ 557 00ac BD F0                   		movw	r8, ax
+ 558 00ae 5A F0 10                		and	r8, #16
+ 559 00b1 F4 F1                   		clrb	r9 ;andhi3 r8,r8,#16
+ 560 00b3 AD F0                   		movw	ax, r8
+ 561 00b5 44 00 00                		cmpw	ax, #0
+ 562 00b8 C9 F0 00 00             		movw	r8, #0
+ 563 00bc 61 E8                   		skz
+ 564 00be E4 F0                   		oneb	r8 ; cstorehi4 r8,nz,ax,#0
+ 565 00c0 5A F0 01                		and	r8, #1
+ 566 00c3 8D F0                   		mov	a, r8
+ 567 00c5 31 29                   		shl	a, 2
+ 568 00c7 9D F0                   		mov	r8, a
+ 569 00c9 AD F2                   		movw	ax, r10
+ 570 00cb BD F4                   		movw	r12, ax
+ 571 00cd FA F4                   		movw	hl, r12
+ 572 00cf 8B                      		mov	a, [hl]
+ 573 00d0 9D F1                   		mov	r9, a
+ 574 00d2 5A F1 FB                		and	r9, #-5
+ 575 00d5 8D F1                   		mov	a, r9
+ 576 00d7 6B F0                   		or	a, r8
+ 577 00d9 9D F0                   		mov	r8, a
+ 578 00db AD F2                   		movw	ax, r10
+ 579 00dd EA F4                   		movw	de, r12
+ 580 00df 8D F0                   		mov	a, r8
+ 581 00e1 99                      		mov	[de], a
+ 149:../HMI/4Digit_7Segment.c **** 	SEG_E =  (Digit_Val & (1<<3))? 1: 0;
+ 582                             		.loc 1 149 0
+ 583 00e2 C9 F2 01 FF             		movw	r10, #-255
+ 584 00e6 88 04                   		mov	a, [sp+4]
+ 585 00e8 31 8E                   		shrw	ax, 8
+ 586 00ea BD F0                   		movw	r8, ax
+ 587 00ec 5A F0 08                		and	r8, #8
+ 588 00ef F4 F1                   		clrb	r9 ;andhi3 r8,r8,#8
+ 589 00f1 AD F0                   		movw	ax, r8
+ 590 00f3 44 00 00                		cmpw	ax, #0
+ 591 00f6 C9 F0 00 00             		movw	r8, #0
+ 592 00fa 61 E8                   		skz
+ 593 00fc E4 F0                   		oneb	r8 ; cstorehi4 r8,nz,ax,#0
+ 594 00fe 5A F0 01                		and	r8, #1
+ 595 0101 8D F0                   		mov	a, r8
+ 596 0103 31 39                   		shl	a, 3
+ 597 0105 9D F0                   		mov	r8, a
+ 598 0107 AD F2                   		movw	ax, r10
+ 599 0109 BD F4                   		movw	r12, ax
+ 600 010b FA F4                   		movw	hl, r12
+ 601 010d 8B                      		mov	a, [hl]
+ 602 010e 9D F1                   		mov	r9, a
+ 603 0110 5A F1 F7                		and	r9, #-9
+ 604 0113 8D F1                   		mov	a, r9
+ 605 0115 6B F0                   		or	a, r8
+ 606 0117 9D F0                   		mov	r8, a
+ 607 0119 AD F2                   		movw	ax, r10
+ 608 011b EA F4                   		movw	de, r12
+ 609 011d 8D F0                   		mov	a, r8
+ 610 011f 99                      		mov	[de], a
+ 150:../HMI/4Digit_7Segment.c **** 	SEG_F =  (Digit_Val & (1<<2))? 1: 0;
+ 611                             		.loc 1 150 0
+ 612 0120 C9 F2 01 FF             		movw	r10, #-255
+ 613 0124 88 04                   		mov	a, [sp+4]
+ 614 0126 31 8E                   		shrw	ax, 8
+ 615 0128 BD F0                   		movw	r8, ax
+ 616 012a 5A F0 04                		and	r8, #4
+ 617 012d F4 F1                   		clrb	r9 ;andhi3 r8,r8,#4
+ 618 012f AD F0                   		movw	ax, r8
+ 619 0131 44 00 00                		cmpw	ax, #0
+ 620 0134 C9 F0 00 00             		movw	r8, #0
+ 621 0138 61 E8                   		skz
+ 622 013a E4 F0                   		oneb	r8 ; cstorehi4 r8,nz,ax,#0
+ 623 013c 5A F0 01                		and	r8, #1
+ 624 013f 8D F0                   		mov	a, r8
+ 625 0141 31 49                   		shl	a, 4
+ 626 0143 9D F0                   		mov	r8, a
+ 627 0145 AD F2                   		movw	ax, r10
+ 628 0147 BD F4                   		movw	r12, ax
+ 629 0149 FA F4                   		movw	hl, r12
+ 630 014b 8B                      		mov	a, [hl]
+ 631 014c 9D F1                   		mov	r9, a
+ 632 014e 5A F1 EF                		and	r9, #-17
+ 633 0151 8D F1                   		mov	a, r9
+ 634 0153 6B F0                   		or	a, r8
+ 635 0155 9D F0                   		mov	r8, a
+ 636 0157 AD F2                   		movw	ax, r10
+ 637 0159 EA F4                   		movw	de, r12
+ 638 015b 8D F0                   		mov	a, r8
+ 639 015d 99                      		mov	[de], a
+ 151:../HMI/4Digit_7Segment.c **** 	SEG_G =  (Digit_Val & (1<<1))? 1: 0;
+ 640                             		.loc 1 151 0
+ 641 015e C9 F2 01 FF             		movw	r10, #-255
+ 642 0162 88 04                   		mov	a, [sp+4]
+ 643 0164 31 8E                   		shrw	ax, 8
+ 644 0166 BD F0                   		movw	r8, ax
+ 645 0168 5A F0 02                		and	r8, #2
+ 646 016b F4 F1                   		clrb	r9 ;andhi3 r8,r8,#2
+ 647 016d AD F0                   		movw	ax, r8
+ 648 016f 44 00 00                		cmpw	ax, #0
+ 649 0172 C9 F0 00 00             		movw	r8, #0
+ 650 0176 61 E8                   		skz
+ 651 0178 E4 F0                   		oneb	r8 ; cstorehi4 r8,nz,ax,#0
+ 652 017a 5A F0 01                		and	r8, #1
+ 653 017d 8D F0                   		mov	a, r8
+ 654 017f 31 59                   		shl	a, 5
+ 655 0181 9D F0                   		mov	r8, a
+ 656 0183 AD F2                   		movw	ax, r10
+ 657 0185 BD F4                   		movw	r12, ax
+ 658 0187 FA F4                   		movw	hl, r12
+ 659 0189 8B                      		mov	a, [hl]
+ 660 018a 9D F1                   		mov	r9, a
+ 661 018c 5A F1 DF                		and	r9, #-33
+ 662 018f 8D F1                   		mov	a, r9
+ 663 0191 6B F0                   		or	a, r8
+ 664 0193 9D F0                   		mov	r8, a
+ 665 0195 AD F2                   		movw	ax, r10
+ 666 0197 EA F4                   		movw	de, r12
+ 667 0199 8D F0                   		mov	a, r8
+ 668 019b 99                      		mov	[de], a
+ 152:../HMI/4Digit_7Segment.c **** 	SEG_DP = (Digit_Val & (1<<0))? 1: 0;
+ 669                             		.loc 1 152 0
+ 670 019c C9 F2 01 FF             		movw	r10, #-255
+ 671 01a0 88 04                   		mov	a, [sp+4]
+ 672 01a2 31 8E                   		shrw	ax, 8
+ 673 01a4 BD F0                   		movw	r8, ax
+ 674 01a6 5A F0 01                		and	r8, #1
+ 675 01a9 F4 F1                   		clrb	r9 ;andhi3 r8,r8,#1
+ 676 01ab AD F0                   		movw	ax, r8
+ 677 01ad 44 00 00                		cmpw	ax, #0
+ 678 01b0 C9 F0 00 00             		movw	r8, #0
+ 679 01b4 61 E8                   		skz
+ 680 01b6 E4 F0                   		oneb	r8 ; cstorehi4 r8,nz,ax,#0
+ 681 01b8 8D F0                   		mov	a, r8
+ 682 01ba 31 79                   		shl	a, 7
+ 683 01bc 9D F0                   		mov	r8, a
+ 684 01be AD F2                   		movw	ax, r10
+ 685 01c0 BD F4                   		movw	r12, ax
+ 686 01c2 FA F4                   		movw	hl, r12
+ 687 01c4 8B                      		mov	a, [hl]
+ 688 01c5 9D F1                   		mov	r9, a
+ 689 01c7 5A F1 7F                		and	r9, #127
+ 690 01ca 8D F1                   		mov	a, r9
+ 691 01cc 6B F0                   		or	a, r8
+ 692 01ce 9D F0                   		mov	r8, a
+ 693 01d0 AD F2                   		movw	ax, r10
+ 694 01d2 EA F4                   		movw	de, r12
+ 695 01d4 8D F0                   		mov	a, r8
+ 696 01d6 99                      		mov	[de], a
+ 153:../HMI/4Digit_7Segment.c **** }
+ 697                             		.loc 1 153 0
+ 698 01d7 D7                      		ret
+ 699                             	.LFE2:
+ 701                             		.section	.text.Display_Parameter_Callback,"ax",@progbits
+ 702                             		.global	_Display_Parameter_Callback
+ 704                             	_Display_Parameter_Callback:
+ 705                             	.LFB3:
+ 154:../HMI/4Digit_7Segment.c **** 
+ 155:../HMI/4Digit_7Segment.c **** void Display_Parameter_Callback()
+ 156:../HMI/4Digit_7Segment.c **** {
+ 706                             		.loc 1 156 0
+ 707                             		; start of function
+ 708                             		; outgoing: 2 bytes
+ 709                             		; uses ES register
+ 710 0000 20 02                   		subw	sp, #2
+ 711                             	.LCFI2:
+ 157:../HMI/4Digit_7Segment.c **** 	switch(Digit_Count)
+ 712                             		.loc 1 157 0
+ 713 0002 8F 00 00                		mov	a, !_Digit_Count
+ 714 0005 9D F0                   		mov	r8, a
+ 715 0007 F4 F1                   		clrb	r9
+ 716 0009 AD F0                   		movw	ax, r8
+ 717 000b 44 01 00                		cmpw	ax, #1
+ 718 000e 61 F8                   		 sknz
+ 719 0010 EC 9C 00 00             		 br	!!.L40
+ 720 0014 AD F0                   		movw	ax, r8
+ 721 0016 44 01 00                		cmpw	ax, #1
+ 722 0019 71 FF                   		 xor1	CY, a.7
+ 723 001b 61 F3                   		 sknh
+ 724 001d EC 30 00 00             		 br	!!.L41
+ 725 0021 AD F0                   		movw	ax, r8
+ 726 0023 44 00 00                		cmpw	ax, #0
+ 727 0026 61 F8                   		 sknz
+ 728 0028 EC 4A 00 00             		 br	!!.L42
+ 158:../HMI/4Digit_7Segment.c **** 	{
+ 159:../HMI/4Digit_7Segment.c **** 		case 0:
+ 160:../HMI/4Digit_7Segment.c **** 		{
+ 161:../HMI/4Digit_7Segment.c **** 			DIG_K3 = 0;
+ 162:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(convert_ascii_to_seven_segment(Parameter_Value[1]) & Mask);
+ 163:../HMI/4Digit_7Segment.c **** 			DIG_K0 = 1;
+ 164:../HMI/4Digit_7Segment.c **** 		}
+ 165:../HMI/4Digit_7Segment.c **** 		break;
+ 166:../HMI/4Digit_7Segment.c **** 		case 1:
+ 167:../HMI/4Digit_7Segment.c **** 		{
+ 168:../HMI/4Digit_7Segment.c **** 			DIG_K0 = 0;
+ 169:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(convert_ascii_to_seven_segment(Parameter_Value[0]) & Mask);
+ 170:../HMI/4Digit_7Segment.c **** 			DIG_K1 = 1;
+ 171:../HMI/4Digit_7Segment.c **** 		}
+ 172:../HMI/4Digit_7Segment.c **** 		break;
+ 173:../HMI/4Digit_7Segment.c **** 		case 2:
+ 174:../HMI/4Digit_7Segment.c **** 		{
+ 175:../HMI/4Digit_7Segment.c **** 			DIG_K1 = 0;
+ 176:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(convert_ascii_to_seven_segment(Parameter_Name[1]) & Mask);
+ 177:../HMI/4Digit_7Segment.c **** 			DIG_K2 = 1;
+ 178:../HMI/4Digit_7Segment.c **** 		}
+ 179:../HMI/4Digit_7Segment.c **** 		break;
+ 180:../HMI/4Digit_7Segment.c **** 		case 3:
+ 181:../HMI/4Digit_7Segment.c **** 		{
+ 182:../HMI/4Digit_7Segment.c **** 			DIG_K2 = 0;
+ 183:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(convert_ascii_to_seven_segment(Parameter_Name[0]) & Mask);
+ 184:../HMI/4Digit_7Segment.c **** 			DIG_K3 = 1;
+ 185:../HMI/4Digit_7Segment.c **** 		}
+ 186:../HMI/4Digit_7Segment.c **** 		break;
+ 187:../HMI/4Digit_7Segment.c **** 		default:
+ 188:../HMI/4Digit_7Segment.c **** 		{
+ 189:../HMI/4Digit_7Segment.c **** 			// Do nothing;
+ 190:../HMI/4Digit_7Segment.c **** 		}
+ 191:../HMI/4Digit_7Segment.c **** 		break;
+ 729                             		.loc 1 191 0
+ 730 002c EC 8F 01 00             		br	!!.L38
+ 731                             	.L41:
+ 157:../HMI/4Digit_7Segment.c **** 	switch(Digit_Count)
+ 732                             		.loc 1 157 0
+ 733 0030 AD F0                   		movw	ax, r8
+ 734 0032 44 02 00                		cmpw	ax, #2
+ 735 0035 61 F8                   		 sknz
+ 736 0037 EC EE 00 00             		 br	!!.L43
+ 737 003b AD F0                   		movw	ax, r8
+ 738 003d 44 03 00                		cmpw	ax, #3
+ 739 0040 61 F8                   		 sknz
+ 740 0042 EC 40 01 00             		 br	!!.L44
+ 741                             		.loc 1 191 0
+ 742 0046 EC 8F 01 00             		br	!!.L38
+ 743                             	.L42:
+ 161:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(convert_ascii_to_seven_segment(Parameter_Value[1]) & Mask);
+ 744                             		.loc 1 161 0
+ 745 004a C9 F0 05 FF             		movw	r8, #-251
+ 746 004e AD F0                   		movw	ax, r8
+ 747 0050 BD F4                   		movw	r12, ax
+ 748 0052 FA F4                   		movw	hl, r12
+ 749 0054 8B                      		mov	a, [hl]
+ 750 0055 9D F2                   		mov	r10, a
+ 751 0057 5A F2 EF                		and	r10, #-17
+ 752 005a AD F0                   		movw	ax, r8
+ 753 005c EA F4                   		movw	de, r12
+ 754 005e 8D F2                   		mov	a, r10
+ 755 0060 99                      		mov	[de], a
+ 162:../HMI/4Digit_7Segment.c **** 			DIG_K0 = 1;
+ 756                             		.loc 1 162 0
+ 757 0061 8F 00 00                		mov	a, !_Parameter_Value+1
+ 758 0064 9D F0                   		mov	r8, a
+ 759 0066 98 00                   		mov	[sp], a
+ 760 0068 FC 00 00 00             		call	!!%code(_convert_ascii_to_seven_segment)
+ 761 006c 8D F0                   		mov	a, r8
+ 762 006e 9D F1                   		mov	r9, a
+ 763 0070 8F 00 00                		mov	a, !_Mask
+ 764 0073 9D F0                   		mov	r8, a
+ 765 0075 8D F1                   		mov	a, r9
+ 766 0077 5B F0                   		and	a, r8
+ 767 0079 9D F0                   		mov	r8, a
+ 768 007b 98 00                   		mov	[sp], a
+ 769 007d FC 00 00 00             		call	!!%code(_Output_Anode_Seven_Segment)
+ 163:../HMI/4Digit_7Segment.c **** 		}
+ 770                             		.loc 1 163 0
+ 771 0081 C9 F0 05 FF             		movw	r8, #-251
+ 772 0085 AD F0                   		movw	ax, r8
+ 773 0087 BD F4                   		movw	r12, ax
+ 774 0089 FA F4                   		movw	hl, r12
+ 775 008b 8B                      		mov	a, [hl]
+ 776 008c 9D F2                   		mov	r10, a
+ 777 008e 6A F2 20                		or	r10, #32
+ 778 0091 AD F0                   		movw	ax, r8
+ 779 0093 EA F4                   		movw	de, r12
+ 780 0095 8D F2                   		mov	a, r10
+ 781 0097 99                      		mov	[de], a
+ 165:../HMI/4Digit_7Segment.c **** 		case 1:
+ 782                             		.loc 1 165 0
+ 783 0098 EC 8F 01 00             		br	!!.L38
+ 784                             	.L40:
+ 168:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(convert_ascii_to_seven_segment(Parameter_Value[0]) & Mask);
+ 785                             		.loc 1 168 0
+ 786 009c C9 F0 05 FF             		movw	r8, #-251
+ 787 00a0 AD F0                   		movw	ax, r8
+ 788 00a2 BD F4                   		movw	r12, ax
+ 789 00a4 FA F4                   		movw	hl, r12
+ 790 00a6 8B                      		mov	a, [hl]
+ 791 00a7 9D F2                   		mov	r10, a
+ 792 00a9 5A F2 DF                		and	r10, #-33
+ 793 00ac AD F0                   		movw	ax, r8
+ 794 00ae EA F4                   		movw	de, r12
+ 795 00b0 8D F2                   		mov	a, r10
+ 796 00b2 99                      		mov	[de], a
+ 169:../HMI/4Digit_7Segment.c **** 			DIG_K1 = 1;
+ 797                             		.loc 1 169 0
+ 798 00b3 8F 00 00                		mov	a, !_Parameter_Value
+ 799 00b6 9D F0                   		mov	r8, a
+ 800 00b8 98 00                   		mov	[sp], a
+ 801 00ba FC 00 00 00             		call	!!%code(_convert_ascii_to_seven_segment)
+ 802 00be 8D F0                   		mov	a, r8
+ 803 00c0 9D F1                   		mov	r9, a
+ 804 00c2 8F 00 00                		mov	a, !_Mask
+ 805 00c5 9D F0                   		mov	r8, a
+ 806 00c7 8D F1                   		mov	a, r9
+ 807 00c9 5B F0                   		and	a, r8
+ 808 00cb 9D F0                   		mov	r8, a
+ 809 00cd 98 00                   		mov	[sp], a
+ 810 00cf FC 00 00 00             		call	!!%code(_Output_Anode_Seven_Segment)
+ 170:../HMI/4Digit_7Segment.c **** 		}
+ 811                             		.loc 1 170 0
+ 812 00d3 C9 F0 05 FF             		movw	r8, #-251
+ 813 00d7 AD F0                   		movw	ax, r8
+ 814 00d9 BD F4                   		movw	r12, ax
+ 815 00db FA F4                   		movw	hl, r12
+ 816 00dd 8B                      		mov	a, [hl]
+ 817 00de 9D F2                   		mov	r10, a
+ 818 00e0 6A F2 04                		or	r10, #4
+ 819 00e3 AD F0                   		movw	ax, r8
+ 820 00e5 EA F4                   		movw	de, r12
+ 821 00e7 8D F2                   		mov	a, r10
+ 822 00e9 99                      		mov	[de], a
+ 172:../HMI/4Digit_7Segment.c **** 		case 2:
+ 823                             		.loc 1 172 0
+ 824 00ea EC 8F 01 00             		br	!!.L38
+ 825                             	.L43:
+ 175:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(convert_ascii_to_seven_segment(Parameter_Name[1]) & Mask);
+ 826                             		.loc 1 175 0
+ 827 00ee C9 F0 05 FF             		movw	r8, #-251
+ 828 00f2 AD F0                   		movw	ax, r8
+ 829 00f4 BD F4                   		movw	r12, ax
+ 830 00f6 FA F4                   		movw	hl, r12
+ 831 00f8 8B                      		mov	a, [hl]
+ 832 00f9 9D F2                   		mov	r10, a
+ 833 00fb 5A F2 FB                		and	r10, #-5
+ 834 00fe AD F0                   		movw	ax, r8
+ 835 0100 EA F4                   		movw	de, r12
+ 836 0102 8D F2                   		mov	a, r10
+ 837 0104 99                      		mov	[de], a
+ 176:../HMI/4Digit_7Segment.c **** 			DIG_K2 = 1;
+ 838                             		.loc 1 176 0
+ 839 0105 8F 00 00                		mov	a, !_Parameter_Name+1
+ 840 0108 9D F0                   		mov	r8, a
+ 841 010a 98 00                   		mov	[sp], a
+ 842 010c FC 00 00 00             		call	!!%code(_convert_ascii_to_seven_segment)
+ 843 0110 8D F0                   		mov	a, r8
+ 844 0112 9D F1                   		mov	r9, a
+ 845 0114 8F 00 00                		mov	a, !_Mask
+ 846 0117 9D F0                   		mov	r8, a
+ 847 0119 8D F1                   		mov	a, r9
+ 848 011b 5B F0                   		and	a, r8
+ 849 011d 9D F0                   		mov	r8, a
+ 850 011f 98 00                   		mov	[sp], a
+ 851 0121 FC 00 00 00             		call	!!%code(_Output_Anode_Seven_Segment)
+ 177:../HMI/4Digit_7Segment.c **** 		}
+ 852                             		.loc 1 177 0
+ 853 0125 C9 F0 05 FF             		movw	r8, #-251
+ 854 0129 AD F0                   		movw	ax, r8
+ 855 012b BD F4                   		movw	r12, ax
+ 856 012d FA F4                   		movw	hl, r12
+ 857 012f 8B                      		mov	a, [hl]
+ 858 0130 9D F2                   		mov	r10, a
+ 859 0132 6A F2 08                		or	r10, #8
+ 860 0135 AD F0                   		movw	ax, r8
+ 861 0137 EA F4                   		movw	de, r12
+ 862 0139 8D F2                   		mov	a, r10
+ 863 013b 99                      		mov	[de], a
+ 179:../HMI/4Digit_7Segment.c **** 		case 3:
+ 864                             		.loc 1 179 0
+ 865 013c EC 8F 01 00             		br	!!.L38
+ 866                             	.L44:
+ 182:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(convert_ascii_to_seven_segment(Parameter_Name[0]) & Mask);
+ 867                             		.loc 1 182 0
+ 868 0140 C9 F0 05 FF             		movw	r8, #-251
+ 869 0144 AD F0                   		movw	ax, r8
+ 870 0146 BD F4                   		movw	r12, ax
+ 871 0148 FA F4                   		movw	hl, r12
+ 872 014a 8B                      		mov	a, [hl]
+ 873 014b 9D F2                   		mov	r10, a
+ 874 014d 5A F2 F7                		and	r10, #-9
+ 875 0150 AD F0                   		movw	ax, r8
+ 876 0152 EA F4                   		movw	de, r12
+ 877 0154 8D F2                   		mov	a, r10
+ 878 0156 99                      		mov	[de], a
+ 183:../HMI/4Digit_7Segment.c **** 			DIG_K3 = 1;
+ 879                             		.loc 1 183 0
+ 880 0157 8F 00 00                		mov	a, !_Parameter_Name
+ 881 015a 9D F0                   		mov	r8, a
+ 882 015c 98 00                   		mov	[sp], a
+ 883 015e FC 00 00 00             		call	!!%code(_convert_ascii_to_seven_segment)
+ 884 0162 8D F0                   		mov	a, r8
+ 885 0164 9D F1                   		mov	r9, a
+ 886 0166 8F 00 00                		mov	a, !_Mask
+ 887 0169 9D F0                   		mov	r8, a
+ 888 016b 8D F1                   		mov	a, r9
+ 889 016d 5B F0                   		and	a, r8
+ 890 016f 9D F0                   		mov	r8, a
+ 891 0171 98 00                   		mov	[sp], a
+ 892 0173 FC 00 00 00             		call	!!%code(_Output_Anode_Seven_Segment)
+ 184:../HMI/4Digit_7Segment.c **** 		}
+ 893                             		.loc 1 184 0
+ 894 0177 C9 F0 05 FF             		movw	r8, #-251
+ 895 017b AD F0                   		movw	ax, r8
+ 896 017d BD F4                   		movw	r12, ax
+ 897 017f FA F4                   		movw	hl, r12
+ 898 0181 8B                      		mov	a, [hl]
+ 899 0182 9D F2                   		mov	r10, a
+ 900 0184 6A F2 10                		or	r10, #16
+ 901 0187 AD F0                   		movw	ax, r8
+ 902 0189 EA F4                   		movw	de, r12
+ 903 018b 8D F2                   		mov	a, r10
+ 904 018d 99                      		mov	[de], a
+ 186:../HMI/4Digit_7Segment.c **** 		default:
+ 905                             		.loc 1 186 0
+ 906 018e 00                      		nop
+ 907                             	.L38:
+ 192:../HMI/4Digit_7Segment.c **** 	}
+ 193:../HMI/4Digit_7Segment.c **** }
+ 908                             		.loc 1 193 0
+ 909 018f 10 02                   		addw	sp, #2
+ 910 0191 D7                      		ret
+ 911                             	.LFE3:
+ 913                             		.section	.text.Display_Status_Callback,"ax",@progbits
+ 914                             		.global	_Display_Status_Callback
+ 916                             	_Display_Status_Callback:
+ 917                             	.LFB4:
+ 194:../HMI/4Digit_7Segment.c **** 
+ 195:../HMI/4Digit_7Segment.c **** void Display_Status_Callback()
+ 196:../HMI/4Digit_7Segment.c **** {
+ 918                             		.loc 1 196 0
+ 919                             		; start of function
+ 920                             		; outgoing: 2 bytes
+ 921                             		; uses ES register
+ 922 0000 20 02                   		subw	sp, #2
+ 923                             	.LCFI3:
+ 197:../HMI/4Digit_7Segment.c **** 	switch(Digit_Count)
+ 924                             		.loc 1 197 0
+ 925 0002 8F 00 00                		mov	a, !_Digit_Count
+ 926 0005 9D F0                   		mov	r8, a
+ 927 0007 F4 F1                   		clrb	r9
+ 928 0009 AD F0                   		movw	ax, r8
+ 929 000b 44 01 00                		cmpw	ax, #1
+ 930 000e 61 F8                   		 sknz
+ 931 0010 EC 87 00 00             		 br	!!.L48
+ 932 0014 AD F0                   		movw	ax, r8
+ 933 0016 44 01 00                		cmpw	ax, #1
+ 934 0019 71 FF                   		 xor1	CY, a.7
+ 935 001b 61 F3                   		 sknh
+ 936 001d EC 30 00 00             		 br	!!.L49
+ 937 0021 AD F0                   		movw	ax, r8
+ 938 0023 44 00 00                		cmpw	ax, #0
+ 939 0026 61 F8                   		 sknz
+ 940 0028 EC 4A 00 00             		 br	!!.L50
+ 198:../HMI/4Digit_7Segment.c **** 	{
+ 199:../HMI/4Digit_7Segment.c **** 		case 0:
+ 200:../HMI/4Digit_7Segment.c **** 		{
+ 201:../HMI/4Digit_7Segment.c **** 			DIG_K3 = 0;
+ 202:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(Safety_Status_No2);
+ 203:../HMI/4Digit_7Segment.c **** 			DIG_K0 = 1;
+ 204:../HMI/4Digit_7Segment.c **** 		}
+ 205:../HMI/4Digit_7Segment.c **** 		break;
+ 206:../HMI/4Digit_7Segment.c **** 		case 1:
+ 207:../HMI/4Digit_7Segment.c **** 		{
+ 208:../HMI/4Digit_7Segment.c **** 			DIG_K0 = 0;
+ 209:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(Safety_Status_No1);
+ 210:../HMI/4Digit_7Segment.c **** 			DIG_K1 = 1;
+ 211:../HMI/4Digit_7Segment.c **** 		}
+ 212:../HMI/4Digit_7Segment.c **** 		break;
+ 213:../HMI/4Digit_7Segment.c **** 		case 2:
+ 214:../HMI/4Digit_7Segment.c **** 		{
+ 215:../HMI/4Digit_7Segment.c **** 			DIG_K1 = 0;
+ 216:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(Command_Status_No2);
+ 217:../HMI/4Digit_7Segment.c **** 			DIG_K2 = 1;
+ 218:../HMI/4Digit_7Segment.c **** 		}
+ 219:../HMI/4Digit_7Segment.c **** 		break;
+ 220:../HMI/4Digit_7Segment.c **** 		case 3:
+ 221:../HMI/4Digit_7Segment.c **** 		{
+ 222:../HMI/4Digit_7Segment.c **** 			DIG_K2 = 0;
+ 223:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(Command_Status_No1);
+ 224:../HMI/4Digit_7Segment.c **** 			DIG_K3 = 1;
+ 225:../HMI/4Digit_7Segment.c **** 		}
+ 226:../HMI/4Digit_7Segment.c **** 		break;
+ 227:../HMI/4Digit_7Segment.c **** 		default:
+ 228:../HMI/4Digit_7Segment.c **** 		{
+ 229:../HMI/4Digit_7Segment.c **** 			// Do nothing;
+ 230:../HMI/4Digit_7Segment.c **** 		}
+ 231:../HMI/4Digit_7Segment.c **** 		break;
+ 941                             		.loc 1 231 0
+ 942 002c EC 3B 01 00             		br	!!.L46
+ 943                             	.L49:
+ 197:../HMI/4Digit_7Segment.c **** 	switch(Digit_Count)
+ 944                             		.loc 1 197 0
+ 945 0030 AD F0                   		movw	ax, r8
+ 946 0032 44 02 00                		cmpw	ax, #2
+ 947 0035 61 F8                   		 sknz
+ 948 0037 EC C4 00 00             		 br	!!.L51
+ 949 003b AD F0                   		movw	ax, r8
+ 950 003d 44 03 00                		cmpw	ax, #3
+ 951 0040 61 F8                   		 sknz
+ 952 0042 EC 01 01 00             		 br	!!.L52
+ 953                             		.loc 1 231 0
+ 954 0046 EC 3B 01 00             		br	!!.L46
+ 955                             	.L50:
+ 201:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(Safety_Status_No2);
+ 956                             		.loc 1 201 0
+ 957 004a C9 F0 05 FF             		movw	r8, #-251
+ 958 004e AD F0                   		movw	ax, r8
+ 959 0050 BD F4                   		movw	r12, ax
+ 960 0052 FA F4                   		movw	hl, r12
+ 961 0054 8B                      		mov	a, [hl]
+ 962 0055 9D F2                   		mov	r10, a
+ 963 0057 5A F2 EF                		and	r10, #-17
+ 964 005a AD F0                   		movw	ax, r8
+ 965 005c EA F4                   		movw	de, r12
+ 966 005e 8D F2                   		mov	a, r10
+ 967 0060 99                      		mov	[de], a
+ 202:../HMI/4Digit_7Segment.c **** 			DIG_K0 = 1;
+ 968                             		.loc 1 202 0
+ 969 0061 8F 00 00                		mov	a, !_Safety_Status_No2
+ 970 0064 9D F0                   		mov	r8, a
+ 971 0066 98 00                   		mov	[sp], a
+ 972 0068 FC 00 00 00             		call	!!%code(_Output_Anode_Seven_Segment)
+ 203:../HMI/4Digit_7Segment.c **** 		}
+ 973                             		.loc 1 203 0
+ 974 006c C9 F0 05 FF             		movw	r8, #-251
+ 975 0070 AD F0                   		movw	ax, r8
+ 976 0072 BD F4                   		movw	r12, ax
+ 977 0074 FA F4                   		movw	hl, r12
+ 978 0076 8B                      		mov	a, [hl]
+ 979 0077 9D F2                   		mov	r10, a
+ 980 0079 6A F2 20                		or	r10, #32
+ 981 007c AD F0                   		movw	ax, r8
+ 982 007e EA F4                   		movw	de, r12
+ 983 0080 8D F2                   		mov	a, r10
+ 984 0082 99                      		mov	[de], a
+ 205:../HMI/4Digit_7Segment.c **** 		case 1:
+ 985                             		.loc 1 205 0
+ 986 0083 EC 3B 01 00             		br	!!.L46
+ 987                             	.L48:
+ 208:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(Safety_Status_No1);
+ 988                             		.loc 1 208 0
+ 989 0087 C9 F0 05 FF             		movw	r8, #-251
+ 990 008b AD F0                   		movw	ax, r8
+ 991 008d BD F4                   		movw	r12, ax
+ 992 008f FA F4                   		movw	hl, r12
+ 993 0091 8B                      		mov	a, [hl]
+ 994 0092 9D F2                   		mov	r10, a
+ 995 0094 5A F2 DF                		and	r10, #-33
+ 996 0097 AD F0                   		movw	ax, r8
+ 997 0099 EA F4                   		movw	de, r12
+ 998 009b 8D F2                   		mov	a, r10
+ 999 009d 99                      		mov	[de], a
+ 209:../HMI/4Digit_7Segment.c **** 			DIG_K1 = 1;
+ 1000                             		.loc 1 209 0
+ 1001 009e 8F 00 00                		mov	a, !_Safety_Status_No1
+ 1002 00a1 9D F0                   		mov	r8, a
+ 1003 00a3 98 00                   		mov	[sp], a
+ 1004 00a5 FC 00 00 00             		call	!!%code(_Output_Anode_Seven_Segment)
+ 210:../HMI/4Digit_7Segment.c **** 		}
+ 1005                             		.loc 1 210 0
+ 1006 00a9 C9 F0 05 FF             		movw	r8, #-251
+ 1007 00ad AD F0                   		movw	ax, r8
+ 1008 00af BD F4                   		movw	r12, ax
+ 1009 00b1 FA F4                   		movw	hl, r12
+ 1010 00b3 8B                      		mov	a, [hl]
+ 1011 00b4 9D F2                   		mov	r10, a
+ 1012 00b6 6A F2 04                		or	r10, #4
+ 1013 00b9 AD F0                   		movw	ax, r8
+ 1014 00bb EA F4                   		movw	de, r12
+ 1015 00bd 8D F2                   		mov	a, r10
+ 1016 00bf 99                      		mov	[de], a
+ 212:../HMI/4Digit_7Segment.c **** 		case 2:
+ 1017                             		.loc 1 212 0
+ 1018 00c0 EC 3B 01 00             		br	!!.L46
+ 1019                             	.L51:
+ 215:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(Command_Status_No2);
+ 1020                             		.loc 1 215 0
+ 1021 00c4 C9 F0 05 FF             		movw	r8, #-251
+ 1022 00c8 AD F0                   		movw	ax, r8
+ 1023 00ca BD F4                   		movw	r12, ax
+ 1024 00cc FA F4                   		movw	hl, r12
+ 1025 00ce 8B                      		mov	a, [hl]
+ 1026 00cf 9D F2                   		mov	r10, a
+ 1027 00d1 5A F2 FB                		and	r10, #-5
+ 1028 00d4 AD F0                   		movw	ax, r8
+ 1029 00d6 EA F4                   		movw	de, r12
+ 1030 00d8 8D F2                   		mov	a, r10
+ 1031 00da 99                      		mov	[de], a
+ 216:../HMI/4Digit_7Segment.c **** 			DIG_K2 = 1;
+ 1032                             		.loc 1 216 0
+ 1033 00db 8F 00 00                		mov	a, !_Command_Status_No2
+ 1034 00de 9D F0                   		mov	r8, a
+ 1035 00e0 98 00                   		mov	[sp], a
+ 1036 00e2 FC 00 00 00             		call	!!%code(_Output_Anode_Seven_Segment)
+ 217:../HMI/4Digit_7Segment.c **** 		}
+ 1037                             		.loc 1 217 0
+ 1038 00e6 C9 F0 05 FF             		movw	r8, #-251
+ 1039 00ea AD F0                   		movw	ax, r8
+ 1040 00ec BD F4                   		movw	r12, ax
+ 1041 00ee FA F4                   		movw	hl, r12
+ 1042 00f0 8B                      		mov	a, [hl]
+ 1043 00f1 9D F2                   		mov	r10, a
+ 1044 00f3 6A F2 08                		or	r10, #8
+ 1045 00f6 AD F0                   		movw	ax, r8
+ 1046 00f8 EA F4                   		movw	de, r12
+ 1047 00fa 8D F2                   		mov	a, r10
+ 1048 00fc 99                      		mov	[de], a
+ 219:../HMI/4Digit_7Segment.c **** 		case 3:
+ 1049                             		.loc 1 219 0
+ 1050 00fd EC 3B 01 00             		br	!!.L46
+ 1051                             	.L52:
+ 222:../HMI/4Digit_7Segment.c **** 			Output_Anode_Seven_Segment(Command_Status_No1);
+ 1052                             		.loc 1 222 0
+ 1053 0101 C9 F0 05 FF             		movw	r8, #-251
+ 1054 0105 AD F0                   		movw	ax, r8
+ 1055 0107 BD F4                   		movw	r12, ax
+ 1056 0109 FA F4                   		movw	hl, r12
+ 1057 010b 8B                      		mov	a, [hl]
+ 1058 010c 9D F2                   		mov	r10, a
+ 1059 010e 5A F2 F7                		and	r10, #-9
+ 1060 0111 AD F0                   		movw	ax, r8
+ 1061 0113 EA F4                   		movw	de, r12
+ 1062 0115 8D F2                   		mov	a, r10
+ 1063 0117 99                      		mov	[de], a
+ 223:../HMI/4Digit_7Segment.c **** 			DIG_K3 = 1;
+ 1064                             		.loc 1 223 0
+ 1065 0118 8F 00 00                		mov	a, !_Command_Status_No1
+ 1066 011b 9D F0                   		mov	r8, a
+ 1067 011d 98 00                   		mov	[sp], a
+ 1068 011f FC 00 00 00             		call	!!%code(_Output_Anode_Seven_Segment)
+ 224:../HMI/4Digit_7Segment.c **** 		}
+ 1069                             		.loc 1 224 0
+ 1070 0123 C9 F0 05 FF             		movw	r8, #-251
+ 1071 0127 AD F0                   		movw	ax, r8
+ 1072 0129 BD F4                   		movw	r12, ax
+ 1073 012b FA F4                   		movw	hl, r12
+ 1074 012d 8B                      		mov	a, [hl]
+ 1075 012e 9D F2                   		mov	r10, a
+ 1076 0130 6A F2 10                		or	r10, #16
+ 1077 0133 AD F0                   		movw	ax, r8
+ 1078 0135 EA F4                   		movw	de, r12
+ 1079 0137 8D F2                   		mov	a, r10
+ 1080 0139 99                      		mov	[de], a
+ 226:../HMI/4Digit_7Segment.c **** 		default:
+ 1081                             		.loc 1 226 0
+ 1082 013a 00                      		nop
+ 1083                             	.L46:
+ 232:../HMI/4Digit_7Segment.c **** 	}
+ 233:../HMI/4Digit_7Segment.c **** }
+ 1084                             		.loc 1 233 0
+ 1085 013b 10 02                   		addw	sp, #2
+ 1086 013d D7                      		ret
+ 1087                             	.LFE4:
+ 1163                             	.Letext0:
+ 1164                             		.file 2 "E:/AIoT/Code/Rogger/Test_new/DGC_A230_6_Rev_1_0_Software/generate/iodefine.h"
+ 1165                             		.file 3 "E:\\AIoT\\Code\\Rogger\\Test_new\\DGC_A230_6_Rev_1_0_Software\\src/r_cg_macrodriver.h"
